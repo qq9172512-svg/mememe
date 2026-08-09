@@ -2,11 +2,1880 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=app.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#6b8e73">
   <title>不動產經紀人 國考勝率戰略系統 App</title>
-  <script>window.location.href = "app.html";</script>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+
+    :root {
+      --bg-primary: #f7f5f0;
+      --bg-card: #ffffff;
+      --bg-card-sub: #f0ebe1;
+      --accent-sage: #6b8e73;
+      --accent-sage-light: #e8f0e8;
+      --accent-terracotta: #d9886a;
+      --accent-amber: #e6a15c;
+      --accent-purple: #9d8ec7;
+      --text-main: #2d3748;
+      --text-sub: #718096;
+      --border-color: #e2e8f0;
+      --shadow-soft: 0 8px 24px rgba(107, 142, 115, 0.08);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.dark-mode {
+      --bg-primary: #121314;
+      --bg-card: #1e1f21;
+      --bg-card-sub: #2a2b2e;
+      --text-main: #e4e6eb;
+      --text-sub: #9a9c9f;
+      --border-color: #323438;
+      --accent-sage-light: #253327;
+      --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
+
+    body {
+      font-family: 'Noto Sans TC', 'Outfit', -apple-system, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      padding-bottom: calc(75px + env(safe-area-inset-bottom));
+    }
+
+    /* 頂部固定 App Header */
+    header {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky; top: 0; z-index: 100;
+      padding: max(0.6rem, env(safe-area-inset-top)) 1rem 0.6rem 1rem;
+    }
+
+    body.dark-mode header { background: rgba(30, 31, 33, 0.92); }
+
+    .header-content {
+      max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;
+    }
+
+    .brand { display: flex; align-items: center; gap: 0.4rem; font-size: 1.1rem; font-weight: 700; color: var(--accent-sage); }
+    .header-actions { display: flex; align-items: center; gap: 0.4rem; }
+
+    /* 底部固定 App Tab Bar 導覽列 */
+    .bottom-nav-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-color);
+      display: flex; justify-content: space-around; align-items: center;
+      padding: 0.4rem 0 calc(0.4rem + env(safe-area-inset-bottom)) 0;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.05);
+      overflow-x: auto;
+    }
+
+    body.dark-mode .bottom-nav-bar { background: rgba(30, 31, 33, 0.95); }
+
+    .tab-item {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: var(--text-sub); background: none; border: none; font-size: 0.7rem; font-weight: 500;
+      padding: 0.3rem 0.25rem; border-radius: 12px; cursor: pointer; flex: 1; transition: var(--transition);
+      min-height: 48px; min-width: 52px; white-space: nowrap;
+    }
+
+    .tab-item .tab-icon { font-size: 1.2rem; margin-bottom: 0.1rem; }
+    .tab-item.active { color: var(--accent-sage); font-weight: 700; }
+    .tab-item.active .tab-icon { transform: scale(1.15); }
+
+    /* 倒數橫幅與寵物條 */
+    .healing-banner {
+      background: linear-gradient(135deg, #eef4ee, #f5efe6); border-bottom: 1px solid var(--border-color);
+      padding: 0.75rem 1rem; text-align: center; font-size: 0.88rem; color: var(--text-main);
+      display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; flex-wrap: wrap;
+    }
+
+    body.dark-mode .healing-banner { background: linear-gradient(135deg, #1e1f21, #161718); }
+
+    .countdown-digits { display: flex; gap: 0.25rem; align-items: center; font-family: 'Outfit', sans-serif; font-weight: 700; color: var(--accent-terracotta); }
+    .digit-box { background: #ffffff; padding: 0.15rem 0.45rem; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); border: 1px solid rgba(217, 136, 106, 0.2); }
+    body.dark-mode .digit-box { background: #2a2b2e; }
+
+    main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 1rem 0.85rem; }
+    .tab-pane { display: none; animation: fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+    .tab-pane.active { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .healing-card {
+      background: var(--bg-card); border-radius: var(--radius-lg); padding: 1.25rem; box-shadow: var(--shadow-soft); margin-bottom: 1.2rem; border: 1px solid var(--border-color);
+    }
+
+    .panel-title {
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
+      color: var(--accent-sage); border-bottom: 2px dashed rgba(107, 142, 115, 0.2); padding-bottom: 0.6rem;
+    }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; margin-bottom: 1.2rem; }
+    .stat-card { background: var(--bg-primary); border: 1px solid var(--border-color); padding: 0.9rem; border-radius: var(--radius-md); text-align: center; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; font-family: 'Outfit', sans-serif; color: var(--accent-sage); }
+    .stat-label { font-size: 0.8rem; color: var(--text-sub); }
+
+    .card-filters { display: flex; gap: 0.4rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+    .filter-btn {
+      background: var(--bg-card-sub); border: none; color: var(--text-sub);
+      padding: 0.45rem 0.9rem; border-radius: 18px; cursor: pointer; transition: var(--transition);
+      font-size: 0.85rem; font-weight: 500; min-height: 38px; display: inline-flex; align-items: center; gap: 0.3rem;
+    }
+    .filter-btn:hover, .filter-btn.active { background: var(--accent-sage); color: #ffffff; }
+
+    .flashcard-container { perspective: 1000px; min-height: 480px; margin-bottom: 1.2rem; }
+    .flashcard { width: 100%; min-height: 480px; position: relative; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+    .flashcard.flipped { transform: rotateY(180deg); }
+
+    .card-face { position: absolute; width: 100%; min-height: 100%; backface-visibility: hidden; border-radius: var(--radius-lg); padding: 1.5rem; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow-soft); }
+    .card-front { background: var(--bg-card); border-color: rgba(107, 142, 115, 0.3); }
+    .card-back { background: var(--bg-card); transform: rotateY(180deg); border-color: rgba(217, 136, 106, 0.3); overflow-y: auto; }
+
+    .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 16px; font-size: 0.78rem; font-weight: 600; background: var(--accent-sage-light); color: var(--accent-sage); border: 1px solid rgba(107, 142, 115, 0.2); }
+
+    .card-title-lg { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin: 0.8rem 0; }
+    .card-question { font-size: 1.02rem; color: var(--accent-terracotta); line-height: 1.7; }
+    .card-hint { font-size: 0.8rem; color: var(--text-sub); text-align: center; margin-top: 0.8rem; }
+
+    .card-section { margin-bottom: 0.8rem; padding: 0.85rem; border-radius: var(--radius-md); background: var(--bg-primary); }
+    .card-section-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .section-lecture { border-left: 4px solid var(--accent-purple); color: #7c68b0; white-space: pre-wrap; }
+    .section-example { border-left: 4px solid var(--accent-sage); color: #3b6b45; }
+
+    .question-item { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.2rem; box-shadow: var(--shadow-soft); }
+    .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.4rem; }
+    .q-title { font-size: 1.02rem; font-weight: 700; line-height: 1.6; color: var(--text-main); }
+    .options-grid { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin: 1rem 0; }
+
+    .option-btn { background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-main); padding: 0.8rem 1rem; border-radius: var(--radius-md); text-align: left; cursor: pointer; transition: var(--transition); font-size: 0.95rem; min-height: 44px; }
+    .option-btn:hover { background: var(--accent-sage-light); border-color: var(--accent-sage); }
+
+    .explanation-box { background: var(--bg-primary); border: 1px solid var(--accent-sage); border-radius: var(--radius-md); padding: 1.1rem; margin-top: 0.8rem; white-space: pre-wrap; line-height: 1.7; font-size: 0.92rem; }
+    .essay-deconstruct-box { background: var(--bg-primary); border: 1px solid var(--accent-purple); border-radius: var(--radius-md); padding: 1.2rem; margin-top: 0.8rem; }
+    .deconstruct-tag { background: rgba(157, 142, 199, 0.15); color: var(--accent-purple); padding: 0.25rem 0.7rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; display: inline-block; margin-bottom: 0.6rem; }
+    .essay-textarea { width: 100%; min-height: 150px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-main); padding: 0.85rem; font-family: inherit; font-size: 0.95rem; line-height: 1.6; resize: vertical; margin: 0.8rem 0; }
+
+    .btn-primary { background: var(--accent-sage); color: #ffffff; border: none; padding: 0.65rem 1.4rem; border-radius: 20px; font-weight: 600; cursor: pointer; transition: var(--transition); min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; font-size: 0.9rem; }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    .day-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 0.6rem; margin-bottom: 1.2rem; }
+    .day-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 0.65rem 0.4rem; border-radius: 12px; text-align: center; cursor: pointer; transition: var(--transition); }
+    .day-card:hover, .day-card.active { border-color: var(--accent-terracotta); background: rgba(217, 136, 106, 0.1); transform: translateY(-2px); }
+    .day-num { font-family: 'Outfit', sans-serif; font-weight: 700; color: var(--accent-terracotta); font-size: 1rem; }
+    .day-topic { font-size: 0.75rem; color: var(--text-sub); margin-top: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .modal-overlay { position: fixed; inset: 0; z-index: 999; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; padding: 1rem; }
+    .modal-overlay.active { display: flex; }
+    .modal-card { background: var(--bg-card); border-radius: var(--radius-lg); padding: 1.5rem; max-width: 500px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-soft); border: 1px solid var(--border-color); }
+
+    .timeline-container { position: relative; padding-left: 1.2rem; border-left: 2px dashed var(--accent-sage); margin-top: 1rem; }
+    .timeline-item { position: relative; margin-bottom: 1rem; }
+    .timeline-item::before { content: ''; position: absolute; left: -1.55rem; top: 0.3rem; width: 10px; height: 10px; border-radius: 50%; background: var(--accent-sage); }
+    .timeline-date { font-size: 0.75rem; color: var(--text-sub); font-family: 'Outfit', sans-serif; }
+    .timeline-desc { font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-top: 0.2rem; }
+
+    /* 進度條樣式 */
+    .progress-bar-bg { width: 100%; height: 12px; background: var(--bg-card-sub); border-radius: 6px; overflow: hidden; margin-top: 0.3rem; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent-sage), var(--accent-terracotta)); border-radius: 6px; transition: width 0.5s ease; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.88rem; }
+    th, td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border-color); text-align: left; }
+    th { background: var(--bg-card-sub); font-weight: 700; color: var(--text-main); }
+  </style>
 </head>
 <body>
-  <p>正在載入國考勝率戰略 App，請稍候... 若未自動跳轉，請<a href="app.html">點擊此處開啟 App</a>。</p>
+
+  <!-- 固定 App Header 列 -->
+  <header>
+    <div class="header-content">
+      <div class="brand">
+        <span>⚔️</span>
+        <span>國考勝率 App</span>
+      </div>
+      <div class="header-actions">
+        <a href="https://law.moj.gov.tw/Index.aspx" target="_blank" rel="noopener" class="filter-btn" style="padding: 0.3rem 0.6rem; text-decoration: none;" title="開啟全國法規資料庫">
+          📜 全球法規網 ↗
+        </a>
+        <button class="filter-btn" style="padding: 0.3rem 0.6rem;" onclick="showScheduledRemindersModal()" title="提醒管理員">
+          🔔 <span id="reminder-badge-count">0</span>
+        </button>
+        <button class="filter-btn" style="padding: 0.3rem 0.6rem;" onclick="toggleAudio()" title="切換音效">
+          <span id="audio-toggle-icon">🔊</span>
+        </button>
+        <button class="filter-btn" style="padding: 0.3rem 0.6rem;" onclick="toggleDarkMode()" title="切換暗黑模式">
+          <span id="theme-toggle-icon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 倒數與寵物狀態列 -->
+  <div class="healing-banner">
+    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+      <span style="font-size: 0.8rem;">🌤️ 11/14 考前倒數：</span>
+      <div class="countdown-digits">
+        <span class="digit-box" id="timer-days">00</span>天
+        <span class="digit-box" id="timer-hours">00</span>時
+        <span class="digit-box" id="timer-mins">00</span>分
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.6rem;">
+      <span id="pet-avatar-icon" style="font-size: 1.4rem; cursor: pointer;" onclick="showPetRulesModal()">🥚</span>
+      <div>
+        <div style="font-weight: 700; font-size: 0.78rem; color: var(--accent-terracotta);" id="pet-name-badge">Lv.0 龍龍蛋</div>
+      </div>
+      <span style="font-weight: 700; font-size: 0.8rem; color: var(--accent-sage);" id="sapling-count-display">🌱 5</span>
+      <button class="filter-btn" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick="feedMonster()">餵食</button>
+    </div>
+  </div>
+
+  <main>
+    <!-- TAB 1: 🌸 儀表板 -->
+    <section id="tab-dashboard" class="tab-pane active">
+      <div class="healing-card" style="background: linear-gradient(135deg, rgba(107, 142, 115, 0.08), rgba(217, 136, 106, 0.08));">
+        <div class="panel-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <span>📅</span>
+            <span>2026-11-14 國考四階段衝刺 ✕ 職場勝任計畫</span>
+          </div>
+          <button class="filter-btn" onclick="showReminderPickerModal('每日國考複習提醒', 'TASK', 'daily_task')">🔔 設定每日提醒</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 0.6rem; margin-bottom: 1rem;">
+          <div style="background: var(--bg-card); padding: 0.8rem; border-radius: 12px; border-left: 3px solid var(--accent-sage);">
+            <strong style="color: var(--accent-sage); font-size: 0.85rem;">第1階段 (8~9月中)</strong>
+            <p style="font-size: 0.78rem; color: var(--text-sub); margin-top: 0.2rem;">基礎打底＋35天速成講義</p>
+          </div>
+          <div style="background: var(--bg-card); padding: 0.8rem; border-radius: 12px; border-left: 3px solid var(--accent-purple);">
+            <strong style="color: var(--accent-purple); font-size: 0.85rem;">第2階段 (9中~10月中)</strong>
+            <p style="font-size: 0.78rem; color: var(--text-sub); margin-top: 0.2rem;">150題申論拆解＋爭點背誦</p>
+          </div>
+          <div style="background: var(--bg-card); padding: 0.8rem; border-radius: 12px; border-left: 3px solid var(--accent-terracotta);">
+            <strong style="color: var(--accent-terracotta); font-size: 0.85rem;">第3階段 (10中~11上)</strong>
+            <p style="font-size: 0.78rem; color: var(--text-sub); margin-top: 0.2rem;">全真模考＋清空錯題卡</p>
+          </div>
+          <div style="background: var(--bg-card); padding: 0.8rem; border-radius: 12px; border-left: 3px solid #3182ce;">
+            <strong style="color: #3182ce; font-size: 0.85rem;">第4階段 (考前5天)</strong>
+            <p style="font-size: 0.78rem; color: var(--text-sub); margin-top: 0.2rem;">極速總掃描高頻考點</p>
+          </div>
+        </div>
+
+        <!-- 今日學習任務 -->
+        <div style="background: var(--bg-card); padding: 1rem; border-radius: 14px; border: 1px solid var(--border-color);">
+          <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem; margin-bottom: 0.6rem; display: flex; justify-content: space-between; align-items: center;">
+            <span>✅ 今日衝刺任務（每日僅能完成領取一次）：</span>
+            <span style="font-size: 0.8rem; color: var(--accent-sage);" id="today-task-progress">0 / 4</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr; gap: 0.5rem; font-size: 0.88rem;">
+            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" id="task-chk-1" onchange="toggleTaskCheck('task-chk-1')"> 1. 研讀今日 35天速成關卡 (+1🌱)
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" id="task-chk-2" onchange="toggleTaskCheck('task-chk-2')"> 2. 瀏覽 5 張講義生活圖卡
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" id="task-chk-3" onchange="toggleTaskCheck('task-chk-3')"> 3. 完成 1 份全真模擬試卷 (+3🌱)
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" id="task-chk-4" onchange="toggleTaskCheck('task-chk-4')"> 4. 每日打卡並紀錄進度 (+1🌱)
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 各科目標分數與動態進度條算分器 -->
+      <div class="healing-card">
+        <div class="panel-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <span>🏆 各科目標與紅線算分器（含最高紀錄推進進度條）</span>
+          <button id="daily-checkin-btn" class="btn-primary" style="padding: 0.35rem 0.8rem; font-size: 0.8rem;" onclick="doDailyCheckIn()">🎯 每日打卡 (+1🌱)</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-sub);">不動產估價 (目標)</label>
+            <input type="number" id="calc-eval" value="70" onchange="updateSubjectProgressBars()" style="width:100%; padding:0.5rem; border-radius:10px; border:1px solid var(--border-color); background:var(--bg-primary); color:var(--text-main); font-weight:700;">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-sub);">土地法規稅法 (目標)</label>
+            <input type="number" id="calc-land" value="60" onchange="updateSubjectProgressBars()" style="width:100%; padding:0.5rem; border-radius:10px; border:1px solid var(--border-color); background:var(--bg-primary); color:var(--text-main); font-weight:700;">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-sub);">民法概要 (目標)</label>
+            <input type="number" id="calc-civil" value="60" onchange="updateSubjectProgressBars()" style="width:100%; padding:0.5rem; border-radius:10px; border:1px solid var(--border-color); background:var(--bg-primary); color:var(--text-main); font-weight:700;">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-sub);">經紀相關法規 (目標)</label>
+            <input type="number" id="calc-broker" value="70" onchange="updateSubjectProgressBars()" style="width:100%; padding:0.5rem; border-radius:10px; border:1px solid var(--border-color); background:var(--bg-primary); color:var(--text-main); font-weight:700;">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-sub);">國文作文 (目標)</label>
+            <input type="number" id="calc-chinese" value="60" onchange="updateSubjectProgressBars()" style="width:100%; padding:0.5rem; border-radius:10px; border:1px solid var(--border-color); background:var(--bg-primary); color:var(--text-main); font-weight:700;">
+          </div>
+        </div>
+
+        <!-- 5 大科目最高成績進度條 -->
+        <div style="background: var(--bg-primary); padding: 1rem; border-radius: 14px; border: 1px solid var(--border-color); margin-bottom: 1rem;" id="subject-progress-bars-container">
+          <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.6rem; color: var(--accent-sage);">📈 各科最高成績推進進度條（朝目標分數前進）：</div>
+          <div id="pb-eval-box" style="margin-bottom: 0.5rem;">
+            <div style="display:flex; justify-content:space-between; font-size: 0.82rem;">
+              <span>不動產估價概要</span><span id="pb-eval-text">最高分: 0分 / 目標: 70分 (0%)</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="pb-eval-bar" style="width: 0%;"></div></div>
+          </div>
+
+          <div id="pb-land-box" style="margin-bottom: 0.5rem;">
+            <div style="display:flex; justify-content:space-between; font-size: 0.82rem;">
+              <span>土地法規與土地稅法</span><span id="pb-land-text">最高分: 0分 / 目標: 60分 (0%)</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="pb-land-bar" style="width: 0%;"></div></div>
+          </div>
+
+          <div id="pb-civil-box" style="margin-bottom: 0.5rem;">
+            <div style="display:flex; justify-content:space-between; font-size: 0.82rem;">
+              <span>民法概要</span><span id="pb-civil-text">最高分: 0分 / 目標: 60分 (0%)</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="pb-civil-bar" style="width: 0%;"></div></div>
+          </div>
+
+          <div id="pb-broker-box" style="margin-bottom: 0.5rem;">
+            <div style="display:flex; justify-content:space-between; font-size: 0.82rem;">
+              <span>不動產經紀相關法規</span><span id="pb-broker-text">最高分: 0分 / 目標: 70分 (0%)</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="pb-broker-bar" style="width: 0%;"></div></div>
+          </div>
+
+          <div id="pb-chinese-box">
+            <div style="display:flex; justify-content:space-between; font-size: 0.82rem;">
+              <span>國文作文</span><span id="pb-chinese-text">最高分: 0分 / 目標: 60分 (0%)</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="pb-chinese-bar" style="width: 0%;"></div></div>
+          </div>
+        </div>
+
+        <button class="btn-primary" style="width:100%; margin-bottom: 1rem;" onclick="calculateExamScore()">🎯 估算國考加權總分</button>
+
+        <div id="calc-result-box" style="display:none; padding:1rem; background:var(--bg-primary); border-radius:12px; border:1px solid var(--accent-sage);">
+          <div id="calc-score-val" style="font-size:1.2rem; font-weight:700; color:var(--accent-sage);"></div>
+          <div id="calc-pass-status" style="font-size:0.95rem; font-weight:600; margin-top:0.4rem;"></div>
+        </div>
+      </div>
+
+      <!-- 不動產經紀人 5 大核心實務技能對照表 -->
+      <div class="healing-card">
+        <div class="panel-title">
+          <span>💼 不動產經紀人 5 大核心實務技能對照表</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>實務技能關鍵領域</th>
+              <th>國考法律依據與規範</th>
+              <th>職場勝任實務運作要點</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. 產權調查與說明書產製</strong></td>
+              <td>經紀業管理條例 §22, §23</td>
+              <td>產權調查、謄本標示部/所有權部/他項權利部精確比對、地籍圖套繪。</td>
+            </tr>
+            <tr>
+              <td><strong>2. 共有土地與建物處分</strong></td>
+              <td>土地法 §34-1, 執行要點</td>
+              <td>多數決通知、優先購買權通知、提存法院與過戶文件審查。</td>
+            </tr>
+            <tr>
+              <td><strong>3. 租賃與佔有爭議處理</strong></td>
+              <td>民法 §425, 租賃專法</td>
+              <td>買賣不破租賃適用範圍、定期/不定期租賃過渡與押金移轉實務。</td>
+            </tr>
+            <tr>
+              <td><strong>4. 稅費試算與資產規劃</strong></td>
+              <td>土地稅法、契稅條例、房地合一2.0</td>
+              <td>土地增值稅（自用10%/一般20-40%）、契稅6%、房地合一稅率試算。</td>
+            </tr>
+            <tr>
+              <td><strong>5. 法定六大文件簽章責任</strong></td>
+              <td>經紀業管理條例 §24</td>
+              <td>不動產說明書、委託契約書、要約書、買賣契約書等親自簽章擔保責任。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">全題庫題目</div>
+          <div class="stat-val" style="color: var(--accent-purple);">2,550 題</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">待複習錯題庫</div>
+          <div class="stat-val" style="color: var(--accent-terracotta);" id="stat-mistake-q">0 題</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: 🌱 35天速成 -->
+    <section id="tab-crash35" class="tab-pane">
+      <div class="healing-card">
+        <div class="panel-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <span>🌱 全科目 35 天速成學習地圖</span>
+          <button class="filter-btn" onclick="speakCurrentDayCourse()">🔊 語音朗讀</button>
+        </div>
+
+        <div class="day-grid" id="day-grid-container"></div>
+
+        <div id="day-content-box" style="background: var(--bg-primary); padding: 1.25rem; border-radius: 14px; border: 1px solid var(--border-color);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <h3 id="day-title" style="color: var(--accent-terracotta); font-size: 1.15rem;">Day 1</h3>
+            <button class="filter-btn" style="font-size: 0.78rem;" onclick="showReminderPickerModal(document.getElementById('day-title').innerText, 'CRASH_DAY', 'crash_1')">🔔 提醒 me</button>
+          </div>
+
+          <div style="margin-top: 0.8rem; padding: 0.85rem; background: var(--bg-card); border-left: 3px solid var(--accent-purple); border-radius: 8px;">
+            <strong style="color: var(--accent-purple); font-size: 0.9rem;">📖 講義重點拆解：</strong>
+            <p id="day-desc" style="margin-top: 0.3rem; font-size: 0.9rem; line-height: 1.7; white-space: pre-wrap;"></p>
+          </div>
+
+          <div style="margin-top: 0.8rem; padding: 0.85rem; background: var(--bg-card); border-left: 3px solid var(--accent-sage); border-radius: 8px;">
+            <strong style="color: var(--accent-sage); font-size: 0.9rem;">🏠 日常生活實例：</strong>
+            <p id="day-example" style="margin-top: 0.3rem; font-size: 0.9rem;"></p>
+          </div>
+
+          <div style="margin-top: 0.8rem; padding: 0.85rem; background: var(--bg-card); border-left: 3px solid var(--accent-amber); border-radius: 8px;">
+            <strong style="color: var(--accent-amber); font-size: 0.9rem;">📜 核心法條與口訣：</strong>
+            <p id="day-article" style="margin-top: 0.3rem; font-size: 0.9rem;"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: 📖 講義圖卡 -->
+    <section id="tab-flashcards" class="tab-pane">
+      <div class="healing-card">
+        <div class="panel-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <span>📖 全章節講義生活圖卡庫</span>
+          <button class="filter-btn" onclick="speakCurrentFlashcard()">🔊 語音朗讀</button>
+        </div>
+
+        <div class="card-filters" style="align-items: center;">
+          <button class="filter-btn active" onclick="filterCards('all', event)">全部</button>
+          <button class="filter-btn" onclick="filterCards('估價', event)">估價</button>
+          <button class="filter-btn" onclick="filterCards('土地', event)">土地</button>
+          <button class="filter-btn" onclick="filterCards('民法', event)">民法</button>
+          <button class="filter-btn" onclick="filterCards('經紀', event)">經紀</button>
+
+          <select id="fc-filter-chapter" style="padding: 0.3rem 0.6rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main); font-size: 0.8rem;" onchange="filterCardsByChapter()">
+            <option value="all">所有章節</option>
+          </select>
+        </div>
+
+        <div class="flashcard-container" onclick="flipCard()">
+          <div class="flashcard" id="active-flashcard">
+            <div class="card-face card-front">
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span class="badge" id="fc-badge">考科 / 章節</span>
+                  <button class="filter-btn" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick="event.stopPropagation(); showReminderPickerModal(document.getElementById('fc-title').innerText, 'FLASHCARD', 'fc_item');">🔔 提醒 me</button>
+                </div>
+                <div class="card-title-lg" id="fc-title">概念名稱</div>
+                <div class="card-question" id="fc-question">白話提問內容...</div>
+              </div>
+              <div class="card-hint">💡 點擊卡片翻面查看重點與實例</div>
+            </div>
+
+            <div class="card-face card-back">
+              <div>
+                <span class="badge" id="fc-back-badge">解答與實例</span>
+                <div class="card-section section-lecture" style="margin-top: 0.6rem;">
+                  <div class="card-section-title">📖 講義重點拆解：</div>
+                  <div id="fc-lecture">講義筆記...</div>
+                </div>
+                <div class="card-section section-example">
+                  <div class="card-section-title">🏠 日常生活實例：</div>
+                  <div id="fc-example">實例內容...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.6rem;">
+          <button class="btn-primary" onclick="prevCard()">⬅️ 上一張</button>
+
+          <div style="display: flex; gap: 0.4rem;">
+            <button class="filter-btn" onclick="rateCard('hard')" style="background: #ffebee; color: #c62828;">🔴 難</button>
+            <button class="filter-btn" onclick="rateCard('medium')" style="background: #fff8e1; color: #f57f17;">🟡 中</button>
+            <button class="filter-btn" onclick="rateCard('easy')" style="background: #e8f5e9; color: #2e7d32;">🟢 易</button>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span style="font-size: 0.85rem; color: var(--text-sub);" id="fc-progress">1 / 10</span>
+            <button class="btn-primary" onclick="nextCard()">下一張 ➡️</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: 📚 歷屆題庫 (114~110年全考古題全檢索與練習) -->
+    <section id="tab-questions" class="tab-pane">
+      <div class="healing-card">
+        <div class="panel-title">
+          <span>📚 114~110 年歷屆考古題庫全檢索與練習 (完整收錄)</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.6rem; margin-bottom: 1.2rem;">
+          <select id="q-filter-year" style="padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);" onchange="renderQuestionsList()">
+            <option value="all">所有年份 (114~110全考古題)</option>
+            <option value="114">114 年考古題</option>
+            <option value="113">113 年考古題</option>
+            <option value="112">112 年考古題</option>
+            <option value="111">111 年考古題</option>
+            <option value="110">110 年考古題</option>
+          </select>
+
+          <select id="q-filter-subject" style="padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);" onchange="renderQuestionsList()">
+            <option value="all">所有科目</option>
+            <option value="估價">不動產估價概要</option>
+            <option value="土地">土地法規與土地稅法</option>
+            <option value="民法">民法概要</option>
+            <option value="經紀">不動產經紀相關法規</option>
+            <option value="國文">國文作文</option>
+          </select>
+
+          <select id="q-filter-type" style="padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);" onchange="renderQuestionsList()">
+            <option value="all">全部題型</option>
+            <option value="mc">選擇題</option>
+            <option value="essay">申論題</option>
+          </select>
+
+          <input type="text" id="q-filter-keyword" placeholder="🔍 搜尋題目/法條關鍵字..." style="padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);" oninput="renderQuestionsList()">
+        </div>
+
+        <div id="questions-list-container"></div>
+      </div>
+    </section>
+
+    <!-- TAB 5: ✍️ 申論拆解 -->
+    <section id="tab-essay" class="tab-pane">
+      <div class="healing-card">
+        <div class="panel-title">
+          <span>✍️ 100~114 年全科目 申論結構拆解 (150題全收錄)</span>
+        </div>
+        <div style="display: flex; gap: 0.6rem; margin-bottom: 1rem; flex-wrap: wrap;">
+          <input type="text" id="essay-search-input" placeholder="🔍 搜尋申論題目關鍵字..." style="flex: 1; min-width: 180px; padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);" oninput="renderEssayDeconstruction()">
+          <select id="essay-filter-subject" style="padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);" onchange="renderEssayDeconstruction()">
+            <option value="all">所有科目</option>
+            <option value="估價">不動產估價</option>
+            <option value="土地">土地法規稅法</option>
+            <option value="民法">民法概要</option>
+            <option value="經紀">經紀相關法規</option>
+            <option value="國文">國文作文</option>
+          </select>
+        </div>
+        <div id="essay-deconstruct-container"></div>
+      </div>
+    </section>
+
+    <!-- TAB 6: 🎲 全真模考 -->
+    <section id="tab-mockexam" class="tab-pane">
+      <div class="healing-card">
+        <div class="panel-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <span>🎲 隨機全真模擬考場 (單科滿分100分：2題申論50分 + 25題選擇50分)</span>
+          <button class="btn-primary" onclick="startRandomMockExam()">🎲 重新抽題組考</button>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+          <select id="mock-subject-select" style="padding: 0.5rem 0.8rem; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main); font-weight: 600;" onchange="startRandomMockExam()">
+            <option value="估價">不動產估價概要 (2題申論50分 + 25題選擇50分)</option>
+            <option value="土地">土地法規與土地稅法 (2題申論50分 + 25題選擇50分)</option>
+            <option value="民法">民法概要 (2題申論50分 + 25題選擇50分)</option>
+            <option value="經紀">不動產經紀相關法規 (2題申論50分 + 25題選擇50分)</option>
+            <option value="國文">國文作文 (2題申論 100分)</option>
+          </select>
+          <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-terracotta);" id="mock-answered-count">已回答 0 / 27 題</span>
+        </div>
+
+        <div id="mock-exam-questions-container"></div>
+
+        <div id="mock-submit-bar" style="margin-top: 1.5rem; text-align: center;">
+          <button class="btn-primary" style="background: var(--accent-terracotta); font-size: 1rem; width: 100%;" onclick="submitMockExam()">📥 提交試卷算分 (+3🌱)</button>
+        </div>
+
+        <div id="mock-result-container" style="display: none; margin-top: 1.5rem; padding: 1.2rem; background: var(--bg-primary); border-radius: 14px; border: 1px solid var(--accent-sage);">
+          <h3 id="mock-result-score" style="color: var(--accent-sage); font-size: 1.3rem;">🎯 全真模擬測驗結果報告</h3>
+          <div id="mock-result-msg" style="font-size: 0.95rem; font-weight: 600; margin-top: 0.5rem; line-height: 1.7;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 7: 🎴 錯題本 -->
+    <section id="tab-mistakes" class="tab-pane">
+      <div class="healing-card">
+        <div class="panel-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <span>🎴 錯題對決卡牌庫</span>
+          <button class="filter-btn" onclick="window.print()">🖨️ 列印錯題本</button>
+        </div>
+
+        <div id="mistake-card-wrapper">
+          <div class="flashcard-container" onclick="flipMistakeCard()">
+            <div class="flashcard" id="active-mistake-card">
+              <div class="card-face card-front">
+                <div>
+                  <span class="badge" style="background: #ffebee; color: #c62828;" id="mc-badge">錯題卡 #1</span>
+                  <div class="card-title-lg" id="mc-subject">科目考點</div>
+                  <div class="card-question" id="mc-question">題目內容...</div>
+                </div>
+                <div class="card-hint">💡 點擊翻面檢視正解與解析</div>
+              </div>
+
+              <div class="card-face card-back">
+                <div>
+                  <span class="badge" style="background: #e8f5e9; color: #2e7d32;" id="mc-back-badge">正解解析</span>
+                  <div class="card-section section-lecture" style="margin-top: 0.6rem;">
+                    <div id="mc-explanation">法條詳解...</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+            <button class="btn-primary" onclick="prevMistakeCard()">⬅️ 上一張</button>
+            <button class="filter-btn" style="background: #e8f5e9; color: #2e7d32;" onclick="removeCurrentMistakeCard()">🟢 移出錯題庫 (+1🌱)</button>
+            <button class="btn-primary" onclick="nextMistakeCard()">下一張 ➡️</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 8: ⚙️ 設定與歷程 -->
+    <section id="tab-settings" class="tab-pane">
+      <div class="healing-card">
+        <div class="panel-title">
+          <span>⚙️ 系統設定、備份與 IndexedDB 學習歷程</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem;">
+          <button class="filter-btn" style="justify-content: center;" onclick="showAccountModal()">👤 切換學員帳號：<strong id="settings-user-name">Default Student</strong></button>
+          <button class="filter-btn" style="justify-content: center; background: #e8f0e8; color: var(--accent-sage);" onclick="exportStudyDataJSON()">📥 匯出完整學習備份 (.json)</button>
+          <button class="filter-btn" style="justify-content: center; background: #faf4ed; color: var(--accent-amber);" onclick="exportHistoryCSV()">📊 匯出學習歷程 CSV 檔</button>
+
+          <label class="filter-btn" style="justify-content: center; background: #fdf5f2; color: var(--accent-terracotta); cursor: pointer;">
+            📤 匯入備份檔 (.json)
+            <input type="file" accept=".json" style="display: none;" onchange="importStudyDataJSON(event)">
+          </label>
+
+          <button class="filter-btn" style="justify-content: center; background: #f0ecf7; color: var(--accent-purple);" onclick="showScheduledRemindersModal()">🔔 管理已排定通知提醒</button>
+        </div>
+
+        <!-- 歷次測驗成績紀錄表 (及格綠色 🟢 / 未達呈紅色 🔴) -->
+        <div style="border-top: 1px dashed var(--border-color); padding-top: 1rem; margin-bottom: 1.5rem;">
+          <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <span>📊 歷次模擬測驗成績紀錄表</span>
+            <span style="font-size: 0.8rem; color: var(--text-sub);" id="exam-history-count">0 筆測驗</span>
+          </div>
+          <div style="overflow-x: auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>測驗時間</th>
+                  <th>科目</th>
+                  <th>選擇題分數</th>
+                  <th>預估總得分</th>
+                  <th>及格狀態</th>
+                </tr>
+              </thead>
+              <tbody id="exam-history-tbody">
+                <tr>
+                  <td colspan="5" style="text-align: center; color: var(--text-sub);">尚未進行模擬測驗...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="border-top: 1px dashed var(--border-color); padding-top: 1rem;">
+          <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; display: flex; justify-content: space-between;">
+            <span>📜 追加式學習日誌 (Append-Only Log Timeline)</span>
+            <span style="font-size: 0.8rem; color: var(--text-sub);" id="append-log-count">0 條紀錄</span>
+          </div>
+          <div class="timeline-container" id="timeline-log-container">
+            <div style="font-size: 0.85rem; color: var(--text-sub);">尚未建立學習歷史日誌...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 底部 App 導覽列 (Bottom Tab Bar) -->
+  <nav class="bottom-nav-bar">
+    <button class="tab-item active" onclick="switchTab('dashboard', event)">
+      <span class="tab-icon">🌸</span>
+      <span>儀表板</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('crash35', event)">
+      <span class="tab-icon">🌱</span>
+      <span>35天速成</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('flashcards', event)">
+      <span class="tab-icon">📖</span>
+      <span>講義圖卡</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('questions', event)">
+      <span class="tab-icon">📚</span>
+      <span>歷屆題庫</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('essay', event)">
+      <span class="tab-icon">✍️</span>
+      <span>申論拆解</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('mockexam', event)">
+      <span class="tab-icon">🎲</span>
+      <span>全真模考</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('mistakes', event)">
+      <span class="tab-icon">🎴</span>
+      <span>錯題本</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('settings', event)">
+      <span class="tab-icon">⚙️</span>
+      <span>設定歷程</span>
+    </button>
+  </nav>
+
+  <!-- Modal: 本地通知時間選擇器 -->
+  <div class="modal-overlay" id="reminder-picker-modal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="color: var(--accent-sage);">🔔 設定本地定時複習提醒</h3>
+        <button class="filter-btn" style="padding: 0.2rem 0.5rem;" onclick="closeModal('reminder-picker-modal')">✕</button>
+      </div>
+
+      <div style="font-weight: 600; margin-bottom: 0.5rem;" id="reminder-target-title">複習項目名稱</div>
+      <label style="font-size: 0.85rem; color: var(--text-sub); display: block; margin-bottom: 0.4rem;">選擇提醒日期與時間：</label>
+      <input type="datetime-local" id="reminder-datetime-input" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main); font-size: 1rem; margin-bottom: 1.2rem;">
+
+      <div style="display: flex; gap: 0.6rem; justify-content: flex-end;">
+        <button class="filter-btn" onclick="closeModal('reminder-picker-modal')">取消</button>
+        <button class="btn-primary" onclick="confirmScheduleReminder()">確認排定提醒</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: 通知管理員 -->
+  <div class="modal-overlay" id="reminder-manager-modal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="color: var(--accent-purple);">🔔 已排定通知提醒管理員</h3>
+        <button class="filter-btn" style="padding: 0.2rem 0.5rem;" onclick="closeModal('reminder-manager-modal')">✕</button>
+      </div>
+      <div id="scheduled-reminders-list" style="display: flex; flex-direction: column; gap: 0.6rem;"></div>
+    </div>
+  </div>
+
+  <script src="data/crash35_data.js"></script>
+  <script src="data/flashcards.js"></script>
+  <script src="data/questions.js"></script>
+
+  <script>
+    // ===== ⚖️ 全球法規網 (https://law.moj.gov.tw/Index.aspx) 超連結輔助涵式 =====
+    function formatLegalLinks(str) {
+      if (!str) return '';
+      return str.replace(/(土地法|土地稅法|民法|不動產經紀業管理條例|契稅條例|房屋稅條例|平均地權條例|區域計畫法|都市計畫法|不動產估價技術規則)\s*(?:§|第)?\s*([0-9]+(?:-[0-9]+)?)\s*(條)?/g, (match) => {
+        return `<a href="https://law.moj.gov.tw/Index.aspx" target="_blank" rel="noopener" style="color:var(--accent-sage); font-weight:700; text-decoration:underline;" title="點擊至全國法規資料庫檢視：${match}">${match} ↗</a>`;
+      });
+    }
+
+    // ===== 🛡️ IndexedDB 本地資料庫與 Append-Only 追加式日誌 =====
+    let db = null;
+    let appendLogs = JSON.parse(localStorage.getItem('broker_append_only_log') || '[]');
+
+    function initIndexedDB() {
+      const request = indexedDB.open('BrokerAppDB', 1);
+      request.onupgradeneeded = function(e) {
+        db = e.target.result;
+        if (!db.objectStoreNames.contains('logs')) db.createObjectStore('logs', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains('mistakes')) db.createObjectStore('mistakes', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains('exams')) db.createObjectStore('exams', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains('drafts')) db.createObjectStore('drafts', { keyPath: 'key' });
+      };
+      request.onsuccess = function(e) {
+        db = e.target.result;
+        syncIndexedDBLogs();
+      };
+    }
+
+    function appendStudyLog(actionType, detail, snapshotData) {
+      const entry = {
+        id: 'log_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+        timestamp: new Date().toISOString(),
+        user: currentUser,
+        actionType: actionType,
+        detail: detail,
+        snapshot: snapshotData || null
+      };
+
+      appendLogs.unshift(entry);
+      localStorage.setItem('broker_append_only_log', JSON.stringify(appendLogs.slice(0, 500)));
+
+      if (db) {
+        try {
+          const tx = db.transaction(['logs'], 'readwrite');
+          tx.objectStore('logs').put(entry);
+        } catch (e) {}
+      }
+      renderTimelineLogs();
+    }
+
+    function syncIndexedDBLogs() {
+      if (!db) return;
+      try {
+        const tx = db.transaction(['logs'], 'readonly');
+        const store = tx.objectStore('logs');
+        const req = store.getAll();
+        req.onsuccess = function() {
+          if (req.result && req.result.length > 0) {
+            appendLogs = req.result.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            renderTimelineLogs();
+          }
+        };
+      } catch (e) {}
+    }
+
+    function renderTimelineLogs() {
+      const container = document.getElementById('timeline-log-container');
+      const countElem = document.getElementById('append-log-count');
+      if (countElem) countElem.innerText = `${appendLogs.length} 條追加式日誌`;
+      if (!container) return;
+
+      if (appendLogs.length === 0) {
+        container.innerHTML = '<div style="font-size: 0.85rem; color: var(--text-sub);">尚未建立學習歷史日誌...</div>';
+        return;
+      }
+
+      container.innerHTML = appendLogs.slice(0, 30).map(log => `
+        <div class="timeline-item">
+          <div class="timeline-date">${new Date(log.timestamp).toLocaleString('zh-TW')} [${log.user}]</div>
+          <div class="timeline-desc">${log.detail}</div>
+        </div>
+      `).join('');
+    }
+
+    // ===== ✍️ Debounce 防手震自動存檔 =====
+    let debounceTimer = null;
+    function debounceSaveDraft(key, value) {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const drafts = JSON.parse(localStorage.getItem('broker_user_drafts') || '{}');
+        drafts[key] = value;
+        localStorage.setItem('broker_user_drafts', JSON.stringify(drafts));
+        appendStudyLog('NOTE_AUTOSAVE', `自動存檔草稿 [${key}] (${value.length} 字)`);
+      }, 500);
+    }
+
+    // ===== 🔔 Capacitor 本地提醒與 Local Notifications =====
+    let scheduledReminders = JSON.parse(localStorage.getItem('broker_scheduled_reminders') || '[]');
+    let currentReminderTarget = { title: '', type: '', id: '' };
+
+    function showReminderPickerModal(title, type, id) {
+      currentReminderTarget = { title, type, id };
+      document.getElementById('reminder-target-title').innerText = title;
+
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(9, 0, 0, 0);
+      const isoStr = new Date(tomorrow.getTime() - (tomorrow.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+      document.getElementById('reminder-datetime-input').value = isoStr;
+
+      document.getElementById('reminder-picker-modal').classList.add('active');
+    }
+
+    function confirmScheduleReminder() {
+      const dtVal = document.getElementById('reminder-datetime-input').value;
+      if (!dtVal) {
+        alert("請選擇提醒時間！");
+        return;
+      }
+      const notifyTime = new Date(dtVal);
+      if (notifyTime.getTime() <= Date.now()) {
+        alert("提醒時間必須為未來時間！");
+        return;
+      }
+
+      const reminderItem = {
+        id: 'rem_' + Date.now(),
+        title: currentReminderTarget.title,
+        type: currentReminderTarget.type,
+        itemId: currentReminderTarget.id,
+        scheduledTime: notifyTime.toISOString(),
+        formattedTime: notifyTime.toLocaleString('zh-TW')
+      };
+
+      if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications) {
+        const ln = window.Capacitor.Plugins.LocalNotifications;
+        ln.requestPermissions().then(result => {
+          ln.schedule({
+            notifications: [{
+              title: "國考勝率 App 複習提醒 🔔",
+              body: `準備複習：${reminderItem.title}`,
+              id: Math.floor(Math.random() * 100000),
+              schedule: { at: notifyTime }
+            }]
+          });
+        });
+      } else if ('Notification' in window && Notification.permission !== 'denied') {
+        Notification.requestPermission();
+      }
+
+      scheduledReminders.push(reminderItem);
+      localStorage.setItem('broker_scheduled_reminders', JSON.stringify(scheduledReminders));
+      updateReminderBadge();
+      appendStudyLog('REMINDER_SET', `設定本地提醒：${reminderItem.title} 於 ${reminderItem.formattedTime}`);
+
+      closeModal('reminder-picker-modal');
+      alert(`✅ 成功排定本地定時提醒！\n時間：${reminderItem.formattedTime}\n項目：${reminderItem.title}`);
+    }
+
+    function cancelScheduledReminder(remId) {
+      scheduledReminders = scheduledReminders.filter(r => r.id !== remId);
+      localStorage.setItem('broker_scheduled_reminders', JSON.stringify(scheduledReminders));
+      updateReminderBadge();
+      renderScheduledRemindersList();
+    }
+
+    function showScheduledRemindersModal() {
+      renderScheduledRemindersList();
+      document.getElementById('reminder-manager-modal').classList.add('active');
+    }
+
+    function renderScheduledRemindersList() {
+      const container = document.getElementById('scheduled-reminders-list');
+      if (!container) return;
+
+      if (scheduledReminders.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: var(--text-sub); padding: 1.5rem;">尚未排定任何本地提醒</div>';
+        return;
+      }
+
+      container.innerHTML = scheduledReminders.map(r => `
+        <div style="background: var(--bg-primary); padding: 0.8rem; border-radius: 12px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-weight: 700; font-size: 0.9rem;">${r.title}</div>
+            <div style="font-size: 0.78rem; color: var(--text-sub);">⏰ ${r.formattedTime}</div>
+          </div>
+          <button class="filter-btn" style="background: #ffebee; color: #c62828; padding: 0.2rem 0.5rem;" onclick="cancelScheduledReminder('${r.id}')">✕ 取消</button>
+        </div>
+      `).join('');
+    }
+
+    function updateReminderBadge() {
+      const countElem = document.getElementById('reminder-badge-count');
+      if (countElem) countElem.innerText = scheduledReminders.length.toString();
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId)?.classList.remove('active');
+    }
+
+    // ===== 全局系統與通用介面控制 =====
+    let currentFlashcardIndex = 0;
+    let filteredCards = typeof FLASHCARDS_DATA !== 'undefined' ? [...FLASHCARDS_DATA] : [];
+    let mistakeBank = JSON.parse(localStorage.getItem('broker_mistake_bank') || '[]');
+    let examHistory = JSON.parse(localStorage.getItem('broker_exam_history') || '[]');
+    let isAudioOn = true;
+    let currentUser = localStorage.getItem('broker_current_user') || 'Default Student';
+    let checkInDays = parseInt(localStorage.getItem('broker_checkin_days') || '0');
+
+    function updateCurrentUserUI() {
+      document.getElementById('settings-user-name').innerText = currentUser;
+    }
+
+    function showAccountModal() {
+      const name = prompt("👤 請輸入學員姓名或登入帳號名稱：", currentUser);
+      if (name && name.trim().length > 0) {
+        currentUser = name.trim();
+        localStorage.setItem('broker_current_user', currentUser);
+        updateCurrentUserUI();
+        appendStudyLog('ACCOUNT_SWITCH', `切換學員帳號為：${currentUser}`);
+        alert(`✅ 學員帳號已切換為：【${currentUser}】！`);
+      }
+    }
+
+    function exportStudyDataJSON() {
+      const backupData = {
+        app: "不動產經紀人國考勝率戰略系統 App",
+        version: "3.0-AppNative",
+        exportTime: new Date().toISOString(),
+        currentUser: currentUser,
+        checkInDays: checkInDays,
+        petData: petData,
+        customTargets: customTargets,
+        bestScores: bestScores,
+        taskProgress: taskProgress,
+        mistakeBank: mistakeBank,
+        examHistory: examHistory,
+        appendLogs: appendLogs,
+        scheduledReminders: scheduledReminders
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `broker_study_backup_${currentUser}_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+
+      appendStudyLog('EXPORT_JSON', '匯出完整 JSON 備份檔案');
+      alert("📥 完整學習備份 JSON 檔案已成功下載！");
+    }
+
+    function exportHistoryCSV() {
+      if (appendLogs.length === 0) {
+        alert("尚無歷史日誌可匯出 CSV！");
+        return;
+      }
+      let csvContent = "data:text/csv;charset=utf-8,\uFEFFTimestamp,User,ActionType,Detail\n";
+      appendLogs.forEach(l => {
+        csvContent += `"${l.timestamp}","${l.user}","${l.actionType}","${(l.detail || '').replace(/"/g, '""')}"\n`;
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `broker_study_history_${currentUser}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    function importStudyDataJSON(evt) {
+      const file = evt.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data.currentUser) currentUser = data.currentUser;
+          if (data.checkInDays !== undefined) checkInDays = data.checkInDays;
+          if (data.petData) petData = data.petData;
+          if (data.customTargets) customTargets = data.customTargets;
+          if (data.bestScores) bestScores = data.bestScores;
+          if (data.taskProgress) taskProgress = data.taskProgress;
+          if (data.mistakeBank) mistakeBank = data.mistakeBank;
+          if (data.examHistory) examHistory = data.examHistory;
+          if (data.appendLogs) appendLogs = data.appendLogs;
+
+          localStorage.setItem('broker_current_user', currentUser);
+          localStorage.setItem('broker_checkin_days', checkInDays.toString());
+          localStorage.setItem('broker_pet_data', JSON.stringify(petData));
+          localStorage.setItem('broker_custom_targets', JSON.stringify(customTargets));
+          localStorage.setItem('broker_best_scores', JSON.stringify(bestScores));
+          localStorage.setItem('broker_today_tasks', JSON.stringify(taskProgress));
+          localStorage.setItem('broker_mistake_bank', JSON.stringify(mistakeBank));
+          localStorage.setItem('broker_exam_history', JSON.stringify(examHistory));
+
+          updateCurrentUserUI();
+          updatePetUI();
+          initTasksUI();
+          updateCheckInBtnUI();
+          updateSubjectProgressBars();
+          renderExamHistoryTable();
+          renderQuestionsList();
+          renderMistakeCardDisplay();
+          updateDashboardStats();
+          appendStudyLog('IMPORT_JSON', '匯入 JSON 備份數據');
+
+          alert("🎉 學習紀錄 100% 成功復原！");
+        } catch (err) {
+          alert("❌ 匯入失敗：JSON 格式不符！");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      localStorage.setItem('broker_theme', isDark ? 'dark' : 'light');
+      document.getElementById('theme-toggle-icon').innerText = isDark ? "☀️" : "🌙";
+    }
+
+    function initTheme() {
+      if (localStorage.getItem('broker_theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-toggle-icon').innerText = "☀️";
+      }
+    }
+
+    function switchTab(tabId, evt) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+
+      const targetPane = document.getElementById(`tab-${tabId}`);
+      if (targetPane) targetPane.classList.add('active');
+
+      if (evt) evt.currentTarget.classList.add('active');
+      else {
+        document.querySelectorAll('.tab-item').forEach(b => {
+          if (b.getAttribute('onclick')?.includes(`'${tabId}'`)) b.classList.add('active');
+        });
+      }
+
+      if (tabId === 'questions') renderQuestionsList();
+      else if (tabId === 'essay') renderEssayDeconstruction();
+      else if (tabId === 'mockexam') {
+        if (currentMockExamQuestions.length === 0) startRandomMockExam();
+      } else if (tabId === 'settings') {
+        renderExamHistoryTable();
+      }
+    }
+
+    function initCountdown() {
+      const examDate = new Date('2026-11-14T08:30:00+08:00').getTime();
+      function updateTimer() {
+        const diff = examDate - new Date().getTime();
+        if (diff <= 0) return;
+        document.getElementById('timer-days').innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+        document.getElementById('timer-hours').innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+        document.getElementById('timer-mins').innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+      }
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    }
+
+    // ===== 🎯 每日打卡限制：一天僅能打卡一次 =====
+    function doDailyCheckIn() {
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const lastCheckIn = localStorage.getItem('broker_last_checkin_date');
+
+      if (lastCheckIn === todayStr) {
+        alert("⚠️ 今日已經完成打卡囉！明天記得再來繼續加油！");
+        return;
+      }
+
+      localStorage.setItem('broker_last_checkin_date', todayStr);
+      checkInDays++;
+      localStorage.setItem('broker_checkin_days', checkInDays.toString());
+      earnSaplings(1, "每日打卡");
+      playSound('correct');
+      appendStudyLog('CHECK_IN', `完成第 ${checkInDays} 天每日打卡 (${todayStr})`);
+      updateCheckInBtnUI();
+      alert(`🎯 今日打卡成功！打卡天數已記錄為第 ${checkInDays} 天！(+1🌱 樹苗)`);
+    }
+
+    function updateCheckInBtnUI() {
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const lastCheckIn = localStorage.getItem('broker_last_checkin_date');
+      const btn = document.getElementById('daily-checkin-btn');
+      if (btn) {
+        if (lastCheckIn === todayStr) {
+          btn.innerText = `✅ 今日已打卡 (第 ${checkInDays} 天)`;
+          btn.style.background = '#e8f5e9';
+          btn.style.color = '#2e7d32';
+        } else {
+          btn.innerText = `🎯 每日打卡 (+1🌱)`;
+          btn.style.background = 'var(--accent-sage)';
+          btn.style.color = '#ffffff';
+        }
+      }
+    }
+
+    // ===== 🦖 考霸小怪獸 8 大等級進化梯次曲線（漸進難度） =====
+    const PET_STAGES = [
+      { level: 0, avatar: '🥚', name: '龍龍蛋', maxExp: 100 },
+      { level: 1, avatar: '👾', name: '毛毛怪', maxExp: 200 },
+      { level: 2, avatar: '🐣', name: '破殼怪', maxExp: 350 },
+      { level: 3, avatar: '🍃', name: '芽芽怪', maxExp: 550 },
+      { level: 4, avatar: '🦖', name: '估價霸王龍', maxExp: 800 },
+      { level: 5, avatar: '🦕', name: '土地雷龍', maxExp: 1100 },
+      { level: 6, avatar: '🐉', name: '經紀火龍', maxExp: 1500 },
+      { level: 7, avatar: '👑', name: '神龍王', maxExp: 9999 }
+    ];
+
+    let petData = JSON.parse(localStorage.getItem('broker_pet_data') || JSON.stringify({ level: 0, exp: 0, saplings: 5 }));
+
+    function updatePetUI() {
+      const stage = PET_STAGES.find(s => s.level === petData.level) || PET_STAGES[0];
+      document.getElementById('pet-avatar-icon').innerText = stage.avatar;
+      document.getElementById('pet-name-badge').innerText = `Lv.${petData.level} ${stage.name}`;
+      document.getElementById('sapling-count-display').innerText = `🌱 ${petData.saplings}`;
+      localStorage.setItem('broker_pet_data', JSON.stringify(petData));
+    }
+
+    function earnSaplings(count, reason) {
+      petData.saplings += count;
+      updatePetUI();
+    }
+
+    function feedMonster() {
+      if (petData.level >= 7) { alert("👑 小怪獸已進化至滿級最高型態！"); return; }
+      if (petData.saplings <= 0) { alert("🌱 樹苗不足，請完成打卡或全真模考獲取樹苗！"); return; }
+
+      const stage = PET_STAGES.find(s => s.level === petData.level) || PET_STAGES[0];
+      petData.saplings--;
+      petData.exp += 25;
+      playSound('correct');
+
+      if (petData.exp >= stage.maxExp) {
+        petData.exp -= stage.maxExp;
+        petData.level++;
+        appendStudyLog('PET_LEVEL_UP', `小怪獸升級至 Lv.${petData.level}`);
+        alert(`🎉 升級大成功！小怪獸進化為 Lv.${petData.level} (${stage.name})！`);
+      }
+      updatePetUI();
+    }
+
+    function showPetRulesModal() {
+      alert(`🦖【考霸小怪獸 8 大等級漸進經驗值曲線】\nLv.0 龍龍蛋 (100) ➜ Lv.1 毛毛怪 (200) ➜ Lv.2 破殼怪 (350) ➜ Lv.3 芽芽怪 (550) ➜ Lv.4 估價霸王龍 (800) ➜ Lv.5 土地雷龍 (1100) ➜ Lv.6 經紀火龍 (1500) ➜ Lv.7 神龍王 (MAX)`);
+    }
+
+    // ===== 📚 114~110年 歷屆題庫全檢索渲染 =====
+    function renderQuestionsList() {
+      const container = document.getElementById('questions-list-container');
+      if (!container) return;
+
+      const yearFilter = document.getElementById('q-filter-year')?.value || 'all';
+      const subjectFilter = document.getElementById('q-filter-subject')?.value || 'all';
+      const typeFilter = document.getElementById('q-filter-type')?.value || 'all';
+      const keyword = (document.getElementById('q-filter-keyword')?.value || '').trim().toLowerCase();
+
+      let list = typeof QUESTIONS_DATA !== 'undefined' ? [...QUESTIONS_DATA] : [];
+
+      if (yearFilter !== 'all') list = list.filter(q => String(q.year) === yearFilter);
+      if (subjectFilter !== 'all') list = list.filter(q => q.subject === subjectFilter);
+      if (typeFilter !== 'all') list = list.filter(q => q.type === typeFilter);
+      if (keyword) list = list.filter(q => (q.question + (q.title || '') + (q.explanation || '')).toLowerCase().includes(keyword));
+
+      if (list.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sub);">查無符合條件的歷屆考古題</div>';
+        return;
+      }
+
+      container.innerHTML = list.slice(0, 30).map(q => `
+        <div class="question-item">
+          <div class="q-header">
+            <span class="badge">${q.year} 年 / ${q.subject} ${q.type === 'essay' ? '申論' : '選擇'}第 ${q.number} 題</span>
+            <div style="display:flex; gap:0.4rem;">
+              <button class="filter-btn" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="addToMistakeBank('${q.id}')">📌 納入錯題庫</button>
+              <button class="filter-btn" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="showReminderPickerModal('${q.title || q.question.slice(0,15)}', 'QUESTION', '${q.id}')">🔔 提醒 me</button>
+            </div>
+          </div>
+          <div class="q-title">${q.title || q.question}</div>
+
+          ${q.options ? `
+            <div class="options-grid">
+              ${q.options.map((opt, optIdx) => `<div style="padding:0.5rem 0.8rem; background:var(--bg-primary); border-radius:8px; font-size:0.9rem;">${opt}</div>`).join('')}
+            </div>
+          ` : ''}
+
+          <button class="filter-btn" style="margin-top:0.6rem;" onclick="toggleQuestionAnswer('q-ans-${q.id}')">💡 顯示/隱藏正解與解析</button>
+
+          <div id="q-ans-${q.id}" class="explanation-box" style="display:none; margin-top:0.6rem;">
+            ${q.type === 'mc' ? `<div style="font-weight:700; color:var(--accent-terracotta);">正解：(${q.answer})</div>` : ''}
+            <div>${formatLegalLinks(q.explanation || q.deconstruction?.sampleAnswer || '')}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleQuestionAnswer(ansId) {
+      const elem = document.getElementById(ansId);
+      if (elem) elem.style.display = elem.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function addToMistakeBank(qId) {
+      const q = QUESTIONS_DATA.find(q => q.id === qId);
+      if (q && !mistakeBank.some(m => m.id === qId)) {
+        mistakeBank.push(q);
+        localStorage.setItem('broker_mistake_bank', JSON.stringify(mistakeBank));
+        updateDashboardStats();
+        playSound('correct');
+        alert(`✅ 成功將 ${q.year} 年 ${q.subject} 試題加入錯題庫！`);
+      } else {
+        alert("這題已經在您的錯題庫中了！");
+      }
+    }
+
+    let customTargets = JSON.parse(localStorage.getItem('broker_custom_targets') || JSON.stringify({ eval: 70, land: 60, civil: 60, broker: 70, chinese: 60 }));
+    let bestScores = JSON.parse(localStorage.getItem('broker_best_scores') || JSON.stringify({ eval: 0, land: 0, civil: 0, broker: 0, chinese: 0 }));
+
+    // ===== 📈 5 大科目最高成績進度條更新涵式 =====
+    function updateSubjectProgressBars() {
+      const targetEval = parseFloat(document.getElementById('calc-eval')?.value) || 70;
+      const targetLand = parseFloat(document.getElementById('calc-land')?.value) || 60;
+      const targetCivil = parseFloat(document.getElementById('calc-civil')?.value) || 60;
+      const targetBroker = parseFloat(document.getElementById('calc-broker')?.value) || 70;
+      const targetChinese = parseFloat(document.getElementById('calc-chinese')?.value) || 60;
+
+      customTargets = { eval: targetEval, land: targetLand, civil: targetCivil, broker: targetBroker, chinese: targetChinese };
+      localStorage.setItem('broker_custom_targets', JSON.stringify(customTargets));
+
+      const pctEval = Math.min(100, Math.round((bestScores.eval / targetEval) * 100));
+      const pctLand = Math.min(100, Math.round((bestScores.land / targetLand) * 100));
+      const pctCivil = Math.min(100, Math.round((bestScores.civil / targetCivil) * 100));
+      const pctBroker = Math.min(100, Math.round((bestScores.broker / targetBroker) * 100));
+      const pctChinese = Math.min(100, Math.round((bestScores.chinese / targetChinese) * 100));
+
+      document.getElementById('pb-eval-text').innerText = `最高分: ${bestScores.eval}分 / 目標: ${targetEval}分 (${pctEval}%)`;
+      document.getElementById('pb-eval-bar').style.width = `${pctEval}%`;
+
+      document.getElementById('pb-land-text').innerText = `最高分: ${bestScores.land}分 / 目標: ${targetLand}分 (${pctLand}%)`;
+      document.getElementById('pb-land-bar').style.width = `${pctLand}%`;
+
+      document.getElementById('pb-civil-text').innerText = `最高分: ${bestScores.civil}分 / 目標: ${targetCivil}分 (${pctCivil}%)`;
+      document.getElementById('pb-civil-bar').style.width = `${pctCivil}%`;
+
+      document.getElementById('pb-broker-text').innerText = `最高分: ${bestScores.broker}分 / 目標: ${targetBroker}分 (${pctBroker}%)`;
+      document.getElementById('pb-broker-bar').style.width = `${pctBroker}%`;
+
+      document.getElementById('pb-chinese-text').innerText = `最高分: ${bestScores.chinese}分 / 目標: ${targetChinese}分 (${pctChinese}%)`;
+      document.getElementById('pb-chinese-bar').style.width = `${pctChinese}%`;
+    }
+
+    function renderCrash35Grid() {
+      const container = document.getElementById('day-grid-container');
+      const dataSrc = typeof CRASH_35_DATA !== 'undefined' ? CRASH_35_DATA : [];
+      container.innerHTML = dataSrc.map(d => `
+        <div class="day-card ${d.day === 1 ? 'active' : ''}" id="day-btn-${d.day}" onclick="selectCrashDay(${d.day})">
+          <div class="day-num">Day ${d.day}</div>
+          <div class="day-topic">${d.subject}</div>
+        </div>
+      `).join('');
+    }
+
+    function selectCrashDay(dayNum) {
+      document.querySelectorAll('.day-card').forEach(c => c.classList.remove('active'));
+      document.getElementById(`day-btn-${dayNum}`)?.classList.add('active');
+
+      const data = (typeof CRASH_35_DATA !== 'undefined' ? CRASH_35_DATA : []).find(d => d.day === dayNum);
+      if (!data) return;
+
+      document.getElementById('day-title').innerText = data.title;
+      document.getElementById('day-desc').innerText = data.desc;
+      document.getElementById('day-example').innerText = data.example;
+      document.getElementById('day-article').innerHTML = formatLegalLinks(data.article);
+    }
+
+    let selectedSubject = 'all';
+
+    function initChapterDropdown() {
+      const selectElem = document.getElementById('fc-filter-chapter');
+      if (!selectElem) return;
+      let cards = typeof FLASHCARDS_DATA !== 'undefined' ? FLASHCARDS_DATA : [];
+      if (selectedSubject !== 'all') cards = cards.filter(c => c.subject === selectedSubject);
+      const chapters = Array.from(new Set(cards.map(c => c.chapter).filter(Boolean)));
+      selectElem.innerHTML = `<option value="all">所有章節 (${chapters.length})</option>` + chapters.map(ch => `<option value="${ch}">${ch}</option>`).join('');
+    }
+
+    function filterCards(subject, evt) {
+      selectedSubject = subject;
+      document.querySelectorAll('.card-filters .filter-btn').forEach(btn => btn.classList.remove('active'));
+      if (evt) evt.currentTarget.classList.add('active');
+      initChapterDropdown();
+      filterCardsByChapter();
+    }
+
+    function filterCardsByChapter() {
+      const chapterVal = document.getElementById('fc-filter-chapter')?.value || 'all';
+      let cards = typeof FLASHCARDS_DATA !== 'undefined' ? [...FLASHCARDS_DATA] : [];
+      if (selectedSubject !== 'all') cards = cards.filter(c => c.subject === selectedSubject);
+      if (chapterVal !== 'all') cards = cards.filter(c => c.chapter === chapterVal);
+      filteredCards = cards;
+      currentFlashcardIndex = 0;
+      displayCurrentCard();
+    }
+
+    function displayCurrentCard() {
+      const card = filteredCards[currentFlashcardIndex];
+      document.getElementById('active-flashcard')?.classList.remove('flipped');
+      if (!card) return;
+
+      document.getElementById('fc-badge').innerText = `${card.subject} / ${card.chapter}`;
+      document.getElementById('fc-back-badge').innerText = `${card.subject} / ${card.chapter}`;
+      document.getElementById('fc-title').innerText = card.title;
+      document.getElementById('fc-question').innerText = card.question;
+      document.getElementById('fc-lecture').innerHTML = formatLegalLinks(card.lectureNote || card.concept);
+      document.getElementById('fc-example').innerText = card.example;
+      document.getElementById('fc-progress').innerText = `${currentFlashcardIndex + 1} / ${filteredCards.length}`;
+    }
+
+    function flipCard() { document.getElementById('active-flashcard')?.classList.toggle('flipped'); }
+    function nextCard() { if (currentFlashcardIndex < filteredCards.length - 1) { currentFlashcardIndex++; displayCurrentCard(); } }
+    function prevCard() { if (currentFlashcardIndex > 0) { currentFlashcardIndex--; displayCurrentCard(); } }
+
+    function rateCard(rating) {
+      const card = filteredCards[currentFlashcardIndex];
+      if (card) {
+        appendStudyLog('CARD_RATED', `評分卡片 [${card.title}] 熟練度：${rating}`);
+        playSound('correct');
+        nextCard();
+      }
+    }
+
+    function renderEssayDeconstruction() {
+      const container = document.getElementById('essay-deconstruct-container');
+      if (!container) return;
+      const searchKey = (document.getElementById('essay-search-input')?.value || '').trim().toLowerCase();
+      const subjectFilter = document.getElementById('essay-filter-subject')?.value || 'all';
+
+      let list = (typeof QUESTIONS_DATA !== 'undefined' ? QUESTIONS_DATA : []).filter(q => q.type === 'essay');
+      if (subjectFilter !== 'all') list = list.filter(q => q.subject === subjectFilter);
+      if (searchKey) list = list.filter(q => (q.question + (q.title || '')).toLowerCase().includes(searchKey));
+
+      const drafts = JSON.parse(localStorage.getItem('broker_user_drafts') || '{}');
+
+      container.innerHTML = list.slice(0, 15).map(q => {
+        const dec = q.deconstruction || {};
+        const draftVal = drafts[`user_essay_${q.id}`] || '';
+        return `
+          <div class="healing-card" style="margin-bottom: 1.2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem;">
+              <span class="badge">${q.year}年 / ${q.subject} 申論題第 ${q.number} 題</span>
+              <button class="filter-btn" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;" onclick="showReminderPickerModal('${q.title}', 'ESSAY', '${q.id}')">🔔 提醒 me</button>
+            </div>
+            <h4 style="margin: 0.6rem 0; font-size: 1.05rem; color: var(--text-main);">${q.title}</h4>
+            <p style="font-size: 0.92rem; color: var(--text-main); font-weight: 600;">${q.question}</p>
+
+            <div class="essay-deconstruct-box">
+              <div class="deconstruct-tag">⚖️ 適用法條：${formatLegalLinks(dec.applicableLaws || '依相關法規辦理')}</div>
+              <textarea class="essay-textarea" placeholder="輸入申論擬答（已啟用 Debounce 自動存檔）..." oninput="debounceSaveDraft('user_essay_${q.id}', this.value)">${draftVal}</textarea>
+              <div style="background: var(--bg-card); padding: 0.85rem; border-radius: 10px; font-size: 0.88rem; line-height: 1.6; white-space: pre-wrap; border: 1px solid var(--border-color);">
+                <strong style="color: var(--accent-purple);">【高分範本解答】</strong>\n${formatLegalLinks(dec.sampleAnswer || '')}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    let currentMistakeIndex = 0;
+
+    function renderMistakeCardDisplay() {
+      const list = mistakeBank.length > 0 ? mistakeBank : [];
+      const q = list[currentMistakeIndex];
+      if (!q) {
+        document.getElementById('mc-question').innerText = "錯題庫已全數清空！太棒了！";
+        return;
+      }
+      document.getElementById('mc-badge').innerText = `錯題卡 #${currentMistakeIndex + 1}`;
+      document.getElementById('mc-subject').innerText = `${q.year}年 / ${q.subject}`;
+      document.getElementById('mc-question').innerText = q.question;
+      document.getElementById('mc-explanation').innerHTML = formatLegalLinks(q.explanation || q.deconstruction?.sampleAnswer || '');
+    }
+
+    function flipMistakeCard() { document.getElementById('active-mistake-card')?.classList.toggle('flipped'); }
+    function nextMistakeCard() { if (currentMistakeIndex < mistakeBank.length - 1) { currentMistakeIndex++; renderMistakeCardDisplay(); } }
+    function prevMistakeCard() { if (currentMistakeIndex > 0) { currentMistakeIndex--; renderMistakeCardDisplay(); } }
+
+    function removeCurrentMistakeCard() {
+      const q = mistakeBank[currentMistakeIndex];
+      if (q) {
+        mistakeBank = mistakeBank.filter(m => m.id !== q.id);
+        localStorage.setItem('broker_mistake_bank', JSON.stringify(mistakeBank));
+        earnSaplings(1, "清空錯題卡");
+        appendStudyLog('MISTAKE_CLEARED', `移出錯題卡 [${q.question.slice(0, 15)}]`);
+        playSound('correct');
+        renderMistakeCardDisplay();
+        updateDashboardStats();
+      }
+    }
+
+    // ===== 🎲 隨機全真模考 (無限測驗次數，每次隨機組考不重複) =====
+    let currentMockExamQuestions = [];
+    let mockUserAnswers = {};
+    let mockUserEssayDrafts = {};
+    let mockExamSubmitted = false;
+
+    function startRandomMockExam() {
+      const subjectFilter = document.getElementById('mock-subject-select').value;
+      let poolMc = typeof QUESTIONS_DATA !== 'undefined' ? QUESTIONS_DATA.filter(q => q.type === 'mc') : [];
+      let poolEssay = typeof QUESTIONS_DATA !== 'undefined' ? QUESTIONS_DATA.filter(q => q.type === 'essay') : [];
+
+      if (subjectFilter !== 'all') {
+        poolMc = poolMc.filter(q => q.subject === subjectFilter);
+        poolEssay = poolEssay.filter(q => q.subject === subjectFilter);
+      }
+
+      const selectedEssay = [...poolEssay].sort(() => 0.5 - Math.random()).slice(0, 2);
+      const selectedMc = [...poolMc].sort(() => 0.5 - Math.random()).slice(0, 25);
+
+      currentMockExamQuestions = [...selectedEssay, ...selectedMc];
+
+      mockUserAnswers = {};
+      mockUserEssayDrafts = {};
+      mockExamSubmitted = false;
+
+      document.getElementById('mock-result-container').style.display = 'none';
+      document.getElementById('mock-submit-bar').style.display = 'block';
+      document.getElementById('mock-answered-count').innerText = `已回答 0 / ${currentMockExamQuestions.length} 題`;
+
+      renderMockExamQuestions();
+    }
+
+    function renderMockExamQuestions() {
+      const container = document.getElementById('mock-exam-questions-container');
+      if (currentMockExamQuestions.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: var(--text-sub); padding: 2rem;">查無對應模擬試題</div>';
+        return;
+      }
+
+      let essayIndex = 0;
+      let mcIndex = 0;
+
+      container.innerHTML = currentMockExamQuestions.map((q, idx) => {
+        if (q.type === 'essay') {
+          essayIndex++;
+          const userDraft = mockUserEssayDrafts[q.id] || '';
+          return `
+            <div class="question-item" id="mock-q-box-${q.id}" style="border-left: 4px solid var(--accent-purple);">
+              <div class="q-header">
+                <span class="badge" style="background: #f0ecf7; color: var(--accent-purple);">✍️ 申論題第 ${essayIndex} 題（25 分）</span>
+                <span style="font-weight: 600; color: var(--text-sub); font-size: 0.82rem;">📌 來自：${q.year} 年 ${q.subject} 申論考古題</span>
+              </div>
+              <div class="q-title">${q.title}</div>
+              <div style="margin-top: 0.4rem; font-size: 0.95rem; color: var(--text-main); font-weight: 600;">${q.question}</div>
+
+              <textarea class="essay-textarea" id="mock-user-essay-${q.id}" placeholder="請在此輸入您的申論試卷擬答..." ${mockExamSubmitted ? 'disabled' : ''} oninput="updateMockEssayDraft('${q.id}', this.value)">${userDraft}</textarea>
+
+              <div id="mock-exp-${q.id}" class="explanation-box" style="display: ${mockExamSubmitted ? 'block' : 'none'}; border-color: var(--accent-purple);">
+                <div style="font-weight: 700; color: var(--accent-purple); margin-bottom: 0.4rem;">✍️ 官方高分解答與適用法條（來自 ${q.year} 年考題）</div>
+                <div style="color: #2b6cb0; font-weight: 700; margin-bottom: 0.4rem;">${formatLegalLinks(q.deconstruction?.applicableLaws || '')}</div>
+                <div style="white-space: pre-wrap;">${formatLegalLinks(q.deconstruction?.sampleAnswer || '')}</div>
+              </div>
+            </div>
+          `;
+        } else {
+          mcIndex++;
+          const userSel = mockUserAnswers[q.id];
+          return `
+            <div class="question-item" id="mock-q-box-${q.id}">
+              <div class="q-header">
+                <span class="badge">📝 選擇題第 ${mcIndex} 題（2 分）</span>
+                <span style="font-weight: 600; color: var(--text-sub); font-size: 0.82rem;">📌 來自：${q.year} 年 ${q.subject} 選擇題第 ${q.number} 題</span>
+              </div>
+              <div class="q-title">${q.question}</div>
+
+              <div class="options-grid">
+                ${q.options.map((opt, optIdx) => {
+                  const optCode = String.fromCharCode(65 + optIdx);
+                  const isSelected = userSel === optCode;
+                  let btnStyle = "";
+                  if (mockExamSubmitted) {
+                    if (optCode === q.answer) btnStyle = "background: #e8f5e9 !important; border-color: #81c784 !important; color: #2e7d32 !important; font-weight: 700;";
+                    else if (isSelected && optCode !== q.answer) btnStyle = "background: #ffebee !important; border-color: #e57373 !important; color: #c62828 !important;";
+                  } else if (isSelected) {
+                    btnStyle = "background: var(--accent-sage-light); border-color: var(--accent-sage); font-weight: 700;";
+                  }
+                  return `
+                    <button class="option-btn" style="${btnStyle}" ${mockExamSubmitted ? 'disabled' : ''} onclick="selectMockAnswer('${q.id}', '${optCode}')">
+                      ${opt}
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+
+              <div id="mock-exp-${q.id}" class="explanation-box" style="display: ${mockExamSubmitted ? 'block' : 'none'};">
+                <div style="font-weight: 700; color: var(--accent-terracotta); margin-bottom: 0.4rem;">正解：(${q.answer}) ${userSel === q.answer ? '✅ 回答正確' : '❌ 回答錯誤'}（來自 ${q.year} 年考題）</div>
+                <div>${formatLegalLinks(q.explanation)}</div>
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+    }
+
+    function selectMockAnswer(qId, optCode) {
+      if (mockExamSubmitted) return;
+      mockUserAnswers[qId] = optCode;
+      updateMockAnsweredCount();
+      renderMockExamQuestions();
+    }
+
+    function updateMockEssayDraft(qId, val) {
+      mockUserEssayDrafts[qId] = val;
+      updateMockAnsweredCount();
+    }
+
+    function updateMockAnsweredCount() {
+      const mcAnswered = Object.keys(mockUserAnswers).length;
+      const essayAnswered = Object.values(mockUserEssayDrafts).filter(v => v.trim().length > 0).length;
+      const totalAnswered = mcAnswered + essayAnswered;
+      document.getElementById('mock-answered-count').innerText = `已回答 ${totalAnswered} / ${currentMockExamQuestions.length} 題`;
+    }
+
+    function submitMockExam() {
+      if (currentMockExamQuestions.length === 0) return;
+      mockExamSubmitted = true;
+
+      let correctCount = 0;
+      let mcTotal = 0;
+      let mistakesAdded = 0;
+
+      currentMockExamQuestions.forEach(q => {
+        if (q.type === 'mc') {
+          mcTotal++;
+          const userSel = mockUserAnswers[q.id];
+          if (userSel === q.answer) {
+            correctCount++;
+          } else {
+            if (!mistakeBank.some(m => m.id === q.id)) {
+              mistakeBank.push(q);
+              mistakesAdded++;
+            }
+          }
+        } else {
+          if (!mistakeBank.some(m => m.id === q.id)) {
+            mistakeBank.push(q);
+            mistakesAdded++;
+          }
+        }
+      });
+
+      localStorage.setItem('broker_mistake_bank', JSON.stringify(mistakeBank));
+
+      const mcScore = correctCount * 2;
+      const wrongCount = mcTotal - correctCount;
+      const totalScore = mcScore + 40; // 預估總分 (滿分100)
+
+      const subjectName = document.getElementById('mock-subject-select').value;
+      const keyMap = { '估價': 'eval', '土地': 'land', '民法': 'civil', '經紀': 'broker', '國文': 'chinese' };
+      const subKey = keyMap[subjectName] || 'eval';
+
+      if (totalScore > (bestScores[subKey] || 0)) {
+        bestScores[subKey] = totalScore;
+        localStorage.setItem('broker_best_scores', JSON.stringify(bestScores));
+        updateSubjectProgressBars();
+      }
+
+      // 紀錄測驗成績至歷史表
+      const examRecord = {
+        id: 'exam_' + Date.now(),
+        timestamp: new Date().toLocaleString('zh-TW'),
+        subject: subjectName,
+        mcScore: mcScore,
+        totalScore: totalScore,
+        passed: totalScore >= 60
+      };
+      examHistory.unshift(examRecord);
+      localStorage.setItem('broker_exam_history', JSON.stringify(examHistory));
+
+      earnSaplings(3, "完成全真模擬考");
+      renderMockExamQuestions();
+
+      const resContainer = document.getElementById('mock-result-container');
+      const scoreElem = document.getElementById('mock-result-score');
+      const msgElem = document.getElementById('mock-result-msg');
+
+      resContainer.style.display = 'block';
+      scoreElem.innerText = `🎯 模擬試卷交卷報告（單科滿分 100 分）`;
+
+      msgElem.innerHTML = `
+        <div style="background: var(--bg-card); padding: 1rem; border-radius: 12px; border: 1px solid var(--border-color);">
+          <div style="color: var(--accent-sage); font-size: 1.1rem; font-weight: 700;">• 📝 選擇題得分：${mcScore} 分 / 50 分（答對 ${correctCount} 題，錯題數：${wrongCount} 題，每題 2 分）</div>
+          <div style="color: var(--accent-purple); font-size: 1rem; font-weight: 700; margin-top: 0.4rem;">• ✍️ 申論題對照：2 題申論題（每題 25 分，共 50 分）已公布官方高分範本解答與權威法條</div>
+          <div style="color: ${totalScore >= 60 ? '#2e7d32' : '#c62828'}; font-weight: 700; margin-top: 0.6rem; font-size: 1.05rem;">
+            預估加權總分：${totalScore} 分 ➜ ${totalScore >= 60 ? '🟢 恭喜已超越紅線及格標準！' : '🔴 未達 60 分紅線，請繼續加強！'}
+          </div>
+        </div>
+      `;
+
+      if (totalScore >= 60) playSound('correct');
+      else playSound('wrong');
+
+      appendStudyLog('MOCK_EXAM_SUBMIT', `提交全真試卷 [${subjectName}]：選擇題得分 ${mcScore}/50分，總得分 ${totalScore}/100分`);
+      renderMistakeCardDisplay();
+      updateDashboardStats();
+      renderExamHistoryTable();
+    }
+
+    // ===== 📊 歷次測驗成績紀錄表 (≥60分呈現綠色 🟢 / 未達呈紅色 🔴) =====
+    function renderExamHistoryTable() {
+      const tbody = document.getElementById('exam-history-tbody');
+      const countElem = document.getElementById('exam-history-count');
+      if (countElem) countElem.innerText = `${examHistory.length} 筆測驗紀錄`;
+      if (!tbody) return;
+
+      if (examHistory.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-sub); padding:1rem;">尚未進行模擬測驗...</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = examHistory.map(rec => {
+        const isPass = rec.totalScore >= 60;
+        const colorStyle = isPass ? 'color: #2e7d32; font-weight: 700;' : 'color: #c62828; font-weight: 700;';
+        return `
+          <tr>
+            <td style="font-size:0.8rem; color:var(--text-sub);">${rec.timestamp}</td>
+            <td style="font-weight:600;">${rec.subject}</td>
+            <td>${rec.mcScore} 分 / 50 分</td>
+            <td style="${colorStyle}">${rec.totalScore} 分</td>
+            <td style="${colorStyle}">${isPass ? '🟢 及格' : '🔴 未達紅線'}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function calculateExamScore() {
+      const e = parseFloat(document.getElementById('calc-eval').value) || 0;
+      const l = parseFloat(document.getElementById('calc-land').value) || 0;
+      const c = parseFloat(document.getElementById('calc-civil').value) || 0;
+      const b = parseFloat(document.getElementById('calc-broker').value) || 0;
+      const ch = parseFloat(document.getElementById('calc-chinese').value) || 0;
+
+      const weighted = ((e + l + c + b) / 4 * 0.9) + (ch * 0.1);
+
+      document.getElementById('calc-result-box').style.display = 'block';
+      document.getElementById('calc-score-val').innerText = `國考加權總分：${weighted.toFixed(2)} 分`;
+
+      const passElem = document.getElementById('calc-pass-status');
+      if (weighted >= 60) {
+        passElem.innerText = "🎉 恭喜跨越 60 分國考及格門檻！正式取得不動產經紀人執照！";
+        passElem.style.color = "var(--accent-sage)";
+        playSound('correct');
+      } else {
+        const diff = (60 - weighted).toFixed(2);
+        passElem.innerText = `⚠️ 距離及格紅線還差 ${diff} 分，請針對弱項科目加強衝刺！`;
+        passElem.style.color = "var(--accent-terracotta)";
+        playSound('wrong');
+      }
+    }
+
+    function updateDashboardStats() {
+      document.getElementById('stat-mistake-q').innerText = `${mistakeBank.length} 題`;
+    }
+
+    function toggleAudio() {
+      isAudioOn = !isAudioOn;
+      document.getElementById('audio-toggle-icon').innerText = isAudioOn ? "🔊" : "🔇";
+    }
+
+    function playSound(type) {
+      if (!isAudioOn) return;
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(type === 'correct' ? 523 : 220, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+      } catch (e) {}
+    }
+
+    // ===== 🎯 今日衝刺任務單日限完成一次 =====
+    let taskProgress = JSON.parse(localStorage.getItem('broker_today_tasks') || JSON.stringify({ t1: false, t2: false, t3: false, t4: false }));
+    let lastTaskDate = localStorage.getItem('broker_task_date') || '';
+
+    function initTasksUI() {
+      const todayStr = new Date().toISOString().slice(0, 10);
+      if (lastTaskDate !== todayStr) {
+        taskProgress = { t1: false, t2: false, t3: false, t4: false };
+        localStorage.setItem('broker_today_tasks', JSON.stringify(taskProgress));
+        localStorage.setItem('broker_task_date', todayStr);
+        lastTaskDate = todayStr;
+      }
+
+      let count = 0;
+      for (let k in taskProgress) {
+        const chk = document.getElementById(`task-chk-${k.replace('t', '')}`);
+        if (chk) chk.checked = taskProgress[k];
+        if (taskProgress[k]) count++;
+      }
+      document.getElementById('today-task-progress').innerText = `${count} / 4`;
+    }
+
+    function toggleTaskCheck(chkId) {
+      const todayStr = new Date().toISOString().slice(0, 10);
+      if (lastTaskDate !== todayStr) {
+        lastTaskDate = todayStr;
+        localStorage.setItem('broker_task_date', todayStr);
+      }
+
+      const chk = document.getElementById(chkId);
+      if (!chk) return;
+      const key = 't' + chkId.replace('task-chk-', '');
+
+      if (taskProgress[key] && chk.checked) {
+        alert("⚠️ 今日該任務已經領取獎勵囉！明天再繼續加油！");
+        return;
+      }
+
+      taskProgress[key] = chk.checked;
+      localStorage.setItem('broker_today_tasks', JSON.stringify(taskProgress));
+
+      if (chk.checked) {
+        playSound('correct');
+        appendStudyLog('TASK_DONE', `完成每日學習任務 [${key}]`);
+        if (key === 't1') earnSaplings(1, "完成速成");
+        else if (key === 't3') earnSaplings(3, "完成模考");
+        else if (key === 't4') doDailyCheckIn();
+      }
+      initTasksUI();
+    }
+
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-TW';
+      window.speechSynthesis.speak(u);
+    }
+
+    function speakCurrentFlashcard() {
+      const card = filteredCards[currentFlashcardIndex];
+      if (card) speakText(`${card.title}。${card.question}`);
+    }
+
+    function speakCurrentDayCourse() {
+      const title = document.getElementById('day-title')?.innerText || '';
+      const desc = document.getElementById('day-desc')?.innerText || '';
+      speakText(`${title}。${desc}`);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initIndexedDB();
+      updateCurrentUserUI();
+      initTheme();
+      initCountdown();
+      renderCrash35Grid();
+      selectCrashDay(1);
+      initChapterDropdown();
+      displayCurrentCard();
+      renderQuestionsList();
+      renderEssayDeconstruction();
+      renderMistakeCardDisplay();
+      updatePetUI();
+      initTasksUI();
+      updateCheckInBtnUI();
+      updateSubjectProgressBars();
+      updateDashboardStats();
+      updateReminderBadge();
+      renderExamHistoryTable();
+      startRandomMockExam();
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      }
+    });
+  </script>
 </body>
 </html>
