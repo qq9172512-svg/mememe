@@ -538,17 +538,27 @@
     <section id="tab-questions" class="tab-pane">
       <div class="healing-card">
         <div class="panel-title">
-          <span>📚 114~110 年歷屆考古題庫全檢索與練習 (完整收錄)</span>
+          <span>📚 100~114 年歷屆考古題庫全檢索與練習 (完整收錄 15 年全考科 2,061 題真題)</span>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.6rem; margin-bottom: 1.2rem;">
           <select id="q-filter-year" style="padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);" onchange="renderQuestionsList()">
-            <option value="all">所有年份 (114~110全考古題)</option>
+            <option value="all">所有年份 (100~114年全考古題)</option>
             <option value="114">114 年考古題</option>
             <option value="113">113 年考古題</option>
             <option value="112">112 年考古題</option>
             <option value="111">111 年考古題</option>
             <option value="110">110 年考古題</option>
+            <option value="109">109 年考古題</option>
+            <option value="108">108 年考古題</option>
+            <option value="107">107 年考古題</option>
+            <option value="106">106 年考古題</option>
+            <option value="105">105 年考古題</option>
+            <option value="104">104 年考古題</option>
+            <option value="103">103 年考古題</option>
+            <option value="102">102 年考古題</option>
+            <option value="101">101 年考古題</option>
+            <option value="100">100 年考古題</option>
           </select>
 
           <select id="q-filter-subject" style="padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);" onchange="renderQuestionsList()">
@@ -1258,7 +1268,37 @@
       const typeFilter = document.getElementById('q-filter-type')?.value || 'all';
       const keyword = (document.getElementById('q-filter-keyword')?.value || '').trim().toLowerCase();
 
-      let list = typeof QUESTIONS_DATA !== 'undefined' ? [...QUESTIONS_DATA] : [];
+      
+    function getQuestionsDataSafe() {
+      if (typeof QUESTIONS_DATA !== 'undefined' && Array.isArray(QUESTIONS_DATA) && QUESTIONS_DATA.length > 0) {
+        return QUESTIONS_DATA;
+      }
+      if (window.QUESTIONS_DATA && Array.isArray(window.QUESTIONS_DATA) && window.QUESTIONS_DATA.length > 0) {
+        return window.QUESTIONS_DATA;
+      }
+      return [];
+    }
+
+    function retryLoadQuestionsData() {
+      const paths = ['./data/questions.js', 'data/questions.js', '../data/questions.js', 'dist/data/questions.js'];
+      let loaded = false;
+      paths.forEach(p => {
+        if (loaded) return;
+        const s = document.createElement('script');
+        s.src = p + '?t=' + Date.now();
+        s.onload = () => {
+          if (getQuestionsDataSafe().length > 0) {
+            loaded = true;
+            alert('✅ 成功載入 100~114 年 2,061 題全真題庫！');
+            renderQuestionsList();
+            renderEssayDeconstruction();
+          }
+        };
+        document.head.appendChild(s);
+      });
+    }
+
+      let list = [...getQuestionsDataSafe()];
 
       if (yearFilter !== 'all') list = list.filter(q => String(q.year) === yearFilter);
       if (subjectFilter !== 'all') list = list.filter(q => q.subject === subjectFilter);
@@ -1266,7 +1306,20 @@
       if (keyword) list = list.filter(q => (q.question + (q.title || '') + (q.explanation || '')).toLowerCase().includes(keyword));
 
       if (list.length === 0) {
+        if (getQuestionsDataSafe().length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:2rem; background: var(--bg-card-sub); border-radius:16px; margin: 1rem 0;">
+            <div style="font-size:1.2rem; font-weight:700; color:var(--accent-terracotta); margin-bottom:0.5rem;">⚠️ 尚未載入考古題庫資料 (data/questions.js)</div>
+            <p style="color:var(--text-sub); margin-bottom:1rem; font-size:0.9rem;">
+              若您在 GitHub / GitHub Pages 上開啟本 App，請確認已將 <code>data/questions.js</code> (共 2,061 題完整真題) 一併推送到 GitHub 儲存庫。<br>
+              您也可以嘗試點擊下方按鈕重新手動載入題庫。
+            </p>
+            <button class="filter-btn" style="background:var(--accent-sage); color:#fff; padding:0.5rem 1.2rem; font-weight:600;" onclick="retryLoadQuestionsData()">🔄 嘗試重新載入 100~114 年考古題庫</button>
+          </div>
+        `;
+      } else {
         container.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sub);">查無符合條件的歷屆考古題</div>';
+      }
         return;
       }
 
@@ -1303,7 +1356,7 @@
     }
 
     function addToMistakeBank(qId) {
-      const q = QUESTIONS_DATA.find(q => q.id === qId);
+      const q = getQuestionsDataSafe().find(q => q.id === qId);
       if (q && !mistakeBank.some(m => m.id === qId)) {
         mistakeBank.push(q);
         localStorage.setItem('broker_mistake_bank', JSON.stringify(mistakeBank));
@@ -1437,7 +1490,7 @@
       const searchKey = (document.getElementById('essay-search-input')?.value || '').trim().toLowerCase();
       const subjectFilter = document.getElementById('essay-filter-subject')?.value || 'all';
 
-      let list = (typeof QUESTIONS_DATA !== 'undefined' ? QUESTIONS_DATA : []).filter(q => q.type === 'essay');
+      let list = getQuestionsDataSafe().filter(q => q.type === 'essay');
       if (subjectFilter !== 'all') list = list.filter(q => q.subject === subjectFilter);
       if (searchKey) list = list.filter(q => (q.question + (q.title || '')).toLowerCase().includes(searchKey));
 
@@ -1507,8 +1560,8 @@
 
     function startRandomMockExam() {
       const subjectFilter = document.getElementById('mock-subject-select').value;
-      let poolMc = typeof QUESTIONS_DATA !== 'undefined' ? QUESTIONS_DATA.filter(q => q.type === 'mc') : [];
-      let poolEssay = typeof QUESTIONS_DATA !== 'undefined' ? QUESTIONS_DATA.filter(q => q.type === 'essay') : [];
+      let poolMc = getQuestionsDataSafe().filter(q => q.type === 'mc');
+      let poolEssay = getQuestionsDataSafe().filter(q => q.type === 'essay');
 
       if (subjectFilter !== 'all') {
         poolMc = poolMc.filter(q => q.subject === subjectFilter);
