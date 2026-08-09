@@ -1,5 +1,5 @@
 // 不動產經紀人 100~114 年 5考科全收錄 歷屆國家考試題庫
-const QUESTIONS_DATA = [
+var QUESTIONS_DATA = [
   {
     "id": "q-114-估價-essay-1",
     "year": 114,
@@ -35186,4 +35186,6 @@ const QUESTIONS_DATA = [
   }
 ];
 
+// Explicit browser global so GitHub Pages and inline app code can always access the dataset.
+if (typeof window !== 'undefined') { window.QUESTIONS_DATA = QUESTIONS_DATA; }
 if (typeof module !== 'undefined') { module.exports = QUESTIONS_DATA; }
