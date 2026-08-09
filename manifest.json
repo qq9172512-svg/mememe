@@ -1,10 +1,1 @@
-{
-  "name": "不動產經紀人 國考勝率戰略系統",
-  "short_name": "不動產經紀人",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#f7f5f0",
-  "theme_color": "#6b8e73",
-  "lang": "zh-TW",
-  "icons": []
-}
+{"name":"不動產經紀人國考勝率戰略系統","short_name":"不動產國考","start_url":"./index.html","display":"standalone","theme_color":"#6b8e73","background_color":"#f7f5f0","lang":"zh-TW","icons":[]}

@@ -1,3 +1,1 @@
-這是以原始完整 index.html 與原始 questions.js 為基礎，只新增「考題中心」入口。
-原本歷屆題庫、申論拆解、全真模考 section 與函式均保留。
-GitHub 根目錄放 index.html、sw.js，data/ 放 questions.js、flashcards.js、crash35_data.js。
+以原本含 Supabase 登入／同步的 index 為基礎；保留原始 QUESTIONS_DATA、歷屆題庫、申論拆解與全真模考，只新增考題中心入口及 35 天速成多設備響應式樣式。

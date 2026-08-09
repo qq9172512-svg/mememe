@@ -175,6 +175,113 @@
     .btn-primary { background: var(--accent-sage); color: #ffffff; border: none; padding: 0.65rem 1.4rem; border-radius: 20px; font-weight: 600; cursor: pointer; transition: var(--transition); min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; font-size: 0.9rem; }
     .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
 
+
+
+    /* ===== 📱 多設備 App 自適應：35天速成與考題中心 ===== */
+    .exam-center-intro { color: var(--text-sub); margin-bottom: 1rem; }
+    .exam-center-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .exam-center-btn {
+      appearance: none;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-radius: 18px;
+      min-height: 180px;
+      padding: 1.25rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      text-align: left;
+      gap: .35rem;
+      box-shadow: var(--shadow-soft);
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .exam-center-btn:hover, .exam-center-btn:focus-visible {
+      transform: translateY(-2px);
+      border-color: var(--accent-sage);
+      outline: none;
+    }
+    .exam-center-icon { font-size: 2rem; margin-bottom: .25rem; }
+    .exam-center-title { font-size: 1.1rem; font-weight: 800; }
+    .exam-center-desc { font-size: .86rem; color: var(--text-sub); line-height: 1.5; }
+    .exam-center-btn-blue { border-top: 4px solid #5b8def; }
+    .exam-center-btn-purple { border-top: 4px solid var(--accent-purple); }
+    .exam-center-btn-orange { border-top: 4px solid var(--accent-terracotta); }
+
+    /* 35天速成：格子、內容與按鈕會隨設備縮放 */
+    .day-grid {
+      grid-template-columns: repeat(auto-fit, minmax(clamp(82px, 11vw, 130px), 1fr));
+      gap: clamp(.4rem, 1vw, .75rem);
+    }
+    .day-card {
+      min-width: 0;
+      min-height: clamp(58px, 8vw, 82px);
+      padding: clamp(.5rem, 1vw, .75rem) clamp(.25rem, .8vw, .55rem);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .day-num { font-size: clamp(.9rem, 1.8vw, 1.1rem); }
+    .day-topic { font-size: clamp(.68rem, 1.3vw, .82rem); max-width: 100%; }
+    .filter-btn, .btn-primary {
+      min-height: clamp(42px, 6vw, 48px);
+      padding: clamp(.55rem, 1.4vw, .75rem) clamp(.8rem, 2vw, 1.15rem);
+      font-size: clamp(.82rem, 1.7vw, .95rem);
+    }
+    #day-content-box {
+      width: 100%;
+      overflow-wrap: anywhere;
+    }
+    #day-content-box button, #day-content-box .filter-btn, #day-content-box .btn-primary {
+      max-width: 100%;
+    }
+
+    @media (max-width: 900px) {
+      main { max-width: 100%; padding: .8rem .7rem; }
+      .healing-card { padding: 1rem; }
+      .exam-center-grid { grid-template-columns: 1fr 1fr; }
+      .exam-center-btn:last-child { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 600px) {
+      body { padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
+      header { padding-left: .7rem; padding-right: .7rem; }
+      .header-content { width: 100%; }
+      main { padding: .65rem .55rem; }
+      .healing-card { padding: .85rem; border-radius: 16px; }
+      .panel-title { font-size: 1rem; }
+      .exam-center-grid { grid-template-columns: 1fr; gap: .7rem; }
+      .exam-center-btn, .exam-center-btn:last-child { grid-column: auto; min-height: 125px; padding: 1rem; }
+      .exam-center-icon { font-size: 1.7rem; }
+      .exam-center-title { font-size: 1rem; }
+      .exam-center-desc { font-size: .8rem; }
+      .day-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .4rem; }
+      .day-card { min-height: 62px; border-radius: 10px; }
+      .day-topic { font-size: .68rem; }
+      #day-content-box { padding: .85rem !important; }
+      #day-content-box h3 { font-size: 1rem !important; }
+      .filter-btn, .btn-primary { width: auto; max-width: 100%; }
+    }
+
+    @media (max-width: 380px) {
+      .day-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .day-card { min-height: 60px; }
+      .day-topic { font-size: .64rem; }
+      .bottom-nav-bar .tab-item { font-size: .62rem; }
+      .bottom-nav-bar .tab-icon { font-size: 1.05rem; }
+    }
+
+    @media (min-width: 1200px) {
+      .day-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+      #day-content-box { max-width: 1100px; margin-inline: auto; }
+    }
     .day-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 0.6rem; margin-bottom: 1.2rem; }
     .day-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 0.65rem 0.4rem; border-radius: 12px; text-align: center; cursor: pointer; transition: var(--transition); }
     .day-card:hover, .day-card.active { border-color: var(--accent-terracotta); background: rgba(217, 136, 106, 0.1); transform: translateY(-2px); }
@@ -198,14 +305,26 @@
     table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.88rem; }
     th, td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border-color); text-align: left; }
     th { background: var(--bg-card-sub); font-weight: 700; color: var(--text-main); }
-  
-    /* ===== 考題中心：只新增入口，不改動原本三個考題功能 ===== */
-    .exam-center-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:1rem}
-    .exam-center-card{border:1px solid var(--border-color);background:var(--bg-card);border-radius:20px;padding:1.25rem;text-align:left;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;box-shadow:0 4px 14px rgba(0,0,0,.05)}
-    .exam-center-card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.09);border-color:var(--accent-sage)}
-    .exam-center-icon{font-size:2rem;margin-bottom:.5rem}.exam-center-title{font-weight:800;font-size:1.1rem;margin-bottom:.3rem}.exam-center-desc{font-size:.88rem;color:var(--text-sub);line-height:1.5}
-    @media(max-width:800px){.exam-center-grid{grid-template-columns:1fr}.exam-center-card{padding:1rem}}
-</style>
+
+    /* ===== Supabase 登入介面 ===== */
+    .auth-user-chip {
+      display:inline-flex; align-items:center; gap:.35rem; max-width:230px;
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    }
+    .auth-user-email { max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .auth-modal-card { max-width:440px; }
+    .auth-input {
+      width:100%; padding:.75rem .85rem; border-radius:12px;
+      border:1px solid var(--border-color); background:var(--bg-primary);
+      color:var(--text-main); font-size:1rem; margin-top:.35rem;
+    }
+    .auth-label { display:block; font-size:.85rem; color:var(--text-sub); margin-top:.8rem; }
+    .auth-status { margin-top:.8rem; padding:.75rem; border-radius:10px; font-size:.85rem; line-height:1.5; display:none; }
+    .auth-status.show { display:block; }
+    .auth-status.ok { background:#e8f5e9; color:#2e7d32; }
+    .auth-status.err { background:#ffebee; color:#c62828; }
+    .auth-status.info { background:var(--accent-sage-light); color:var(--text-main); }
+  </style>
 </head>
 <body>
 
@@ -217,6 +336,9 @@
         <span>國考勝率 App</span>
       </div>
       <div class="header-actions">
+        <button id="auth-header-btn" class="filter-btn auth-user-chip" style="padding:.3rem .6rem;" onclick="openAuthModal()" title="Email 登入／同步學習資料">
+          🔐 <span id="auth-header-text">登入同步</span>
+        </button>
         <a href="https://law.moj.gov.tw/Index.aspx" target="_blank" rel="noopener" class="filter-btn" style="padding: 0.3rem 0.6rem; text-decoration: none;" title="開啟全國法規資料庫">
           📜 全球法規網 ↗
         </a>
@@ -541,23 +663,31 @@
       </div>
     </section>
 
-    <!-- TAB 4: 📚 考題中心（入口；原本歷屆題庫／申論拆解／全真模考完整保留） -->
+    <!-- TAB 4: 📚 考題中心：保留原本三大考題功能，只增加統一入口 -->
     <section id="tab-examcenter" class="tab-pane">
-      <div class="healing-card">
-        <div class="panel-title">📚 考題中心</div>
-        <div style="color:var(--text-sub);line-height:1.6;margin:.4rem 0 1rem;">請選擇要使用的考題功能。點擊後才會進入原本完整的題目頁面。</div>
+      <div class="healing-card exam-center-card">
+        <div class="panel-title">
+          <span>📚 考題中心</span>
+        </div>
+        <p class="exam-center-intro">請選擇要使用的考題功能。只有按下後才會進入對應功能；原本完整題庫、申論拆解與全真模考內容均保留。</p>
+
         <div class="exam-center-grid">
-          <button class="exam-center-card" type="button" onclick="switchTab('questions')">
-            <div class="exam-center-icon">📚</div><div class="exam-center-title">歷屆考題</div>
-            <div class="exam-center-desc">100～114 年完整歷屆題庫，保留原本年度、科目、題型與關鍵字篩選。</div>
+          <button class="exam-center-btn exam-center-btn-blue" onclick="switchTab('questions', event)">
+            <span class="exam-center-icon">📚</span>
+            <span class="exam-center-title">歷屆考題</span>
+            <span class="exam-center-desc">100～114 年完整歷屆題庫</span>
           </button>
-          <button class="exam-center-card" type="button" onclick="switchTab('essay')">
-            <div class="exam-center-icon">✍️</div><div class="exam-center-title">申論拆解</div>
-            <div class="exam-center-desc">原本完整申論題、拆解與答案內容。</div>
+
+          <button class="exam-center-btn exam-center-btn-purple" onclick="switchTab('essay', event)">
+            <span class="exam-center-icon">✍️</span>
+            <span class="exam-center-title">申論拆解</span>
+            <span class="exam-center-desc">完整申論題、題目與拆解</span>
           </button>
-          <button class="exam-center-card" type="button" onclick="switchTab('mockexam')">
-            <div class="exam-center-icon">🎲</div><div class="exam-center-title">全真模考</div>
-            <div class="exam-center-desc">使用原本 QUESTIONS_DATA 抽題與模考流程。</div>
+
+          <button class="exam-center-btn exam-center-btn-orange" onclick="switchTab('mockexam', event)">
+            <span class="exam-center-icon">🎲</span>
+            <span class="exam-center-title">全真模考</span>
+            <span class="exam-center-desc">從原本 QUESTIONS_DATA 抽題</span>
           </button>
         </div>
       </div>
@@ -608,6 +738,7 @@
           <input type="text" id="q-filter-keyword" placeholder="🔍 搜尋題目/法條關鍵字..." style="padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);" oninput="renderQuestionsList()">
         </div>
 
+        <div id="question-data-status" style="margin-bottom:0.8rem;font-size:0.9rem;font-weight:600;"></div>
         <div id="questions-list-container"></div>
       </div>
     </section>
@@ -616,7 +747,7 @@
     <section id="tab-essay" class="tab-pane">
       <div class="healing-card">
         <div class="panel-title">
-          <span>✍️ 100~114 年全科目 申論結構拆解 (150題全收錄)</span>
+          <span>✍️ 100~114 年全科目 申論結構拆解（依題庫實際資料完整顯示）</span>
         </div>
         <div style="display: flex; gap: 0.6rem; margin-bottom: 1rem; flex-wrap: wrap;">
           <input type="text" id="essay-search-input" placeholder="🔍 搜尋申論題目關鍵字..." style="flex: 1; min-width: 180px; padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);" oninput="renderEssayDeconstruction()">
@@ -764,6 +895,39 @@
     </section>
   </main>
 
+  <!-- Modal: Email＋密碼登入／註冊／跨裝置同步 -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-card auth-modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <h3 style="color:var(--accent-sage);">🔐 帳號登入與同步</h3>
+        <button class="filter-btn" style="padding:.2rem .5rem;" onclick="closeModal('auth-modal')">✕</button>
+      </div>
+
+      <div id="auth-login-panel">
+        <p style="font-size:.9rem;color:var(--text-sub);margin-bottom:.7rem;">使用同一組 Email＋密碼，就可以在手機、平板、電腦同步學習進度。</p>
+        <label class="auth-label">Email</label>
+        <input id="auth-email" class="auth-input" type="email" autocomplete="email" placeholder="請輸入 Email">
+        <label class="auth-label">密碼</label>
+        <input id="auth-password" class="auth-input" type="password" autocomplete="current-password" placeholder="至少 6 碼">
+        <div id="auth-status" class="auth-status"></div>
+        <div style="display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap;">
+          <button class="btn-primary" style="flex:1;min-width:120px;" onclick="authSignIn()">🔓 登入</button>
+          <button class="filter-btn" style="flex:1;min-width:120px;justify-content:center;" onclick="authSignUp()">📝 建立帳號</button>
+        </div>
+        <p style="font-size:.76rem;color:var(--text-sub);margin-top:.8rem;line-height:1.5;">第一次使用請按「建立帳號」。如果 Supabase 要求 Email 驗證，請先到信箱完成驗證，再回來登入。</p>
+      </div>
+
+      <div id="auth-logged-panel" style="display:none;">
+        <div style="background:var(--bg-primary);border:1px solid var(--border-color);border-radius:12px;padding:1rem;">
+          <div style="font-size:.8rem;color:var(--text-sub);">目前登入帳號</div>
+          <div id="auth-logged-email" style="font-weight:700;margin-top:.2rem;word-break:break-all;"></div>
+          <div id="auth-sync-status" style="font-size:.82rem;color:var(--accent-sage);margin-top:.6rem;">☁️ 已啟用跨裝置同步</div>
+        </div>
+        <button class="filter-btn" style="width:100%;justify-content:center;margin-top:1rem;background:#ffebee;color:#c62828;" onclick="authSignOut()">🚪 登出此帳號</button>
+      </div>
+    </div>
+  </div>
+
   <!-- 底部 App 導覽列 (Bottom Tab Bar) -->
   <nav class="bottom-nav-bar">
     <button class="tab-item active" onclick="switchTab('dashboard', event)">
@@ -821,6 +985,15 @@
       <div id="scheduled-reminders-list" style="display: flex; flex-direction: column; gap: 0.6rem;"></div>
     </div>
   </div>
+
+  <!-- Supabase 登入與跨裝置同步 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // 這兩個值已經幫您設定好，不需要再修改。
+    const SUPABASE_URL = 'https://hvcyjevvcdmcrjrqstag.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_uDlPq_POd37k_SlaE_v-uA_XmE6TuLk';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  </script>
 
   <script src="data/crash35_data.js"></script>
   <script src="data/flashcards.js"></script>
@@ -1040,14 +1213,7 @@
     }
 
     function showAccountModal() {
-      const name = prompt("👤 請輸入學員姓名或登入帳號名稱：", currentUser);
-      if (name && name.trim().length > 0) {
-        currentUser = name.trim();
-        localStorage.setItem('broker_current_user', currentUser);
-        updateCurrentUserUI();
-        appendStudyLog('ACCOUNT_SWITCH', `切換學員帳號為：${currentUser}`);
-        alert(`✅ 學員帳號已切換為：【${currentUser}】！`);
-      }
+      openAuthModal();
     }
 
     function exportStudyDataJSON() {
@@ -1178,8 +1344,6 @@
       } else if (tabId === 'settings') {
         renderExamHistoryTable();
       }
-      // 考題中心只是入口，原本三個功能仍使用原本的 section 與函式。
-      // 不在進入中心時預先抽模考題，避免尚未按下「全真模考」就抽題。
     }
 
     function initCountdown() {
@@ -1281,8 +1445,69 @@
       alert(`🦖【考霸小怪獸 8 大等級漸進經驗值曲線】\nLv.0 龍龍蛋 (100) ➜ Lv.1 毛毛怪 (200) ➜ Lv.2 破殼怪 (350) ➜ Lv.3 芽芽怪 (550) ➜ Lv.4 估價霸王龍 (800) ➜ Lv.5 土地雷龍 (1100) ➜ Lv.6 經紀火龍 (1500) ➜ Lv.7 神龍王 (MAX)`);
     }
 
-    // ===== 📚 114~110年 歷屆題庫全檢索渲染 =====
-    function renderQuestionsList() {
+    // ===== 📚 題庫資料安全存取 =====
+    function getQuestionsDataSafe() {
+      if (Array.isArray(window.QUESTIONS_DATA)) return window.QUESTIONS_DATA;
+      try {
+        if (typeof QUESTIONS_DATA !== 'undefined' && Array.isArray(QUESTIONS_DATA)) return QUESTIONS_DATA;
+      } catch (e) {}
+      return [];
+    }
+
+    function refreshQuestionViews() {
+      const data = getQuestionsDataSafe();
+      const stats = getQuestionStats();
+      const status = document.getElementById('question-data-status');
+      if (status) {
+        status.textContent = data.length
+          ? `✅ 題庫已載入：${stats.total.toLocaleString()} 題（選擇 ${stats.mc.toLocaleString()}／申論 ${stats.essay.toLocaleString()}）`
+          : '⚠️ 題庫尚未載入，請確認 data/questions.js 已上傳。';
+        status.style.color = data.length ? 'var(--accent-sage)' : 'var(--accent-terracotta)';
+      }
+      renderQuestionsList(questionsCurrentPage || 1);
+      renderEssayDeconstruction(essayCurrentPage || 1);
+    }
+
+    function getQuestionStats() {
+      const data = getQuestionsDataSafe();
+      return {
+        total: data.length,
+        mc: data.filter(q => q.type === 'mc').length,
+        essay: data.filter(q => q.type === 'essay').length
+      };
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function retryLoadQuestionsData() {
+      const paths = ['./data/questions.js', 'data/questions.js'];
+      let tried = 0;
+      paths.forEach(p => {
+        const s = document.createElement('script');
+        s.src = p + '?t=' + Date.now();
+        s.onload = () => {
+          tried++;
+          if (getQuestionsDataSafe().length > 0) {
+            renderQuestionsList(1);
+            renderEssayDeconstruction(1);
+          }
+        };
+        s.onerror = () => { tried++; };
+        document.head.appendChild(s);
+      });
+    }
+
+    let questionsCurrentPage = 1;
+    const QUESTIONS_PAGE_SIZE = 30;
+
+    function renderQuestionsList(page = 1) {
       const container = document.getElementById('questions-list-container');
       if (!container) return;
 
@@ -1290,87 +1515,86 @@
       const subjectFilter = document.getElementById('q-filter-subject')?.value || 'all';
       const typeFilter = document.getElementById('q-filter-type')?.value || 'all';
       const keyword = (document.getElementById('q-filter-keyword')?.value || '').trim().toLowerCase();
+      const allData = getQuestionsDataSafe();
 
-      
-    function getQuestionsDataSafe() {
-      if (typeof QUESTIONS_DATA !== 'undefined' && Array.isArray(QUESTIONS_DATA) && QUESTIONS_DATA.length > 0) {
-        return QUESTIONS_DATA;
-      }
-      if (window.QUESTIONS_DATA && Array.isArray(window.QUESTIONS_DATA) && window.QUESTIONS_DATA.length > 0) {
-        return window.QUESTIONS_DATA;
-      }
-      return [];
-    }
-
-    function retryLoadQuestionsData() {
-      const paths = ['./data/questions.js', 'data/questions.js', '../data/questions.js', 'dist/data/questions.js'];
-      let loaded = false;
-      paths.forEach(p => {
-        if (loaded) return;
-        const s = document.createElement('script');
-        s.src = p + '?t=' + Date.now();
-        s.onload = () => {
-          if (getQuestionsDataSafe().length > 0) {
-            loaded = true;
-            alert('✅ 成功載入 100~114 年 2,061 題全真題庫！');
-            renderQuestionsList();
-            renderEssayDeconstruction();
-          }
-        };
-        document.head.appendChild(s);
-      });
-    }
-
-      let list = [...getQuestionsDataSafe()];
-
-      if (yearFilter !== 'all') list = list.filter(q => String(q.year) === yearFilter);
-      if (subjectFilter !== 'all') list = list.filter(q => q.subject === subjectFilter);
-      if (typeFilter !== 'all') list = list.filter(q => q.type === typeFilter);
-      if (keyword) list = list.filter(q => (q.question + (q.title || '') + (q.explanation || '')).toLowerCase().includes(keyword));
-
-      if (list.length === 0) {
-        if (getQuestionsDataSafe().length === 0) {
+      if (!allData.length) {
         container.innerHTML = `
-          <div style="text-align:center; padding:2rem; background: var(--bg-card-sub); border-radius:16px; margin: 1rem 0;">
-            <div style="font-size:1.2rem; font-weight:700; color:var(--accent-terracotta); margin-bottom:0.5rem;">⚠️ 尚未載入考古題庫資料 (data/questions.js)</div>
-            <p style="color:var(--text-sub); margin-bottom:1rem; font-size:0.9rem;">
-              若您在 GitHub / GitHub Pages 上開啟本 App，請確認已將 <code>data/questions.js</code> (共 2,061 題完整真題) 一併推送到 GitHub 儲存庫。<br>
-              您也可以嘗試點擊下方按鈕重新手動載入題庫。
-            </p>
-            <button class="filter-btn" style="background:var(--accent-sage); color:#fff; padding:0.5rem 1.2rem; font-weight:600;" onclick="retryLoadQuestionsData()">🔄 嘗試重新載入 100~114 年考古題庫</button>
-          </div>
-        `;
-      } else {
-        container.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sub);">查無符合條件的歷屆考古題</div>';
-      }
+          <div style="text-align:center; padding:2rem; background:var(--bg-card-sub); border-radius:16px; margin:1rem 0;">
+            <div style="font-size:1.15rem; font-weight:700; color:var(--accent-terracotta); margin-bottom:.5rem;">⚠️ 題庫尚未載入</div>
+            <p style="color:var(--text-sub); margin-bottom:1rem;">請確認 GitHub 儲存庫內有 <code>data/questions.js</code>，且檔案名稱與資料夾位置完全一致。</p>
+            <button class="filter-btn" onclick="retryLoadQuestionsData()">🔄 重新載入題庫</button>
+          </div>`;
         return;
       }
 
-      container.innerHTML = list.slice(0, 30).map(q => `
-        <div class="question-item">
-          <div class="q-header">
-            <span class="badge">${q.year} 年 / ${q.subject} ${q.type === 'essay' ? '申論' : '選擇'}第 ${q.number} 題</span>
-            <div style="display:flex; gap:0.4rem;">
-              <button class="filter-btn" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="addToMistakeBank('${q.id}')">📌 納入錯題庫</button>
-              <button class="filter-btn" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="showReminderPickerModal('${q.title || q.question.slice(0,15)}', 'QUESTION', '${q.id}')">🔔 提醒 me</button>
+      let list = [...allData];
+      if (yearFilter !== 'all') list = list.filter(q => String(q.year) === yearFilter);
+      if (subjectFilter !== 'all') list = list.filter(q => q.subject === subjectFilter);
+      if (typeFilter !== 'all') list = list.filter(q => q.type === typeFilter);
+      if (keyword) list = list.filter(q => {
+        const haystack = [q.question, q.title, q.explanation, q.deconstruction?.applicableLaws, q.deconstruction?.sampleAnswer]
+          .filter(Boolean).join(' ').toLowerCase();
+        return haystack.includes(keyword);
+      });
+
+      if (!list.length) {
+        container.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sub);">查無符合條件的歷屆考古題</div>';
+        return;
+      }
+
+      const totalPages = Math.max(1, Math.ceil(list.length / QUESTIONS_PAGE_SIZE));
+      questionsCurrentPage = Math.min(Math.max(Number(page) || 1, 1), totalPages);
+      const start = (questionsCurrentPage - 1) * QUESTIONS_PAGE_SIZE;
+      const pageItems = list.slice(start, start + QUESTIONS_PAGE_SIZE);
+      const stats = getQuestionStats();
+
+      const cards = pageItems.map(q => {
+        const answerText = q.type === 'mc' ? `<div style="font-weight:700;color:var(--accent-terracotta);">正解：(${escapeHtml(q.answer)})</div>` : '';
+        const explanation = q.explanation || q.deconstruction?.sampleAnswer || '';
+        const laws = q.deconstruction?.applicableLaws || '';
+        const keywords = q.deconstruction?.mustKeywords || [];
+        return `
+          <div class="question-item">
+            <div class="q-header">
+              <span class="badge">${escapeHtml(q.year)} 年 / ${escapeHtml(q.subject)} ${q.type === 'essay' ? '申論' : '選擇'}第 ${escapeHtml(q.number)} 題</span>
+              <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+                <button class="filter-btn" style="padding:.2rem .5rem;font-size:.75rem;" onclick="addToMistakeBank('${escapeHtml(q.id)}')">📌 納入錯題庫</button>
+                <button class="filter-btn" style="padding:.2rem .5rem;font-size:.75rem;" onclick="showReminderPickerModal('${escapeHtml((q.title || q.question || '').slice(0,15))}','QUESTION','${escapeHtml(q.id)}')">🔔 提醒</button>
+              </div>
             </div>
-          </div>
-          <div class="q-title">${q.title || q.question}</div>
-
-          ${q.options ? `
-            <div class="options-grid">
-              ${q.options.map((opt, optIdx) => `<div style="padding:0.5rem 0.8rem; background:var(--bg-primary); border-radius:8px; font-size:0.9rem;">${opt}</div>`).join('')}
+            ${q.title ? `<div style="font-weight:700;color:var(--accent-purple);margin:.4rem 0;">${escapeHtml(q.title)}</div>` : ''}
+            <div class="q-title" style="white-space:pre-wrap;">${escapeHtml(q.question || '')}</div>
+            ${q.options ? `<div class="options-grid">${q.options.map(opt => `<div style="padding:.6rem .8rem;background:var(--bg-primary);border-radius:8px;font-size:.9rem;">${escapeHtml(opt)}</div>`).join('')}</div>` : ''}
+            <button class="filter-btn" style="margin-top:.6rem;" onclick="toggleQuestionAnswer('q-ans-${escapeHtml(q.id)}')">💡 顯示/隱藏正解與解析</button>
+            <div id="q-ans-${escapeHtml(q.id)}" class="explanation-box" style="display:none;margin-top:.6rem;">
+              ${answerText}
+              ${laws ? `<div style="margin:.4rem 0;"><strong>⚖️ 適用法條：</strong>${formatLegalLinks(escapeHtml(laws))}</div>` : ''}
+              ${keywords.length ? `<div style="margin:.4rem 0;"><strong>🔑 關鍵詞：</strong>${keywords.map(k => escapeHtml(k)).join('、')}</div>` : ''}
+              <div style="white-space:pre-wrap;">${formatLegalLinks(escapeHtml(explanation))}</div>
             </div>
-          ` : ''}
+          </div>`;
+      }).join('');
 
-          <button class="filter-btn" style="margin-top:0.6rem;" onclick="toggleQuestionAnswer('q-ans-${q.id}')">💡 顯示/隱藏正解與解析</button>
-
-          <div id="q-ans-${q.id}" class="explanation-box" style="display:none; margin-top:0.6rem;">
-            ${q.type === 'mc' ? `<div style="font-weight:700; color:var(--accent-terracotta);">正解：(${q.answer})</div>` : ''}
-            <div>${formatLegalLinks(q.explanation || q.deconstruction?.sampleAnswer || '')}</div>
-          </div>
+      const pager = renderPager('questions', questionsCurrentPage, totalPages, list.length, start + 1, Math.min(start + QUESTIONS_PAGE_SIZE, list.length));
+      container.innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:.6rem;align-items:center;flex-wrap:wrap;margin-bottom:.8rem;">
+          <div style="font-weight:700;">目前篩選：${list.length} 題</div>
+          <div style="font-size:.82rem;color:var(--text-sub);">完整題庫 ${stats.total} 題（選擇 ${stats.mc}／申論 ${stats.essay}）</div>
         </div>
-      `).join('');
+        ${cards}
+        ${pager}`;
+    }
+
+    function renderPager(kind, page, totalPages, totalItems, from, to) {
+      if (totalPages <= 1) return `<div style="text-align:center;color:var(--text-sub);font-size:.82rem;margin:1rem 0;">顯示 ${from}～${to} / ${totalItems} 題</div>`;
+      const fn = kind === 'questions' ? 'renderQuestionsList' : 'renderEssayDeconstruction';
+      const buttons = [];
+      const start = Math.max(1, page - 2);
+      const end = Math.min(totalPages, start + 4);
+      buttons.push(`<button class="filter-btn" ${page === 1 ? 'disabled' : ''} onclick="${fn}(${page - 1})">‹ 上一頁</button>`);
+      for (let i = start; i <= end; i++) buttons.push(`<button class="filter-btn" style="font-weight:${i === page ? '800' : '500'};" onclick="${fn}(${i})">${i}</button>`);
+      buttons.push(`<button class="filter-btn" ${page === totalPages ? 'disabled' : ''} onclick="${fn}(${page + 1})">下一頁 ›</button>`);
+      return `<div style="display:flex;justify-content:center;align-items:center;gap:.35rem;flex-wrap:wrap;margin:1rem 0;">${buttons.join('')}<span style="font-size:.8rem;color:var(--text-sub);margin-left:.4rem;">${from}～${to} / ${totalItems} 題</span></div>`;
     }
 
     function toggleQuestionAnswer(ansId) {
@@ -1507,7 +1731,10 @@
       }
     }
 
-    function renderEssayDeconstruction() {
+    let essayCurrentPage = 1;
+    const ESSAY_PAGE_SIZE = 15;
+
+    function renderEssayDeconstruction(page = 1) {
       const container = document.getElementById('essay-deconstruct-container');
       if (!container) return;
       const searchKey = (document.getElementById('essay-search-input')?.value || '').trim().toLowerCase();
@@ -1515,32 +1742,48 @@
 
       let list = getQuestionsDataSafe().filter(q => q.type === 'essay');
       if (subjectFilter !== 'all') list = list.filter(q => q.subject === subjectFilter);
-      if (searchKey) list = list.filter(q => (q.question + (q.title || '')).toLowerCase().includes(searchKey));
+      if (searchKey) list = list.filter(q => [q.question, q.title, q.deconstruction?.sampleAnswer, q.deconstruction?.applicableLaws].filter(Boolean).join(' ').toLowerCase().includes(searchKey));
 
+      if (!list.length) {
+        container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-sub);">目前題庫沒有符合條件的申論題。</div>';
+        return;
+      }
+
+      const totalPages = Math.max(1, Math.ceil(list.length / ESSAY_PAGE_SIZE));
+      essayCurrentPage = Math.min(Math.max(Number(page) || 1, 1), totalPages);
+      const start = (essayCurrentPage - 1) * ESSAY_PAGE_SIZE;
+      const pageItems = list.slice(start, start + ESSAY_PAGE_SIZE);
       const drafts = JSON.parse(localStorage.getItem('broker_user_drafts') || '{}');
 
-      container.innerHTML = list.slice(0, 15).map(q => {
+      const cards = pageItems.map(q => {
         const dec = q.deconstruction || {};
         const draftVal = drafts[`user_essay_${q.id}`] || '';
+        const structure = dec.structure ? Object.values(dec.structure).map(v => `<div style="margin:.25rem 0;">${escapeHtml(v)}</div>`).join('') : '';
+        const mustKeywords = Array.isArray(dec.mustKeywords) ? dec.mustKeywords.map(k => escapeHtml(k)).join('、') : '';
         return `
-          <div class="healing-card" style="margin-bottom: 1.2rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem;">
-              <span class="badge">${q.year}年 / ${q.subject} 申論題第 ${q.number} 題</span>
-              <button class="filter-btn" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;" onclick="showReminderPickerModal('${q.title}', 'ESSAY', '${q.id}')">🔔 提醒 me</button>
+          <div class="healing-card" style="margin-bottom:1.2rem;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.4rem;">
+              <span class="badge">${escapeHtml(q.year)}年 / ${escapeHtml(q.subject)} 申論題第 ${escapeHtml(q.number)} 題</span>
+              <button class="filter-btn" style="font-size:.75rem;padding:.2rem .5rem;" onclick="showReminderPickerModal('${escapeHtml((q.title || '').slice(0,20))}','ESSAY','${escapeHtml(q.id)}')">🔔 提醒</button>
             </div>
-            <h4 style="margin: 0.6rem 0; font-size: 1.05rem; color: var(--text-main);">${q.title}</h4>
-            <p style="font-size: 0.92rem; color: var(--text-main); font-weight: 600;">${q.question}</p>
-
+            <h4 style="margin:.6rem 0;font-size:1.05rem;color:var(--text-main);">${escapeHtml(q.title || '')}</h4>
+            <p style="font-size:.92rem;color:var(--text-main);font-weight:600;white-space:pre-wrap;">${escapeHtml(q.question || '')}</p>
             <div class="essay-deconstruct-box">
-              <div class="deconstruct-tag">⚖️ 適用法條：${formatLegalLinks(dec.applicableLaws || '依相關法規辦理')}</div>
-              <textarea class="essay-textarea" placeholder="輸入申論擬答（已啟用 Debounce 自動存檔）..." oninput="debounceSaveDraft('user_essay_${q.id}', this.value)">${draftVal}</textarea>
-              <div style="background: var(--bg-card); padding: 0.85rem; border-radius: 10px; font-size: 0.88rem; line-height: 1.6; white-space: pre-wrap; border: 1px solid var(--border-color);">
-                <strong style="color: var(--accent-purple);">【高分範本解答】</strong>\n${formatLegalLinks(dec.sampleAnswer || '')}
+              ${dec.applicableLaws ? `<div class="deconstruct-tag">⚖️ 適用法條：${formatLegalLinks(escapeHtml(dec.applicableLaws))}</div>` : ''}
+              ${dec.intent ? `<div style="margin:.6rem 0;"><strong>🎯 考題意旨：</strong>${escapeHtml(dec.intent)}</div>` : ''}
+              ${structure ? `<div style="margin:.6rem 0;"><strong>🧩 答題架構：</strong>${structure}</div>` : ''}
+              ${mustKeywords ? `<div style="margin:.6rem 0;"><strong>🔑 必背關鍵詞：</strong>${mustKeywords}</div>` : ''}
+              ${dec.everydayExample ? `<div style="margin:.6rem 0;"><strong>🏠 日常實例：</strong>${escapeHtml(dec.everydayExample)}</div>` : ''}
+              <textarea class="essay-textarea" placeholder="輸入申論擬答（自動存檔）..." oninput="debounceSaveDraft('user_essay_${escapeHtml(q.id)}', this.value)">${escapeHtml(draftVal)}</textarea>
+              <div style="background:var(--bg-card);padding:.85rem;border-radius:10px;font-size:.88rem;line-height:1.6;white-space:pre-wrap;border:1px solid var(--border-color);margin-top:.7rem;">
+                <strong style="color:var(--accent-purple);">【高分範本解答】</strong>\n${formatLegalLinks(escapeHtml(dec.sampleAnswer || q.explanation || ''))}
               </div>
             </div>
-          </div>
-        `;
+          </div>`;
       }).join('');
+
+      const pager = renderPager('essay', essayCurrentPage, totalPages, list.length, start + 1, Math.min(start + ESSAY_PAGE_SIZE, list.length));
+      container.innerHTML = `<div style="display:flex;justify-content:space-between;gap:.5rem;align-items:center;flex-wrap:wrap;margin-bottom:.8rem;"><strong>目前 ${list.length} 題</strong><span style="font-size:.82rem;color:var(--text-sub);">題庫實際收錄 ${getQuestionStats().essay} 題申論</span></div>${cards}${pager}`;
     }
 
     let currentMistakeIndex = 0;
@@ -1927,17 +2170,203 @@
       speakText(`${title}。${desc}`);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // ===== 🔐 Supabase Email＋密碼登入／跨裝置同步 =====
+    let authUser = null;
+    let cloudSaveTimer = null;
+    let authBootFinished = false;
+
+    function showAuthStatus(message, type = 'info') {
+      const el = document.getElementById('auth-status');
+      if (!el) return;
+      el.textContent = message;
+      el.className = `auth-status show ${type}`;
+    }
+
+    function updateAuthUI() {
+      const headerText = document.getElementById('auth-header-text');
+      const loggedPanel = document.getElementById('auth-logged-panel');
+      const loginPanel = document.getElementById('auth-login-panel');
+      const emailEl = document.getElementById('auth-logged-email');
+      const settingsName = document.getElementById('settings-user-name');
+
+      if (authUser) {
+        const email = authUser.email || '已登入';
+        if (headerText) headerText.textContent = email;
+        if (loggedPanel) loggedPanel.style.display = 'block';
+        if (loginPanel) loginPanel.style.display = 'none';
+        if (emailEl) emailEl.textContent = email;
+        currentUser = email;
+        localStorage.setItem('broker_current_user', currentUser);
+        if (settingsName) settingsName.innerText = currentUser;
+      } else {
+        if (headerText) headerText.textContent = '登入同步';
+        if (loggedPanel) loggedPanel.style.display = 'none';
+        if (loginPanel) loginPanel.style.display = 'block';
+      }
+    }
+
+    function openAuthModal() {
+      updateAuthUI();
+      document.getElementById('auth-modal')?.classList.add('active');
+      document.getElementById('auth-email')?.focus();
+    }
+
+    async function authSignIn() {
+      const email = document.getElementById('auth-email')?.value.trim();
+      const password = document.getElementById('auth-password')?.value || '';
+      if (!email || !password) { showAuthStatus('請輸入 Email 和密碼。', 'err'); return; }
+      showAuthStatus('正在登入，請稍候……', 'info');
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) { showAuthStatus('登入失敗：' + error.message, 'err'); return; }
+      authUser = data.user;
+      updateAuthUI();
+      await loadCloudStateAndRefresh();
+    }
+
+    async function authSignUp() {
+      const email = document.getElementById('auth-email')?.value.trim();
+      const password = document.getElementById('auth-password')?.value || '';
+      if (!email || password.length < 6) { showAuthStatus('請輸入 Email，且密碼至少 6 碼。', 'err'); return; }
+      showAuthStatus('正在建立帳號，請稍候……', 'info');
+      const { data, error } = await supabaseClient.auth.signUp({ email, password });
+      if (error) { showAuthStatus('建立帳號失敗：' + error.message, 'err'); return; }
+      if (data.session && data.user) {
+        authUser = data.user;
+        updateAuthUI();
+        await saveCloudState(true);
+        showAuthStatus('帳號建立成功，學習資料已開始同步。', 'ok');
+      } else {
+        showAuthStatus('帳號建立成功！請先到 Email 信箱完成驗證，再回來登入。', 'ok');
+      }
+    }
+
+    async function authSignOut() {
+      if (authUser) await saveCloudState(true);
+      await supabaseClient.auth.signOut();
+      authUser = null;
+      // 登出後清除本機學習資料，避免下一位使用者看到上一位的資料。雲端資料仍保留。
+      Object.keys(localStorage).filter(k => k.startsWith('broker_')).forEach(k => localStorage.removeItem(k));
+      location.reload();
+    }
+
+    function collectLocalAppState() {
+      const state = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('broker_')) state[key] = localStorage.getItem(key);
+      }
+      return state;
+    }
+
+    async function saveCloudState(force = false) {
+      if (!authUser) return;
+      if (!force) {
+        clearTimeout(cloudSaveTimer);
+        cloudSaveTimer = setTimeout(() => saveCloudState(true), 900);
+        return;
+      }
+
+      const state = collectLocalAppState();
+      const payload = {
+        user_id: authUser.id,
+        crash35_day: parseInt(localStorage.getItem('broker_crash35_day') || '1', 10),
+        crash35_completed: JSON.parse(localStorage.getItem('broker_crash35_completed') || '[]'),
+        flashcard_progress: state,
+        last_question_id: localStorage.getItem('broker_last_question_id') || null
+      };
+
+      const { error } = await supabaseClient.from('study_progress').upsert(payload, { onConflict: 'user_id' });
+      if (error) {
+        console.warn('Cloud sync failed:', error.message);
+      } else {
+        const sync = document.getElementById('auth-sync-status');
+        if (sync) sync.textContent = '☁️ 已同步到 Supabase';
+      }
+
+      // 同步個人基本資料；即使這一步失敗，也不影響登入。
+      try {
+        await supabaseClient.from('profiles').upsert({ id: authUser.id, display_name: authUser.email || '學員' }, { onConflict: 'id' });
+      } catch (e) {}
+    }
+
+    async function loadCloudStateAndRefresh() {
+      if (!authUser) return;
+      showAuthStatus('正在讀取雲端學習進度……', 'info');
+      const { data, error } = await supabaseClient
+        .from('study_progress')
+        .select('user_id, crash35_day, crash35_completed, flashcard_progress, last_question_id')
+        .eq('user_id', authUser.id)
+        .maybeSingle();
+
+      if (error) {
+        showAuthStatus('登入成功，但讀取雲端資料失敗：' + error.message, 'err');
+        return;
+      }
+
+      if (data && data.flashcard_progress && typeof data.flashcard_progress === 'object' && !Array.isArray(data.flashcard_progress)) {
+        Object.entries(data.flashcard_progress).forEach(([key, value]) => {
+          if (key.startsWith('broker_')) localStorage.setItem(key, value);
+        });
+        if (data.crash35_day != null) localStorage.setItem('broker_crash35_day', String(data.crash35_day));
+        if (data.crash35_completed != null) localStorage.setItem('broker_crash35_completed', JSON.stringify(data.crash35_completed));
+        if (data.last_question_id != null) localStorage.setItem('broker_last_question_id', data.last_question_id);
+        localStorage.setItem('broker_current_user', authUser.email || 'Student');
+        showAuthStatus('☁️ 雲端資料已載入，正在重新整理 App……', 'ok');
+        setTimeout(() => location.reload(), 450);
+      } else {
+        await saveCloudState(true);
+        showAuthStatus('這是此帳號第一次同步，已把目前裝置的學習資料上傳。', 'ok');
+      }
+    }
+
+    async function initSupabaseAuth() {
+      try {
+        const { data } = await supabaseClient.auth.getSession();
+        authUser = data?.session?.user || null;
+        updateAuthUI();
+
+        if (authUser && !authBootFinished) {
+          authBootFinished = true;
+          const { data: cloud } = await supabaseClient.from('study_progress').select('flashcard_progress').eq('user_id', authUser.id).maybeSingle();
+          if (cloud && cloud.flashcard_progress && typeof cloud.flashcard_progress === 'object' && Object.keys(cloud.flashcard_progress).length > 0) {
+            Object.entries(cloud.flashcard_progress).forEach(([key, value]) => {
+              if (key.startsWith('broker_')) localStorage.setItem(key, value);
+            });
+            localStorage.setItem('broker_current_user', authUser.email || 'Student');
+            currentUser = authUser.email || 'Student';
+            updateCurrentUserUI();
+          } else {
+            await saveCloudState(true);
+          }
+        }
+      } catch (e) {
+        console.warn('Supabase auth init failed:', e);
+      }
+
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        authUser = session?.user || null;
+        updateAuthUI();
+      });
+    }
+
+    // 只同步 broker_ 開頭的學習資料，不碰題庫本身。
+    const originalLocalStorageSetItem = localStorage.setItem.bind(localStorage);
+    localStorage.setItem = function(key, value) {
+      originalLocalStorageSetItem(key, value);
+      if (String(key).startsWith('broker_') && authUser) saveCloudState(false);
+    };
+
+    document.addEventListener('DOMContentLoaded', async () => {
       initIndexedDB();
       updateCurrentUserUI();
+      initSupabaseAuth();
       initTheme();
       initCountdown();
       renderCrash35Grid();
       selectCrashDay(1);
       initChapterDropdown();
       displayCurrentCard();
-      renderQuestionsList();
-      renderEssayDeconstruction();
+      refreshQuestionViews();
       renderMistakeCardDisplay();
       updatePetUI();
       initTasksUI();
@@ -1948,8 +2377,12 @@
       renderExamHistoryTable();
       startRandomMockExam();
 
+      // 若外部題庫因快取／載入時序較慢，load 後再刷新一次。
+      window.addEventListener('load', () => { refreshQuestionViews(); });
+
+      // 清除舊版 Service Worker，避免 GitHub Pages 繼續顯示舊快取版本。
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
+        navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(reg => reg.unregister())).catch(() => {});
       }
     });
   </script>
