@@ -198,7 +198,14 @@
     table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.88rem; }
     th, td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border-color); text-align: left; }
     th { background: var(--bg-card-sub); font-weight: 700; color: var(--text-main); }
-  </style>
+  
+    /* ===== 考題中心：只新增入口，不改動原本三個考題功能 ===== */
+    .exam-center-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:1rem}
+    .exam-center-card{border:1px solid var(--border-color);background:var(--bg-card);border-radius:20px;padding:1.25rem;text-align:left;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;box-shadow:0 4px 14px rgba(0,0,0,.05)}
+    .exam-center-card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.09);border-color:var(--accent-sage)}
+    .exam-center-icon{font-size:2rem;margin-bottom:.5rem}.exam-center-title{font-weight:800;font-size:1.1rem;margin-bottom:.3rem}.exam-center-desc{font-size:.88rem;color:var(--text-sub);line-height:1.5}
+    @media(max-width:800px){.exam-center-grid{grid-template-columns:1fr}.exam-center-card{padding:1rem}}
+</style>
 </head>
 <body>
 
@@ -534,6 +541,28 @@
       </div>
     </section>
 
+    <!-- TAB 4: 📚 考題中心（入口；原本歷屆題庫／申論拆解／全真模考完整保留） -->
+    <section id="tab-examcenter" class="tab-pane">
+      <div class="healing-card">
+        <div class="panel-title">📚 考題中心</div>
+        <div style="color:var(--text-sub);line-height:1.6;margin:.4rem 0 1rem;">請選擇要使用的考題功能。點擊後才會進入原本完整的題目頁面。</div>
+        <div class="exam-center-grid">
+          <button class="exam-center-card" type="button" onclick="switchTab('questions')">
+            <div class="exam-center-icon">📚</div><div class="exam-center-title">歷屆考題</div>
+            <div class="exam-center-desc">100～114 年完整歷屆題庫，保留原本年度、科目、題型與關鍵字篩選。</div>
+          </button>
+          <button class="exam-center-card" type="button" onclick="switchTab('essay')">
+            <div class="exam-center-icon">✍️</div><div class="exam-center-title">申論拆解</div>
+            <div class="exam-center-desc">原本完整申論題、拆解與答案內容。</div>
+          </button>
+          <button class="exam-center-card" type="button" onclick="switchTab('mockexam')">
+            <div class="exam-center-icon">🎲</div><div class="exam-center-title">全真模考</div>
+            <div class="exam-center-desc">使用原本 QUESTIONS_DATA 抽題與模考流程。</div>
+          </button>
+        </div>
+      </div>
+    </section>
+
     <!-- TAB 4: 📚 歷屆題庫 (114~110年全考古題全檢索與練習) -->
     <section id="tab-questions" class="tab-pane">
       <div class="healing-card">
@@ -749,17 +778,9 @@
       <span class="tab-icon">📖</span>
       <span>講義圖卡</span>
     </button>
-    <button class="tab-item" onclick="switchTab('questions', event)">
+    <button class="tab-item" onclick="switchTab('examcenter', event)">
       <span class="tab-icon">📚</span>
-      <span>歷屆題庫</span>
-    </button>
-    <button class="tab-item" onclick="switchTab('essay', event)">
-      <span class="tab-icon">✍️</span>
-      <span>申論拆解</span>
-    </button>
-    <button class="tab-item" onclick="switchTab('mockexam', event)">
-      <span class="tab-icon">🎲</span>
-      <span>全真模考</span>
+      <span>考題</span>
     </button>
     <button class="tab-item" onclick="switchTab('mistakes', event)">
       <span class="tab-icon">🎴</span>
@@ -1157,6 +1178,8 @@
       } else if (tabId === 'settings') {
         renderExamHistoryTable();
       }
+      // 考題中心只是入口，原本三個功能仍使用原本的 section 與函式。
+      // 不在進入中心時預先抽模考題，避免尚未按下「全真模考」就抽題。
     }
 
     function initCountdown() {
@@ -1258,40 +1281,6 @@
       alert(`🦖【考霸小怪獸 8 大等級漸進經驗值曲線】\nLv.0 龍龍蛋 (100) ➜ Lv.1 毛毛怪 (200) ➜ Lv.2 破殼怪 (350) ➜ Lv.3 芽芽怪 (550) ➜ Lv.4 估價霸王龍 (800) ➜ Lv.5 土地雷龍 (1100) ➜ Lv.6 經紀火龍 (1500) ➜ Lv.7 神龍王 (MAX)`);
     }
 
-    // ===== 🛡️ 題庫資料全域安全存取（修正版） =====
-    // 這個函式必須在歷屆題庫、申論拆解、全真模考共用，
-    // 避免其中一個頁面找不到 QUESTIONS_DATA 而導致整個功能失效。
-    function getQuestionsDataSafe() {
-      try {
-        if (typeof QUESTIONS_DATA !== 'undefined' && Array.isArray(QUESTIONS_DATA)) {
-          return QUESTIONS_DATA;
-        }
-      } catch (e) {}
-      if (Array.isArray(window.QUESTIONS_DATA)) return window.QUESTIONS_DATA;
-      return [];
-    }
-
-    function retryLoadQuestionsData() {
-      const paths = ['./data/questions.js', 'data/questions.js', '../data/questions.js'];
-      let loaded = false;
-      paths.forEach(function(p) {
-        if (loaded) return;
-        const s = document.createElement('script');
-        s.src = p + '?t=' + Date.now();
-        s.onload = function() {
-          const data = getQuestionsDataSafe();
-          if (data.length > 0) {
-            loaded = true;
-            renderQuestionsList();
-            if (typeof renderEssayDeconstruction === 'function') renderEssayDeconstruction();
-            alert('✅ 已載入完整歷屆題庫，共 ' + data.length.toLocaleString() + ' 題。');
-          }
-        };
-        s.onerror = function(){};
-        document.head.appendChild(s);
-      });
-    }
-
     // ===== 📚 114~110年 歷屆題庫全檢索渲染 =====
     function renderQuestionsList() {
       const container = document.getElementById('questions-list-container');
@@ -1301,6 +1290,36 @@
       const subjectFilter = document.getElementById('q-filter-subject')?.value || 'all';
       const typeFilter = document.getElementById('q-filter-type')?.value || 'all';
       const keyword = (document.getElementById('q-filter-keyword')?.value || '').trim().toLowerCase();
+
+      
+    function getQuestionsDataSafe() {
+      if (typeof QUESTIONS_DATA !== 'undefined' && Array.isArray(QUESTIONS_DATA) && QUESTIONS_DATA.length > 0) {
+        return QUESTIONS_DATA;
+      }
+      if (window.QUESTIONS_DATA && Array.isArray(window.QUESTIONS_DATA) && window.QUESTIONS_DATA.length > 0) {
+        return window.QUESTIONS_DATA;
+      }
+      return [];
+    }
+
+    function retryLoadQuestionsData() {
+      const paths = ['./data/questions.js', 'data/questions.js', '../data/questions.js', 'dist/data/questions.js'];
+      let loaded = false;
+      paths.forEach(p => {
+        if (loaded) return;
+        const s = document.createElement('script');
+        s.src = p + '?t=' + Date.now();
+        s.onload = () => {
+          if (getQuestionsDataSafe().length > 0) {
+            loaded = true;
+            alert('✅ 成功載入 100~114 年 2,061 題全真題庫！');
+            renderQuestionsList();
+            renderEssayDeconstruction();
+          }
+        };
+        document.head.appendChild(s);
+      });
+    }
 
       let list = [...getQuestionsDataSafe()];
 
@@ -1934,21 +1953,5 @@
       }
     });
   </script>
-<script>
-  // ===== 🚑 啟動保險：確保三個考題頁進入時一定渲染 =====
-  document.addEventListener('DOMContentLoaded', function () {
-    setTimeout(function () {
-      try {
-        const data = getQuestionsDataSafe();
-        if (data.length > 0) {
-          if (typeof renderQuestionsList === 'function') renderQuestionsList();
-          if (typeof renderEssayDeconstruction === 'function') renderEssayDeconstruction();
-        }
-      } catch (e) {
-        console.error('題庫初始化失敗：', e);
-      }
-    }, 100);
-  });
-</script>
 </body>
 </html>
