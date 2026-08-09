@@ -240,6 +240,34 @@
     @media (max-width:820px){ .exam-entry-grid{grid-template-columns:1fr;} .exam-entry-card{min-height:145px;} }
     @media (max-width:520px){ .flashcard-controls{gap:.22rem;} .flash-nav-btn{padding:.42rem .48rem;min-height:38px;font-size:.72rem;border-radius:10px;} .flash-rate-btn{padding:.42rem .36rem !important;min-height:38px;font-size:.7rem !important;border-radius:10px !important;} .flash-difficulty{gap:.16rem;} .flash-next-wrap{gap:.2rem;} .flash-progress{display:none;} }
     @media (max-width:380px){ .flash-nav-btn{padding-left:.34rem;padding-right:.34rem;font-size:.66rem;} .flash-rate-btn{padding-left:.28rem !important;padding-right:.28rem !important;font-size:.64rem !important;} }
+    /* ===== 本次指定調整：手機版登入同步移至「設定歷程」 ===== */
+    .mobile-auth-settings-btn { display: none; }
+    @media (max-width: 820px) {
+      #auth-header-btn { display: none !important; }
+      .mobile-auth-settings-btn { display: flex !important; width: 100%; justify-content: center; }
+    }
+
+    /* ===== 本次指定調整：手機講義圖卡完整呈現，不被底部導覽列遮擋 ===== */
+    @media (max-width: 820px) {
+      #tab-flashcards { padding-bottom: 95px; }
+      #tab-flashcards .flashcard-container {
+        min-height: calc(100vh - 255px);
+        height: calc(100vh - 255px);
+        margin-bottom: 95px;
+        overflow: visible;
+      }
+      #tab-flashcards .flashcard {
+        height: 100%;
+        min-height: 100%;
+      }
+      #tab-flashcards .card-face {
+        height: 100%;
+        min-height: 100%;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+
 
   </style>
 </head>
@@ -757,6 +785,9 @@
 
         <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem;">
           <button class="filter-btn" style="justify-content: center;" onclick="showAccountModal()">👤 切換學員帳號：<strong id="settings-user-name">Default Student</strong></button>
+          <button class="filter-btn mobile-auth-settings-btn" onclick="openAuthModal()" title="Email 登入／同步學習資料">
+            🔐 登入同步／跨裝置同步
+          </button>
           <button class="filter-btn" style="justify-content: center; background: #e8f0e8; color: var(--accent-sage);" onclick="exportStudyDataJSON()">📥 匯出完整學習備份 (.json)</button>
           <button class="filter-btn" style="justify-content: center; background: #faf4ed; color: var(--accent-amber);" onclick="exportHistoryCSV()">📊 匯出學習歷程 CSV 檔</button>
 
@@ -1321,6 +1352,17 @@
     ];
 
     let petData = JSON.parse(localStorage.getItem('broker_pet_data') || JSON.stringify({ level: 0, exp: 0, saplings: 5 }));
+
+    // ===== 本次指定調整：首次啟用本版本時，初始樹苗固定 5 個、學習日誌清空 =====
+    // 只執行一次；之後不會因重新整理頁面而重置使用者進度。
+    const INITIAL_STATE_VERSION = 'broker_initial_state_v4';
+    if (localStorage.getItem(INITIAL_STATE_VERSION) !== '1') {
+      petData = { level: 0, exp: 0, saplings: 5 };
+      localStorage.setItem('broker_pet_data', JSON.stringify(petData));
+      appendLogs = [];
+      localStorage.setItem('broker_append_only_log', '[]');
+      localStorage.setItem(INITIAL_STATE_VERSION, '1');
+    }
 
     function updatePetUI() {
       const stage = PET_STAGES.find(s => s.level === petData.level) || PET_STAGES[0];
