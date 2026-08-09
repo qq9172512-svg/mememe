@@ -1,4 +1,4 @@
-const CACHE_NAME = 'broker-study-app-v4';
+const CACHE_NAME = 'broker-study-app-v5';
 const ASSETS = [
   './',
   './app.html',
