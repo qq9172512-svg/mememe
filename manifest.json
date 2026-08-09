@@ -1,1 +1,16 @@
-{"name":"不動產經紀人國考勝率戰略系統","short_name":"不動產國考","start_url":"./index.html","display":"standalone","theme_color":"#6b8e73","background_color":"#f7f5f0","lang":"zh-TW","icons":[]}
+{
+  "short_name": "國考勝率App",
+  "name": "不動產經紀人 國考勝率戰略系統",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "app.html",
+  "background_color": "#18191a",
+  "theme_color": "#6b8e73",
+  "display": "standalone",
+  "orientation": "portrait"
+}

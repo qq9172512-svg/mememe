@@ -175,113 +175,6 @@
     .btn-primary { background: var(--accent-sage); color: #ffffff; border: none; padding: 0.65rem 1.4rem; border-radius: 20px; font-weight: 600; cursor: pointer; transition: var(--transition); min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; font-size: 0.9rem; }
     .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
 
-
-
-    /* ===== 📱 多設備 App 自適應：35天速成與考題中心 ===== */
-    .exam-center-intro { color: var(--text-sub); margin-bottom: 1rem; }
-    .exam-center-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1rem;
-    }
-    .exam-center-btn {
-      appearance: none;
-      border: 1px solid var(--border-color);
-      background: var(--bg-card);
-      color: var(--text-main);
-      border-radius: 18px;
-      min-height: 180px;
-      padding: 1.25rem;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      text-align: left;
-      gap: .35rem;
-      box-shadow: var(--shadow-soft);
-      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
-    }
-    .exam-center-btn:hover, .exam-center-btn:focus-visible {
-      transform: translateY(-2px);
-      border-color: var(--accent-sage);
-      outline: none;
-    }
-    .exam-center-icon { font-size: 2rem; margin-bottom: .25rem; }
-    .exam-center-title { font-size: 1.1rem; font-weight: 800; }
-    .exam-center-desc { font-size: .86rem; color: var(--text-sub); line-height: 1.5; }
-    .exam-center-btn-blue { border-top: 4px solid #5b8def; }
-    .exam-center-btn-purple { border-top: 4px solid var(--accent-purple); }
-    .exam-center-btn-orange { border-top: 4px solid var(--accent-terracotta); }
-
-    /* 35天速成：格子、內容與按鈕會隨設備縮放 */
-    .day-grid {
-      grid-template-columns: repeat(auto-fit, minmax(clamp(82px, 11vw, 130px), 1fr));
-      gap: clamp(.4rem, 1vw, .75rem);
-    }
-    .day-card {
-      min-width: 0;
-      min-height: clamp(58px, 8vw, 82px);
-      padding: clamp(.5rem, 1vw, .75rem) clamp(.25rem, .8vw, .55rem);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .day-num { font-size: clamp(.9rem, 1.8vw, 1.1rem); }
-    .day-topic { font-size: clamp(.68rem, 1.3vw, .82rem); max-width: 100%; }
-    .filter-btn, .btn-primary {
-      min-height: clamp(42px, 6vw, 48px);
-      padding: clamp(.55rem, 1.4vw, .75rem) clamp(.8rem, 2vw, 1.15rem);
-      font-size: clamp(.82rem, 1.7vw, .95rem);
-    }
-    #day-content-box {
-      width: 100%;
-      overflow-wrap: anywhere;
-    }
-    #day-content-box button, #day-content-box .filter-btn, #day-content-box .btn-primary {
-      max-width: 100%;
-    }
-
-    @media (max-width: 900px) {
-      main { max-width: 100%; padding: .8rem .7rem; }
-      .healing-card { padding: 1rem; }
-      .exam-center-grid { grid-template-columns: 1fr 1fr; }
-      .exam-center-btn:last-child { grid-column: 1 / -1; }
-    }
-
-    @media (max-width: 600px) {
-      body { padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
-      header { padding-left: .7rem; padding-right: .7rem; }
-      .header-content { width: 100%; }
-      main { padding: .65rem .55rem; }
-      .healing-card { padding: .85rem; border-radius: 16px; }
-      .panel-title { font-size: 1rem; }
-      .exam-center-grid { grid-template-columns: 1fr; gap: .7rem; }
-      .exam-center-btn, .exam-center-btn:last-child { grid-column: auto; min-height: 125px; padding: 1rem; }
-      .exam-center-icon { font-size: 1.7rem; }
-      .exam-center-title { font-size: 1rem; }
-      .exam-center-desc { font-size: .8rem; }
-      .day-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .4rem; }
-      .day-card { min-height: 62px; border-radius: 10px; }
-      .day-topic { font-size: .68rem; }
-      #day-content-box { padding: .85rem !important; }
-      #day-content-box h3 { font-size: 1rem !important; }
-      .filter-btn, .btn-primary { width: auto; max-width: 100%; }
-    }
-
-    @media (max-width: 380px) {
-      .day-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .day-card { min-height: 60px; }
-      .day-topic { font-size: .64rem; }
-      .bottom-nav-bar .tab-item { font-size: .62rem; }
-      .bottom-nav-bar .tab-icon { font-size: 1.05rem; }
-    }
-
-    @media (min-width: 1200px) {
-      .day-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
-      #day-content-box { max-width: 1100px; margin-inline: auto; }
-    }
     .day-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 0.6rem; margin-bottom: 1.2rem; }
     .day-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 0.65rem 0.4rem; border-radius: 12px; text-align: center; cursor: pointer; transition: var(--transition); }
     .day-card:hover, .day-card.active { border-color: var(--accent-terracotta); background: rgba(217, 136, 106, 0.1); transform: translateY(-2px); }
@@ -324,6 +217,16 @@
     .auth-status.ok { background:#e8f5e9; color:#2e7d32; }
     .auth-status.err { background:#ffebee; color:#c62828; }
     .auth-status.info { background:var(--accent-sage-light); color:var(--text-main); }
+
+    /* ===== 📱 App 響應式：35天速成＋講義圖卡＋設定頁 ===== */
+    .settings-account-card{background:linear-gradient(135deg,rgba(107,142,115,.10),rgba(157,142,199,.08));border:1px solid var(--border-color);border-radius:18px;padding:1rem;margin-bottom:1rem}.settings-account-head{display:flex;justify-content:space-between;align-items:flex-start;gap:.75rem}.settings-section-kicker{font-size:.75rem;color:var(--text-sub)}.settings-account-title{font-size:1.08rem;font-weight:800;margin-top:.1rem}.settings-cloud-status{font-size:.78rem;font-weight:700;color:var(--accent-sage);background:var(--bg-card);border:1px solid var(--border-color);border-radius:999px;padding:.35rem .65rem;white-space:nowrap}.settings-account-email{color:var(--text-sub);font-size:.84rem;line-height:1.55;margin:.65rem 0 .8rem}.settings-account-actions{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}.settings-account-btn{width:100%;min-height:46px;justify-content:center}
+    #tab-flashcards .healing-card{width:100%;max-width:980px;margin-left:auto;margin-right:auto}#tab-flashcards .flashcard-container{width:100%;max-width:900px;margin-left:auto;margin-right:auto;min-height:clamp(360px,55vh,540px)}#tab-flashcards .flashcard{min-height:clamp(360px,55vh,540px)}#tab-flashcards .card-face{padding:clamp(1rem,2vw,1.6rem)}#tab-flashcards .card-title-lg{font-size:clamp(1.05rem,2vw,1.45rem)}#tab-flashcards .card-question{font-size:clamp(.92rem,1.6vw,1.08rem)}#tab-flashcards .card-filters{align-items:stretch}#tab-flashcards .card-filters .filter-btn,#tab-flashcards .card-filters select{min-height:44px}#tab-flashcards > .healing-card > div:last-child{max-width:900px;margin-left:auto;margin-right:auto}
+    #tab-crash35 .healing-card{width:100%;max-width:1100px;margin-left:auto;margin-right:auto}#tab-crash35 .day-grid{grid-template-columns:repeat(auto-fit,minmax(clamp(82px,10vw,125px),1fr));gap:clamp(.4rem,1vw,.7rem)}#tab-crash35 .day-card{min-height:clamp(64px,8vw,88px);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:.55rem .35rem}#tab-crash35 .day-num{font-size:clamp(.9rem,1.5vw,1.08rem)}#tab-crash35 .day-topic{font-size:clamp(.68rem,1.1vw,.8rem);max-width:100%}#tab-crash35 #day-content-box{width:100%}
+    @media (min-width:1200px){main{max-width:1320px;padding-left:1.25rem;padding-right:1.25rem}.day-grid{grid-template-columns:repeat(7,minmax(100px,1fr))}.bottom-nav-bar{max-width:1180px;left:50%;right:auto;transform:translateX(-50%);width:calc(100% - 2rem);border:1px solid var(--border-color);border-bottom:none;border-radius:18px 18px 0 0}}
+    @media (min-width:768px) and (max-width:1199px){main{max-width:960px;padding:1.1rem}#tab-flashcards .card-filters{display:grid;grid-template-columns:repeat(5,1fr)}#tab-flashcards .card-filters select{grid-column:1/-1;width:100%}#tab-flashcards .flashcard-container,#tab-flashcards .flashcard{min-height:460px}#tab-crash35 .day-grid{grid-template-columns:repeat(5,minmax(95px,1fr))}}
+    @media (max-width:767px){body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}main{padding:.65rem .55rem}.healing-card{padding:.85rem;border-radius:16px}.panel-title{font-size:1rem}.bottom-nav-bar{padding-left:.2rem;padding-right:.2rem}.tab-item{min-width:64px;min-height:54px;font-size:.65rem}.tab-item .tab-icon{font-size:1.12rem}.settings-account-actions{grid-template-columns:1fr}#tab-flashcards .flashcard-container,#tab-flashcards .flashcard{min-height:clamp(360px,62vh,500px)}#tab-flashcards .card-face{padding:1rem}#tab-flashcards .card-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem}#tab-flashcards .card-filters .filter-btn{width:100%;min-height:46px;justify-content:center}#tab-flashcards .card-filters select{grid-column:1/-1;width:100%;min-height:46px}#tab-flashcards > .healing-card > div:last-child{display:grid!important;grid-template-columns:1fr 1fr;gap:.55rem!important}#tab-flashcards > .healing-card > div:last-child > div{grid-column:1/-1;justify-content:center}#tab-flashcards > .healing-card > div:last-child > button{width:100%;min-height:48px}#tab-crash35 .day-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem}#tab-crash35 .day-card{min-height:68px;border-radius:11px}#tab-crash35 #day-content-box{padding:.9rem!important}#tab-crash35 #day-content-box .filter-btn{min-height:42px}#tab-crash35 .panel-title{align-items:flex-start!important}#tab-crash35 .panel-title .filter-btn{min-height:44px}}
+    @media (max-width:390px){.brand{font-size:.98rem}.day-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}#tab-flashcards .card-title-lg{font-size:1rem}#tab-flashcards .card-question{font-size:.9rem}.settings-account-card{padding:.85rem}}
+
   </style>
 </head>
 <body>
@@ -336,7 +239,7 @@
         <span>國考勝率 App</span>
       </div>
       <div class="header-actions">
-        <button id="auth-header-btn" class="filter-btn auth-user-chip" style="padding:.3rem .6rem;" onclick="openAuthModal()" title="Email 登入／同步學習資料">
+        <button id="auth-header-btn" class="filter-btn auth-user-chip" style="padding:.3rem .6rem; display:none;" onclick="openAuthModal()" title="Email 登入／同步學習資料">
           🔐 <span id="auth-header-text">登入同步</span>
         </button>
         <a href="https://law.moj.gov.tw/Index.aspx" target="_blank" rel="noopener" class="filter-btn" style="padding: 0.3rem 0.6rem; text-decoration: none;" title="開啟全國法規資料庫">
@@ -663,36 +566,6 @@
       </div>
     </section>
 
-    <!-- TAB 4: 📚 考題中心：保留原本三大考題功能，只增加統一入口 -->
-    <section id="tab-examcenter" class="tab-pane">
-      <div class="healing-card exam-center-card">
-        <div class="panel-title">
-          <span>📚 考題中心</span>
-        </div>
-        <p class="exam-center-intro">請選擇要使用的考題功能。只有按下後才會進入對應功能；原本完整題庫、申論拆解與全真模考內容均保留。</p>
-
-        <div class="exam-center-grid">
-          <button class="exam-center-btn exam-center-btn-blue" onclick="switchTab('questions', event)">
-            <span class="exam-center-icon">📚</span>
-            <span class="exam-center-title">歷屆考題</span>
-            <span class="exam-center-desc">100～114 年完整歷屆題庫</span>
-          </button>
-
-          <button class="exam-center-btn exam-center-btn-purple" onclick="switchTab('essay', event)">
-            <span class="exam-center-icon">✍️</span>
-            <span class="exam-center-title">申論拆解</span>
-            <span class="exam-center-desc">完整申論題、題目與拆解</span>
-          </button>
-
-          <button class="exam-center-btn exam-center-btn-orange" onclick="switchTab('mockexam', event)">
-            <span class="exam-center-icon">🎲</span>
-            <span class="exam-center-title">全真模考</span>
-            <span class="exam-center-desc">從原本 QUESTIONS_DATA 抽題</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
     <!-- TAB 4: 📚 歷屆題庫 (114~110年全考古題全檢索與練習) -->
     <section id="tab-questions" class="tab-pane">
       <div class="healing-card">
@@ -843,6 +716,21 @@
           <span>⚙️ 系統設定、備份與 IndexedDB 學習歷程</span>
         </div>
 
+        <div class="settings-account-card">
+          <div class="settings-account-head">
+            <div>
+              <div class="settings-section-kicker">帳號與雲端</div>
+              <div class="settings-account-title">☁️ 登入同步</div>
+            </div>
+            <div class="settings-cloud-status" id="settings-cloud-status">未登入</div>
+          </div>
+          <div class="settings-account-email" id="settings-cloud-email">使用 Email＋密碼登入後，可在手機、平板、電腦同步學習進度。</div>
+          <div class="settings-account-actions">
+            <button class="btn-primary settings-account-btn" onclick="openAuthModal()">🔐 <span id="settings-auth-action-text">登入／建立帳號</span></button>
+            <button class="filter-btn settings-account-btn" onclick="openAuthModal()">☁️ 查看同步狀態</button>
+          </div>
+        </div>
+
         <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem;">
           <button class="filter-btn" style="justify-content: center;" onclick="showAccountModal()">👤 切換學員帳號：<strong id="settings-user-name">Default Student</strong></button>
           <button class="filter-btn" style="justify-content: center; background: #e8f0e8; color: var(--accent-sage);" onclick="exportStudyDataJSON()">📥 匯出完整學習備份 (.json)</button>
@@ -942,9 +830,17 @@
       <span class="tab-icon">📖</span>
       <span>講義圖卡</span>
     </button>
-    <button class="tab-item" onclick="switchTab('examcenter', event)">
+    <button class="tab-item" onclick="switchTab('questions', event)">
       <span class="tab-icon">📚</span>
-      <span>考題</span>
+      <span>歷屆題庫</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('essay', event)">
+      <span class="tab-icon">✍️</span>
+      <span>申論拆解</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('mockexam', event)">
+      <span class="tab-icon">🎲</span>
+      <span>全真模考</span>
     </button>
     <button class="tab-item" onclick="switchTab('mistakes', event)">
       <span class="tab-icon">🎴</span>
@@ -1063,6 +959,8 @@
         };
       } catch (e) {}
     }
+
+    function updateSettingsCloudCard(){const status=document.getElementById('settings-cloud-status'),email=document.getElementById('settings-cloud-email'),action=document.getElementById('settings-auth-action-text');if(!status||!email||!action)return;if(typeof currentUser!=='undefined'&&currentUser){status.textContent='☁️ 已登入／同步';email.textContent=currentUser;action.textContent='管理帳號／同步'}else{status.textContent='未登入';email.textContent='使用 Email＋密碼登入後，可在手機、平板、電腦同步學習進度。';action.textContent='登入／建立帳號'}}
 
     function renderTimelineLogs() {
       const container = document.getElementById('timeline-log-container');
@@ -2206,6 +2104,7 @@
     }
 
     function openAuthModal() {
+      updateSettingsCloudCard();
       updateAuthUI();
       document.getElementById('auth-modal')?.classList.add('active');
       document.getElementById('auth-email')?.focus();
@@ -2385,6 +2284,7 @@
         navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(reg => reg.unregister())).catch(() => {});
       }
     });
+  try { setTimeout(updateSettingsCloudCard, 0); } catch(e) {}
   </script>
 </body>
 </html>
