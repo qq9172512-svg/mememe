@@ -198,6 +198,67 @@
     table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.88rem; }
     th, td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border-color); text-align: left; }
     th { background: var(--bg-card-sub); font-weight: 700; color: var(--text-main); }
+
+    /* ===== App 介面升級：手機／平板／桌機自適應 ===== */
+    html { scroll-behavior: smooth; }
+    button, select, input, textarea { font: inherit; }
+    button, .filter-btn, .btn-primary, .tab-item { -webkit-tap-highlight-color: transparent; }
+    .app-shell { width:100%; }
+    .app-page-title { font-size:1.45rem; font-weight:800; letter-spacing:-.02em; margin-bottom:.25rem; }
+    .app-subtitle { color:var(--text-sub); font-size:.88rem; }
+    .study-hub { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; margin:1rem 0 1.25rem; }
+    .study-hub-btn { border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-main); border-radius:22px; padding:1.25rem; text-align:left; cursor:pointer; box-shadow:var(--shadow-soft); transition:var(--transition); min-height:145px; }
+    .study-hub-btn:hover { transform:translateY(-2px); border-color:var(--accent-sage); }
+    .study-hub-btn.active { border:2px solid var(--accent-sage); background:var(--accent-sage-light); }
+    .study-hub-icon { font-size:2rem; display:block; margin-bottom:.45rem; }
+    .study-hub-title { font-size:1.08rem; font-weight:800; display:block; }
+    .study-hub-desc { display:block; color:var(--text-sub); font-size:.82rem; margin-top:.25rem; line-height:1.5; }
+    .study-workspace { margin-top:.5rem; }
+    .study-workspace > .workspace-card { display:none; }
+    .study-workspace > .workspace-card.active { display:block; }
+    .workspace-card > .healing-card { margin-bottom:0; }
+    .settings-app-card { background:var(--bg-card); border:1px solid var(--border-color); border-radius:18px; overflow:hidden; box-shadow:var(--shadow-soft); margin-bottom:1rem; }
+    .settings-row { display:flex; align-items:center; gap:.8rem; padding:1rem; border-bottom:1px solid var(--border-color); cursor:pointer; min-height:64px; }
+    .settings-row:last-child { border-bottom:0; }
+    .settings-row:hover { background:var(--bg-primary); }
+    .settings-icon { width:40px; height:40px; border-radius:12px; display:grid; place-items:center; background:var(--bg-card-sub); font-size:1.25rem; flex:none; }
+    .settings-main { min-width:0; flex:1; }
+    .settings-title { font-weight:750; }
+    .settings-desc { color:var(--text-sub); font-size:.78rem; margin-top:.1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .settings-arrow { color:var(--text-sub); font-size:1.2rem; }
+    .sync-pill { display:inline-flex; align-items:center; gap:.3rem; padding:.3rem .55rem; border-radius:999px; background:var(--accent-sage-light); color:var(--accent-sage); font-size:.75rem; font-weight:700; }
+    .mobile-only-back { display:none; }
+    @media (max-width: 700px) {
+      body { font-size:15px; padding-bottom:calc(78px + env(safe-area-inset-bottom)); }
+      header { padding-left:.75rem; padding-right:.75rem; }
+      .brand { font-size:.98rem; }
+      .header-content { min-height:42px; }
+      main { padding:.7rem .65rem 1.25rem; }
+      .healing-card { padding:.9rem; border-radius:17px; margin-bottom:.8rem; }
+      .panel-title { font-size:1rem; }
+      .study-hub { grid-template-columns:1fr; gap:.7rem; }
+      .study-hub-btn { min-height:112px; padding:1rem; border-radius:18px; }
+      .study-hub-icon { font-size:1.7rem; }
+      .bottom-nav-bar { padding-left:.15rem; padding-right:.15rem; }
+      .tab-item { min-width:58px; font-size:.64rem; padding:.25rem .1rem; }
+      .tab-item .tab-icon { font-size:1.1rem; }
+      .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      table { min-width:640px; }
+      textarea.essay-textarea { min-height:180px !important; }
+      .desktop-hide { display:none !important; }
+    }
+    @media (min-width: 701px) and (max-width: 1100px) {
+      main { max-width:900px; padding-left:1rem; padding-right:1rem; }
+      .bottom-nav-bar { max-width:900px; left:50%; right:auto; transform:translateX(-50%); width:100%; border:1px solid var(--border-color); border-bottom:0; border-radius:18px 18px 0 0; }
+    }
+    @media (min-width: 1101px) {
+      body { padding-bottom:92px; }
+      main { max-width:1180px; padding:1.25rem 1.25rem 2rem; }
+      .bottom-nav-bar { left:50%; right:auto; transform:translateX(-50%); width:min(1080px,calc(100% - 32px)); border:1px solid var(--border-color); border-bottom:0; border-radius:20px 20px 0 0; }
+      .tab-item { font-size:.76rem; }
+      .healing-card { padding:1.35rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior:auto !important; transition:none !important; animation:none !important; } }
   </style>
 </head>
 <body>
@@ -534,8 +595,32 @@
       </div>
     </section>
 
-    <!-- TAB 4: 📚 歷屆題庫 (114~110年全考古題全檢索與練習) -->
+    <!-- TAB 4: 📚 歷屆考題中心：歷屆題庫／全真模考 -->
     <section id="tab-questions" class="tab-pane">
+      <div class="healing-card">
+        <div class="app-page-title">📚 歷屆考題中心</div>
+        <div class="app-subtitle">先選擇模式，再載入內容；避免一進頁面就塞滿題目。</div>
+        <div class="study-hub">
+          <button class="study-hub-btn active" id="study-hub-btn-questions" onclick="showStudyHubMode('questions')">
+            <span class="study-hub-icon">📚</span>
+            <span class="study-hub-title">歷屆題庫</span>
+            <span class="study-hub-desc">100～114 年歷屆考題、科目篩選、搜尋與逐題練習</span>
+          </button>
+          <button class="study-hub-btn" id="study-hub-btn-mock" onclick="showStudyHubMode('mock')">
+            <span class="study-hub-icon">🎲</span>
+            <span class="study-hub-title">全真模考</span>
+            <span class="study-hub-desc">隨機抽題、作答、計分與歷次成績紀錄</span>
+          </button>
+        </div>
+        <div id="study-workspace" class="study-workspace">
+          <div id="workspace-questions" class="workspace-card active"></div>
+          <div id="workspace-mock" class="workspace-card"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 舊有題庫工作區：由 JS 移入歷屆考題中心 -->
+    <section id="tab-questions-source" class="tab-pane" style="display:none">
       <div class="healing-card">
         <div class="panel-title">
           <span>📚 100~114 年歷屆考古題庫全檢索與練習 (完整收錄 15 年全考科 2,061 題真題)</span>
@@ -683,6 +768,19 @@
           <span>⚙️ 系統設定、備份與 IndexedDB 學習歷程</span>
         </div>
 
+        <div class="settings-app-card">
+          <div class="settings-row" onclick="showAccountModal()">
+            <div class="settings-icon">👤</div>
+            <div class="settings-main"><div class="settings-title">帳號與雲端同步</div><div class="settings-desc" id="settings-account-desc">尚未登入；登入後可跨設備同步</div></div>
+            <span class="sync-pill" id="settings-sync-pill">未登入</span><span class="settings-arrow">›</span>
+          </div>
+          <div class="settings-row" onclick="syncCloudNow(); updateSyncStatus('正在同步…')">
+            <div class="settings-icon">☁️</div>
+            <div class="settings-main"><div class="settings-title">立即同步</div><div class="settings-desc">手動將目前學習資料同步到雲端</div></div>
+            <span class="settings-arrow">›</span>
+          </div>
+        </div>
+
         <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem;">
           <button class="filter-btn" style="justify-content: center;" onclick="showAccountModal()">👤 切換學員帳號：<strong id="settings-user-name">Default Student</strong></button>
           <button class="filter-btn" style="justify-content: center; background: #e8f0e8; color: var(--accent-sage);" onclick="exportStudyDataJSON()">📥 匯出完整學習備份 (.json)</button>
@@ -755,40 +853,14 @@
     </div>
   </div>
 
-  <!-- 底部 App 導覽列 (Bottom Tab Bar) -->
-  <nav class="bottom-nav-bar">
-    <button class="tab-item active" onclick="switchTab('dashboard', event)">
-      <span class="tab-icon">🌸</span>
-      <span>儀表板</span>
-    </button>
-    <button class="tab-item" onclick="switchTab('crash35', event)">
-      <span class="tab-icon">🌱</span>
-      <span>35天速成</span>
-    </button>
-    <button class="tab-item" onclick="switchTab('flashcards', event)">
-      <span class="tab-icon">📖</span>
-      <span>講義圖卡</span>
-    </button>
-    <button class="tab-item" onclick="switchTab('questions', event)">
-      <span class="tab-icon">📚</span>
-      <span>歷屆題庫</span>
-    </button>
-    <button class="tab-item" onclick="switchTab('essay', event)">
-      <span class="tab-icon">✍️</span>
-      <span>申論拆解</span>
-    </button>
-    <button class="tab-item" onclick="switchTab('mockexam', event)">
-      <span class="tab-icon">🎲</span>
-      <span>全真模考</span>
-    </button>
-    <button class="tab-item" onclick="switchTab('mistakes', event)">
-      <span class="tab-icon">🎴</span>
-      <span>錯題本</span>
-    </button>
-    <button class="tab-item" onclick="switchTab('settings', event)">
-      <span class="tab-icon">⚙️</span>
-      <span>設定歷程</span>
-    </button>
+  <!-- 底部 App 導覽列 -->
+  <nav class="bottom-nav-bar" aria-label="主要導覽">
+    <button class="tab-item active" onclick="switchTab('dashboard', event)"><span class="tab-icon">🌸</span><span>首頁</span></button>
+    <button class="tab-item" onclick="switchTab('crash35', event)"><span class="tab-icon">🌱</span><span>35天</span></button>
+    <button class="tab-item" onclick="switchTab('flashcards', event)"><span class="tab-icon">📖</span><span>講義</span></button>
+    <button class="tab-item" onclick="switchTab('questions', event)"><span class="tab-icon">📚</span><span>考題</span></button>
+    <button class="tab-item" onclick="switchTab('mistakes', event)"><span class="tab-icon">🎴</span><span>錯題</span></button>
+    <button class="tab-item" onclick="switchTab('settings', event)"><span class="tab-icon">⚙️</span><span>設定</span></button>
   </nav>
 
   <!-- Modal: 本地通知時間選擇器 -->
@@ -1108,11 +1180,13 @@
     function updateAuthUI(){
       const el=document.getElementById('settings-user-name');
       if(el) el.innerText=cloudUser ? cloudUser.email : '尚未登入';
+      updateSyncStatus(cloudUser ? '已登入' : '未登入');
     }
     async function handleCloudLogin(user){
-      cloudUser=user; currentUser=user.email; localStorage.setItem('broker_current_user',currentUser); updateAuthUI();
+      cloudUser=user; currentUser=user.email; localStorage.setItem('broker_current_user',currentUser); updateAuthUI(); updateSyncStatus('同步中…');
       document.getElementById('auth-modal')?.classList.remove('active');
       await loadCloudData();
+      updateSyncStatus('已同步');
       renderEssayDeconstruction(); renderMistakeCardDisplay(); renderExamHistoryTable(); updateDashboardStats(); updateSubjectProgressBars();
     }
     async function loadCloudData(){
@@ -1282,13 +1356,41 @@
         });
       }
 
-      if (tabId === 'questions') renderQuestionsList();
-      else if (tabId === 'essay') renderEssayDeconstruction();
-      else if (tabId === 'mockexam') {
-        if (currentMockExamQuestions.length === 0) startRandomMockExam();
+      if (tabId === 'questions') {
+        showStudyHubMode(window.studyHubMode || 'questions');
+      } else if (tabId === 'essay') {
+        showStudyHubMode('essay');
+      } else if (tabId === 'mockexam') {
+        showStudyHubMode('mock');
       } else if (tabId === 'settings') {
         renderExamHistoryTable();
+        updateSyncStatus(cloudUser ? '已登入' : '未登入');
       }
+    }
+
+    let studyHubMode = 'questions';
+    window.studyHubMode = studyHubMode;
+    function showStudyHubMode(mode) {
+      studyHubMode = mode; window.studyHubMode = mode;
+      const qBtn=document.getElementById('study-hub-btn-questions'), mBtn=document.getElementById('study-hub-btn-mock');
+      qBtn?.classList.toggle('active', mode==='questions'); mBtn?.classList.toggle('active', mode==='mock');
+      const qws=document.getElementById('workspace-questions'), mws=document.getElementById('workspace-mock');
+      if (!qws || !mws) return;
+      qws.classList.toggle('active', mode==='questions'); mws.classList.toggle('active', mode==='mock');
+      const sourceQ=document.getElementById('tab-questions-source');
+      const sourceEssay=document.getElementById('tab-essay');
+      const sourceMock=document.getElementById('tab-mockexam');
+      if (sourceQ && !qws.contains(sourceQ)) qws.appendChild(sourceQ);
+      if (sourceEssay && !qws.contains(sourceEssay)) qws.appendChild(sourceEssay);
+      if (sourceMock && !mws.contains(sourceMock)) mws.appendChild(sourceMock);
+      if (mode==='questions') { sourceQ?.style.setProperty('display','block','important'); sourceEssay?.style.setProperty('display','none','important'); sourceMock?.style.setProperty('display','none','important'); renderQuestionsList(); }
+      if (mode==='essay') { sourceQ?.style.setProperty('display','none','important'); sourceMock?.style.setProperty('display','none','important'); sourceEssay?.style.setProperty('display','block','important'); renderEssayDeconstruction(); }
+      if (mode==='mock') { sourceQ?.style.setProperty('display','none','important'); sourceEssay?.style.setProperty('display','none','important'); sourceMock?.style.setProperty('display','block','important'); if(currentMockExamQuestions.length===0) startRandomMockExam(); }
+    }
+    function updateSyncStatus(text) {
+      const pill=document.getElementById('settings-sync-pill'), desc=document.getElementById('settings-account-desc');
+      if (pill) pill.innerText=text || (cloudUser?'已登入':'未登入');
+      if (desc) desc.innerText=cloudUser ? `${cloudUser.email}｜可跨手機、平板、電腦同步` : '尚未登入；登入後可跨設備同步';
     }
 
     function initCountdown() {
@@ -1651,6 +1753,7 @@
                 <div style="margin-top:.6rem;line-height:1.75;">${formatLegalLinks(dec.intent || '請依題目要求分點作答。')}</div>
               </details>
               ${Array.isArray(dec.keywords)&&dec.keywords.length ? `<div style="margin-bottom:.8rem;"><strong>🔑 必背關鍵字：</strong>${dec.keywords.map(k=>`<span class="badge" style="margin:.15rem;">${k}</span>`).join('')}</div>`:''}
+              ${renderRelatedCrash35(q.subject)}
               <div style="font-weight:800;color:var(--accent-purple);margin:.5rem 0;">✍️ 你的申論擬答</div>
               <textarea class="essay-textarea" placeholder="在這裡練習完整申論答案；登入後會同步到雲端。" oninput="debounceSaveDraft('user_essay_${q.id}', this.value)">${draftVal}</textarea>
               <div style="background:var(--bg-card);padding:1rem;border-radius:12px;font-size:.9rem;line-height:1.75;white-space:pre-wrap;border:1px solid var(--border-color);margin-top:.8rem;">
@@ -1667,6 +1770,17 @@
           <span style="font-size:.82rem;color:var(--text-sub);">共 ${list.length} 題</span>
         </div>`;
     }
+
+    function renderRelatedCrash35(subject) {
+      const data = typeof CRASH_35_DATA !== 'undefined' ? CRASH_35_DATA.filter(d=>d.subject===subject) : [];
+      if (!data.length) return '';
+      return `<div style="background:var(--bg-primary);border:1px solid var(--border-color);border-radius:14px;padding:.8rem;margin:.8rem 0;">
+        <div style="font-weight:800;color:var(--accent-sage);margin-bottom:.45rem;">🌱 35天速成：本題同科複習</div>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;">${data.slice(0,8).map(d=>`<button class="filter-btn" onclick="openCrashDayFromEssay(${d.day})">Day ${d.day}｜${String(d.title).replace(/`/g,'') .slice(0,28)}</button>`).join('')}</div>
+        ${data.length>8?`<div style="font-size:.75rem;color:var(--text-sub);margin-top:.4rem;">另有 ${data.length-8} 個同科講義日可於 35 天速成查看。</div>`:''}
+      </div>`;
+    }
+    function openCrashDayFromEssay(day) { switchTab('crash35'); setTimeout(()=>selectCrashDay(day),50); }
 
     function essayGoPage(page){ essayCurrentPage=Math.max(1,page); renderEssayDeconstruction(); document.getElementById('tab-essay')?.scrollIntoView({behavior:'smooth',block:'start'}); }
 
@@ -2065,8 +2179,7 @@
       selectCrashDay(1);
       initChapterDropdown();
       displayCurrentCard();
-      renderQuestionsList();
-      renderEssayDeconstruction();
+      // 歷屆題庫與模考改為按需載入，進入頁面後由使用者選擇模式。
       renderMistakeCardDisplay();
       updatePetUI();
       initTasksUI();
@@ -2075,7 +2188,7 @@
       updateDashboardStats();
       updateReminderBadge();
       renderExamHistoryTable();
-      startRandomMockExam();
+      // 不在首頁自動抽模考題，避免浪費載入並符合 App 按需操作。
 
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js').catch(() => {});
