@@ -198,6 +198,25 @@
     table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.88rem; }
     th, td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border-color); text-align: left; }
     th { background: var(--bg-card-sub); font-weight: 700; color: var(--text-main); }
+
+    /* ===== Supabase 登入介面 ===== */
+    .auth-user-chip {
+      display:inline-flex; align-items:center; gap:.35rem; max-width:230px;
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    }
+    .auth-user-email { max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .auth-modal-card { max-width:440px; }
+    .auth-input {
+      width:100%; padding:.75rem .85rem; border-radius:12px;
+      border:1px solid var(--border-color); background:var(--bg-primary);
+      color:var(--text-main); font-size:1rem; margin-top:.35rem;
+    }
+    .auth-label { display:block; font-size:.85rem; color:var(--text-sub); margin-top:.8rem; }
+    .auth-status { margin-top:.8rem; padding:.75rem; border-radius:10px; font-size:.85rem; line-height:1.5; display:none; }
+    .auth-status.show { display:block; }
+    .auth-status.ok { background:#e8f5e9; color:#2e7d32; }
+    .auth-status.err { background:#ffebee; color:#c62828; }
+    .auth-status.info { background:var(--accent-sage-light); color:var(--text-main); }
   </style>
 </head>
 <body>
@@ -210,6 +229,9 @@
         <span>國考勝率 App</span>
       </div>
       <div class="header-actions">
+        <button id="auth-header-btn" class="filter-btn auth-user-chip" style="padding:.3rem .6rem;" onclick="openAuthModal()" title="Email 登入／同步學習資料">
+          🔐 <span id="auth-header-text">登入同步</span>
+        </button>
         <a href="https://law.moj.gov.tw/Index.aspx" target="_blank" rel="noopener" class="filter-btn" style="padding: 0.3rem 0.6rem; text-decoration: none;" title="開啟全國法規資料庫">
           📜 全球法規網 ↗
         </a>
@@ -736,6 +758,39 @@
     </section>
   </main>
 
+  <!-- Modal: Email＋密碼登入／註冊／跨裝置同步 -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-card auth-modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <h3 style="color:var(--accent-sage);">🔐 帳號登入與同步</h3>
+        <button class="filter-btn" style="padding:.2rem .5rem;" onclick="closeModal('auth-modal')">✕</button>
+      </div>
+
+      <div id="auth-login-panel">
+        <p style="font-size:.9rem;color:var(--text-sub);margin-bottom:.7rem;">使用同一組 Email＋密碼，就可以在手機、平板、電腦同步學習進度。</p>
+        <label class="auth-label">Email</label>
+        <input id="auth-email" class="auth-input" type="email" autocomplete="email" placeholder="請輸入 Email">
+        <label class="auth-label">密碼</label>
+        <input id="auth-password" class="auth-input" type="password" autocomplete="current-password" placeholder="至少 6 碼">
+        <div id="auth-status" class="auth-status"></div>
+        <div style="display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap;">
+          <button class="btn-primary" style="flex:1;min-width:120px;" onclick="authSignIn()">🔓 登入</button>
+          <button class="filter-btn" style="flex:1;min-width:120px;justify-content:center;" onclick="authSignUp()">📝 建立帳號</button>
+        </div>
+        <p style="font-size:.76rem;color:var(--text-sub);margin-top:.8rem;line-height:1.5;">第一次使用請按「建立帳號」。如果 Supabase 要求 Email 驗證，請先到信箱完成驗證，再回來登入。</p>
+      </div>
+
+      <div id="auth-logged-panel" style="display:none;">
+        <div style="background:var(--bg-primary);border:1px solid var(--border-color);border-radius:12px;padding:1rem;">
+          <div style="font-size:.8rem;color:var(--text-sub);">目前登入帳號</div>
+          <div id="auth-logged-email" style="font-weight:700;margin-top:.2rem;word-break:break-all;"></div>
+          <div id="auth-sync-status" style="font-size:.82rem;color:var(--accent-sage);margin-top:.6rem;">☁️ 已啟用跨裝置同步</div>
+        </div>
+        <button class="filter-btn" style="width:100%;justify-content:center;margin-top:1rem;background:#ffebee;color:#c62828;" onclick="authSignOut()">🚪 登出此帳號</button>
+      </div>
+    </div>
+  </div>
+
   <!-- 底部 App 導覽列 (Bottom Tab Bar) -->
   <nav class="bottom-nav-bar">
     <button class="tab-item active" onclick="switchTab('dashboard', event)">
@@ -801,6 +856,15 @@
       <div id="scheduled-reminders-list" style="display: flex; flex-direction: column; gap: 0.6rem;"></div>
     </div>
   </div>
+
+  <!-- Supabase 登入與跨裝置同步 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // 這兩個值已經幫您設定好，不需要再修改。
+    const SUPABASE_URL = 'https://hvcyjevvcdmcrjrqstag.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_uDlPq_POd37k_SlaE_v-uA_XmE6TuLk';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  </script>
 
   <script src="data/crash35_data.js"></script>
   <script src="data/flashcards.js"></script>
@@ -1020,14 +1084,7 @@
     }
 
     function showAccountModal() {
-      const name = prompt("👤 請輸入學員姓名或登入帳號名稱：", currentUser);
-      if (name && name.trim().length > 0) {
-        currentUser = name.trim();
-        localStorage.setItem('broker_current_user', currentUser);
-        updateCurrentUserUI();
-        appendStudyLog('ACCOUNT_SWITCH', `切換學員帳號為：${currentUser}`);
-        alert(`✅ 學員帳號已切換為：【${currentUser}】！`);
-      }
+      openAuthModal();
     }
 
     function exportStudyDataJSON() {
@@ -1984,9 +2041,196 @@
       speakText(`${title}。${desc}`);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // ===== 🔐 Supabase Email＋密碼登入／跨裝置同步 =====
+    let authUser = null;
+    let cloudSaveTimer = null;
+    let authBootFinished = false;
+
+    function showAuthStatus(message, type = 'info') {
+      const el = document.getElementById('auth-status');
+      if (!el) return;
+      el.textContent = message;
+      el.className = `auth-status show ${type}`;
+    }
+
+    function updateAuthUI() {
+      const headerText = document.getElementById('auth-header-text');
+      const loggedPanel = document.getElementById('auth-logged-panel');
+      const loginPanel = document.getElementById('auth-login-panel');
+      const emailEl = document.getElementById('auth-logged-email');
+      const settingsName = document.getElementById('settings-user-name');
+
+      if (authUser) {
+        const email = authUser.email || '已登入';
+        if (headerText) headerText.textContent = email;
+        if (loggedPanel) loggedPanel.style.display = 'block';
+        if (loginPanel) loginPanel.style.display = 'none';
+        if (emailEl) emailEl.textContent = email;
+        currentUser = email;
+        localStorage.setItem('broker_current_user', currentUser);
+        if (settingsName) settingsName.innerText = currentUser;
+      } else {
+        if (headerText) headerText.textContent = '登入同步';
+        if (loggedPanel) loggedPanel.style.display = 'none';
+        if (loginPanel) loginPanel.style.display = 'block';
+      }
+    }
+
+    function openAuthModal() {
+      updateAuthUI();
+      document.getElementById('auth-modal')?.classList.add('active');
+      document.getElementById('auth-email')?.focus();
+    }
+
+    async function authSignIn() {
+      const email = document.getElementById('auth-email')?.value.trim();
+      const password = document.getElementById('auth-password')?.value || '';
+      if (!email || !password) { showAuthStatus('請輸入 Email 和密碼。', 'err'); return; }
+      showAuthStatus('正在登入，請稍候……', 'info');
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) { showAuthStatus('登入失敗：' + error.message, 'err'); return; }
+      authUser = data.user;
+      updateAuthUI();
+      await loadCloudStateAndRefresh();
+    }
+
+    async function authSignUp() {
+      const email = document.getElementById('auth-email')?.value.trim();
+      const password = document.getElementById('auth-password')?.value || '';
+      if (!email || password.length < 6) { showAuthStatus('請輸入 Email，且密碼至少 6 碼。', 'err'); return; }
+      showAuthStatus('正在建立帳號，請稍候……', 'info');
+      const { data, error } = await supabaseClient.auth.signUp({ email, password });
+      if (error) { showAuthStatus('建立帳號失敗：' + error.message, 'err'); return; }
+      if (data.session && data.user) {
+        authUser = data.user;
+        updateAuthUI();
+        await saveCloudState(true);
+        showAuthStatus('帳號建立成功，學習資料已開始同步。', 'ok');
+      } else {
+        showAuthStatus('帳號建立成功！請先到 Email 信箱完成驗證，再回來登入。', 'ok');
+      }
+    }
+
+    async function authSignOut() {
+      if (authUser) await saveCloudState(true);
+      await supabaseClient.auth.signOut();
+      authUser = null;
+      // 登出後清除本機學習資料，避免下一位使用者看到上一位的資料。雲端資料仍保留。
+      Object.keys(localStorage).filter(k => k.startsWith('broker_')).forEach(k => localStorage.removeItem(k));
+      location.reload();
+    }
+
+    function collectLocalAppState() {
+      const state = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('broker_')) state[key] = localStorage.getItem(key);
+      }
+      return state;
+    }
+
+    async function saveCloudState(force = false) {
+      if (!authUser) return;
+      if (!force) {
+        clearTimeout(cloudSaveTimer);
+        cloudSaveTimer = setTimeout(() => saveCloudState(true), 900);
+        return;
+      }
+
+      const state = collectLocalAppState();
+      const payload = {
+        user_id: authUser.id,
+        crash35_day: parseInt(localStorage.getItem('broker_crash35_day') || '1', 10),
+        crash35_completed: JSON.parse(localStorage.getItem('broker_crash35_completed') || '[]'),
+        flashcard_progress: state,
+        last_question_id: localStorage.getItem('broker_last_question_id') || null
+      };
+
+      const { error } = await supabaseClient.from('study_progress').upsert(payload, { onConflict: 'user_id' });
+      if (error) {
+        console.warn('Cloud sync failed:', error.message);
+      } else {
+        const sync = document.getElementById('auth-sync-status');
+        if (sync) sync.textContent = '☁️ 已同步到 Supabase';
+      }
+
+      // 同步個人基本資料；即使這一步失敗，也不影響登入。
+      try {
+        await supabaseClient.from('profiles').upsert({ id: authUser.id, display_name: authUser.email || '學員' }, { onConflict: 'id' });
+      } catch (e) {}
+    }
+
+    async function loadCloudStateAndRefresh() {
+      if (!authUser) return;
+      showAuthStatus('正在讀取雲端學習進度……', 'info');
+      const { data, error } = await supabaseClient
+        .from('study_progress')
+        .select('user_id, crash35_day, crash35_completed, flashcard_progress, last_question_id')
+        .eq('user_id', authUser.id)
+        .maybeSingle();
+
+      if (error) {
+        showAuthStatus('登入成功，但讀取雲端資料失敗：' + error.message, 'err');
+        return;
+      }
+
+      if (data && data.flashcard_progress && typeof data.flashcard_progress === 'object' && !Array.isArray(data.flashcard_progress)) {
+        Object.entries(data.flashcard_progress).forEach(([key, value]) => {
+          if (key.startsWith('broker_')) localStorage.setItem(key, value);
+        });
+        if (data.crash35_day != null) localStorage.setItem('broker_crash35_day', String(data.crash35_day));
+        if (data.crash35_completed != null) localStorage.setItem('broker_crash35_completed', JSON.stringify(data.crash35_completed));
+        if (data.last_question_id != null) localStorage.setItem('broker_last_question_id', data.last_question_id);
+        localStorage.setItem('broker_current_user', authUser.email || 'Student');
+        showAuthStatus('☁️ 雲端資料已載入，正在重新整理 App……', 'ok');
+        setTimeout(() => location.reload(), 450);
+      } else {
+        await saveCloudState(true);
+        showAuthStatus('這是此帳號第一次同步，已把目前裝置的學習資料上傳。', 'ok');
+      }
+    }
+
+    async function initSupabaseAuth() {
+      try {
+        const { data } = await supabaseClient.auth.getSession();
+        authUser = data?.session?.user || null;
+        updateAuthUI();
+
+        if (authUser && !authBootFinished) {
+          authBootFinished = true;
+          const { data: cloud } = await supabaseClient.from('study_progress').select('flashcard_progress').eq('user_id', authUser.id).maybeSingle();
+          if (cloud && cloud.flashcard_progress && typeof cloud.flashcard_progress === 'object' && Object.keys(cloud.flashcard_progress).length > 0) {
+            Object.entries(cloud.flashcard_progress).forEach(([key, value]) => {
+              if (key.startsWith('broker_')) localStorage.setItem(key, value);
+            });
+            localStorage.setItem('broker_current_user', authUser.email || 'Student');
+            currentUser = authUser.email || 'Student';
+            updateCurrentUserUI();
+          } else {
+            await saveCloudState(true);
+          }
+        }
+      } catch (e) {
+        console.warn('Supabase auth init failed:', e);
+      }
+
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        authUser = session?.user || null;
+        updateAuthUI();
+      });
+    }
+
+    // 只同步 broker_ 開頭的學習資料，不碰題庫本身。
+    const originalLocalStorageSetItem = localStorage.setItem.bind(localStorage);
+    localStorage.setItem = function(key, value) {
+      originalLocalStorageSetItem(key, value);
+      if (String(key).startsWith('broker_') && authUser) saveCloudState(false);
+    };
+
+    document.addEventListener('DOMContentLoaded', async () => {
       initIndexedDB();
       updateCurrentUserUI();
+      initSupabaseAuth();
       initTheme();
       initCountdown();
       renderCrash35Grid();
