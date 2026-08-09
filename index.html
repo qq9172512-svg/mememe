@@ -587,7 +587,7 @@
     <section id="tab-essay" class="tab-pane">
       <div class="healing-card">
         <div class="panel-title">
-          <span>✍️ 100~114 年全科目 申論結構拆解 (150題全收錄)</span>
+          <span>✍️ 100~114 年全科目 申論結構拆解（依題庫實際資料完整顯示）</span>
         </div>
         <div style="display: flex; gap: 0.6rem; margin-bottom: 1rem; flex-wrap: wrap;">
           <input type="text" id="essay-search-input" placeholder="🔍 搜尋申論題目關鍵字..." style="flex: 1; min-width: 180px; padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main);" oninput="renderEssayDeconstruction()">
@@ -1258,8 +1258,55 @@
       alert(`🦖【考霸小怪獸 8 大等級漸進經驗值曲線】\nLv.0 龍龍蛋 (100) ➜ Lv.1 毛毛怪 (200) ➜ Lv.2 破殼怪 (350) ➜ Lv.3 芽芽怪 (550) ➜ Lv.4 估價霸王龍 (800) ➜ Lv.5 土地雷龍 (1100) ➜ Lv.6 經紀火龍 (1500) ➜ Lv.7 神龍王 (MAX)`);
     }
 
-    // ===== 📚 114~110年 歷屆題庫全檢索渲染 =====
-    function renderQuestionsList() {
+    // ===== 📚 題庫資料安全存取 =====
+    function getQuestionsDataSafe() {
+      try {
+        if (typeof QUESTIONS_DATA !== 'undefined' && Array.isArray(QUESTIONS_DATA)) return QUESTIONS_DATA;
+      } catch (e) {}
+      if (Array.isArray(window.QUESTIONS_DATA)) return window.QUESTIONS_DATA;
+      return [];
+    }
+
+    function getQuestionStats() {
+      const data = getQuestionsDataSafe();
+      return {
+        total: data.length,
+        mc: data.filter(q => q.type === 'mc').length,
+        essay: data.filter(q => q.type === 'essay').length
+      };
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function retryLoadQuestionsData() {
+      const paths = ['./data/questions.js', 'data/questions.js'];
+      let tried = 0;
+      paths.forEach(p => {
+        const s = document.createElement('script');
+        s.src = p + '?t=' + Date.now();
+        s.onload = () => {
+          tried++;
+          if (getQuestionsDataSafe().length > 0) {
+            renderQuestionsList(1);
+            renderEssayDeconstruction(1);
+          }
+        };
+        s.onerror = () => { tried++; };
+        document.head.appendChild(s);
+      });
+    }
+
+    let questionsCurrentPage = 1;
+    const QUESTIONS_PAGE_SIZE = 30;
+
+    function renderQuestionsList(page = 1) {
       const container = document.getElementById('questions-list-container');
       if (!container) return;
 
@@ -1267,87 +1314,86 @@
       const subjectFilter = document.getElementById('q-filter-subject')?.value || 'all';
       const typeFilter = document.getElementById('q-filter-type')?.value || 'all';
       const keyword = (document.getElementById('q-filter-keyword')?.value || '').trim().toLowerCase();
+      const allData = getQuestionsDataSafe();
 
-      
-    function getQuestionsDataSafe() {
-      if (typeof QUESTIONS_DATA !== 'undefined' && Array.isArray(QUESTIONS_DATA) && QUESTIONS_DATA.length > 0) {
-        return QUESTIONS_DATA;
-      }
-      if (window.QUESTIONS_DATA && Array.isArray(window.QUESTIONS_DATA) && window.QUESTIONS_DATA.length > 0) {
-        return window.QUESTIONS_DATA;
-      }
-      return [];
-    }
-
-    function retryLoadQuestionsData() {
-      const paths = ['./data/questions.js', 'data/questions.js', '../data/questions.js', 'dist/data/questions.js'];
-      let loaded = false;
-      paths.forEach(p => {
-        if (loaded) return;
-        const s = document.createElement('script');
-        s.src = p + '?t=' + Date.now();
-        s.onload = () => {
-          if (getQuestionsDataSafe().length > 0) {
-            loaded = true;
-            alert('✅ 成功載入 100~114 年 2,061 題全真題庫！');
-            renderQuestionsList();
-            renderEssayDeconstruction();
-          }
-        };
-        document.head.appendChild(s);
-      });
-    }
-
-      let list = [...getQuestionsDataSafe()];
-
-      if (yearFilter !== 'all') list = list.filter(q => String(q.year) === yearFilter);
-      if (subjectFilter !== 'all') list = list.filter(q => q.subject === subjectFilter);
-      if (typeFilter !== 'all') list = list.filter(q => q.type === typeFilter);
-      if (keyword) list = list.filter(q => (q.question + (q.title || '') + (q.explanation || '')).toLowerCase().includes(keyword));
-
-      if (list.length === 0) {
-        if (getQuestionsDataSafe().length === 0) {
+      if (!allData.length) {
         container.innerHTML = `
-          <div style="text-align:center; padding:2rem; background: var(--bg-card-sub); border-radius:16px; margin: 1rem 0;">
-            <div style="font-size:1.2rem; font-weight:700; color:var(--accent-terracotta); margin-bottom:0.5rem;">⚠️ 尚未載入考古題庫資料 (data/questions.js)</div>
-            <p style="color:var(--text-sub); margin-bottom:1rem; font-size:0.9rem;">
-              若您在 GitHub / GitHub Pages 上開啟本 App，請確認已將 <code>data/questions.js</code> (共 2,061 題完整真題) 一併推送到 GitHub 儲存庫。<br>
-              您也可以嘗試點擊下方按鈕重新手動載入題庫。
-            </p>
-            <button class="filter-btn" style="background:var(--accent-sage); color:#fff; padding:0.5rem 1.2rem; font-weight:600;" onclick="retryLoadQuestionsData()">🔄 嘗試重新載入 100~114 年考古題庫</button>
-          </div>
-        `;
-      } else {
-        container.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sub);">查無符合條件的歷屆考古題</div>';
-      }
+          <div style="text-align:center; padding:2rem; background:var(--bg-card-sub); border-radius:16px; margin:1rem 0;">
+            <div style="font-size:1.15rem; font-weight:700; color:var(--accent-terracotta); margin-bottom:.5rem;">⚠️ 題庫尚未載入</div>
+            <p style="color:var(--text-sub); margin-bottom:1rem;">請確認 GitHub 儲存庫內有 <code>data/questions.js</code>，且檔案名稱與資料夾位置完全一致。</p>
+            <button class="filter-btn" onclick="retryLoadQuestionsData()">🔄 重新載入題庫</button>
+          </div>`;
         return;
       }
 
-      container.innerHTML = list.slice(0, 30).map(q => `
-        <div class="question-item">
-          <div class="q-header">
-            <span class="badge">${q.year} 年 / ${q.subject} ${q.type === 'essay' ? '申論' : '選擇'}第 ${q.number} 題</span>
-            <div style="display:flex; gap:0.4rem;">
-              <button class="filter-btn" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="addToMistakeBank('${q.id}')">📌 納入錯題庫</button>
-              <button class="filter-btn" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="showReminderPickerModal('${q.title || q.question.slice(0,15)}', 'QUESTION', '${q.id}')">🔔 提醒 me</button>
+      let list = [...allData];
+      if (yearFilter !== 'all') list = list.filter(q => String(q.year) === yearFilter);
+      if (subjectFilter !== 'all') list = list.filter(q => q.subject === subjectFilter);
+      if (typeFilter !== 'all') list = list.filter(q => q.type === typeFilter);
+      if (keyword) list = list.filter(q => {
+        const haystack = [q.question, q.title, q.explanation, q.deconstruction?.applicableLaws, q.deconstruction?.sampleAnswer]
+          .filter(Boolean).join(' ').toLowerCase();
+        return haystack.includes(keyword);
+      });
+
+      if (!list.length) {
+        container.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-sub);">查無符合條件的歷屆考古題</div>';
+        return;
+      }
+
+      const totalPages = Math.max(1, Math.ceil(list.length / QUESTIONS_PAGE_SIZE));
+      questionsCurrentPage = Math.min(Math.max(Number(page) || 1, 1), totalPages);
+      const start = (questionsCurrentPage - 1) * QUESTIONS_PAGE_SIZE;
+      const pageItems = list.slice(start, start + QUESTIONS_PAGE_SIZE);
+      const stats = getQuestionStats();
+
+      const cards = pageItems.map(q => {
+        const answerText = q.type === 'mc' ? `<div style="font-weight:700;color:var(--accent-terracotta);">正解：(${escapeHtml(q.answer)})</div>` : '';
+        const explanation = q.explanation || q.deconstruction?.sampleAnswer || '';
+        const laws = q.deconstruction?.applicableLaws || '';
+        const keywords = q.deconstruction?.mustKeywords || [];
+        return `
+          <div class="question-item">
+            <div class="q-header">
+              <span class="badge">${escapeHtml(q.year)} 年 / ${escapeHtml(q.subject)} ${q.type === 'essay' ? '申論' : '選擇'}第 ${escapeHtml(q.number)} 題</span>
+              <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+                <button class="filter-btn" style="padding:.2rem .5rem;font-size:.75rem;" onclick="addToMistakeBank('${escapeHtml(q.id)}')">📌 納入錯題庫</button>
+                <button class="filter-btn" style="padding:.2rem .5rem;font-size:.75rem;" onclick="showReminderPickerModal('${escapeHtml((q.title || q.question || '').slice(0,15))}','QUESTION','${escapeHtml(q.id)}')">🔔 提醒</button>
+              </div>
             </div>
-          </div>
-          <div class="q-title">${q.title || q.question}</div>
-
-          ${q.options ? `
-            <div class="options-grid">
-              ${q.options.map((opt, optIdx) => `<div style="padding:0.5rem 0.8rem; background:var(--bg-primary); border-radius:8px; font-size:0.9rem;">${opt}</div>`).join('')}
+            ${q.title ? `<div style="font-weight:700;color:var(--accent-purple);margin:.4rem 0;">${escapeHtml(q.title)}</div>` : ''}
+            <div class="q-title" style="white-space:pre-wrap;">${escapeHtml(q.question || '')}</div>
+            ${q.options ? `<div class="options-grid">${q.options.map(opt => `<div style="padding:.6rem .8rem;background:var(--bg-primary);border-radius:8px;font-size:.9rem;">${escapeHtml(opt)}</div>`).join('')}</div>` : ''}
+            <button class="filter-btn" style="margin-top:.6rem;" onclick="toggleQuestionAnswer('q-ans-${escapeHtml(q.id)}')">💡 顯示/隱藏正解與解析</button>
+            <div id="q-ans-${escapeHtml(q.id)}" class="explanation-box" style="display:none;margin-top:.6rem;">
+              ${answerText}
+              ${laws ? `<div style="margin:.4rem 0;"><strong>⚖️ 適用法條：</strong>${formatLegalLinks(escapeHtml(laws))}</div>` : ''}
+              ${keywords.length ? `<div style="margin:.4rem 0;"><strong>🔑 關鍵詞：</strong>${keywords.map(k => escapeHtml(k)).join('、')}</div>` : ''}
+              <div style="white-space:pre-wrap;">${formatLegalLinks(escapeHtml(explanation))}</div>
             </div>
-          ` : ''}
+          </div>`;
+      }).join('');
 
-          <button class="filter-btn" style="margin-top:0.6rem;" onclick="toggleQuestionAnswer('q-ans-${q.id}')">💡 顯示/隱藏正解與解析</button>
-
-          <div id="q-ans-${q.id}" class="explanation-box" style="display:none; margin-top:0.6rem;">
-            ${q.type === 'mc' ? `<div style="font-weight:700; color:var(--accent-terracotta);">正解：(${q.answer})</div>` : ''}
-            <div>${formatLegalLinks(q.explanation || q.deconstruction?.sampleAnswer || '')}</div>
-          </div>
+      const pager = renderPager('questions', questionsCurrentPage, totalPages, list.length, start + 1, Math.min(start + QUESTIONS_PAGE_SIZE, list.length));
+      container.innerHTML = `
+        <div style="display:flex;justify-content:space-between;gap:.6rem;align-items:center;flex-wrap:wrap;margin-bottom:.8rem;">
+          <div style="font-weight:700;">目前篩選：${list.length} 題</div>
+          <div style="font-size:.82rem;color:var(--text-sub);">完整題庫 ${stats.total} 題（選擇 ${stats.mc}／申論 ${stats.essay}）</div>
         </div>
-      `).join('');
+        ${cards}
+        ${pager}`;
+    }
+
+    function renderPager(kind, page, totalPages, totalItems, from, to) {
+      if (totalPages <= 1) return `<div style="text-align:center;color:var(--text-sub);font-size:.82rem;margin:1rem 0;">顯示 ${from}～${to} / ${totalItems} 題</div>`;
+      const fn = kind === 'questions' ? 'renderQuestionsList' : 'renderEssayDeconstruction';
+      const buttons = [];
+      const start = Math.max(1, page - 2);
+      const end = Math.min(totalPages, start + 4);
+      buttons.push(`<button class="filter-btn" ${page === 1 ? 'disabled' : ''} onclick="${fn}(${page - 1})">‹ 上一頁</button>`);
+      for (let i = start; i <= end; i++) buttons.push(`<button class="filter-btn" style="font-weight:${i === page ? '800' : '500'};" onclick="${fn}(${i})">${i}</button>`);
+      buttons.push(`<button class="filter-btn" ${page === totalPages ? 'disabled' : ''} onclick="${fn}(${page + 1})">下一頁 ›</button>`);
+      return `<div style="display:flex;justify-content:center;align-items:center;gap:.35rem;flex-wrap:wrap;margin:1rem 0;">${buttons.join('')}<span style="font-size:.8rem;color:var(--text-sub);margin-left:.4rem;">${from}～${to} / ${totalItems} 題</span></div>`;
     }
 
     function toggleQuestionAnswer(ansId) {
@@ -1484,7 +1530,10 @@
       }
     }
 
-    function renderEssayDeconstruction() {
+    let essayCurrentPage = 1;
+    const ESSAY_PAGE_SIZE = 15;
+
+    function renderEssayDeconstruction(page = 1) {
       const container = document.getElementById('essay-deconstruct-container');
       if (!container) return;
       const searchKey = (document.getElementById('essay-search-input')?.value || '').trim().toLowerCase();
@@ -1492,32 +1541,48 @@
 
       let list = getQuestionsDataSafe().filter(q => q.type === 'essay');
       if (subjectFilter !== 'all') list = list.filter(q => q.subject === subjectFilter);
-      if (searchKey) list = list.filter(q => (q.question + (q.title || '')).toLowerCase().includes(searchKey));
+      if (searchKey) list = list.filter(q => [q.question, q.title, q.deconstruction?.sampleAnswer, q.deconstruction?.applicableLaws].filter(Boolean).join(' ').toLowerCase().includes(searchKey));
 
+      if (!list.length) {
+        container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-sub);">目前題庫沒有符合條件的申論題。</div>';
+        return;
+      }
+
+      const totalPages = Math.max(1, Math.ceil(list.length / ESSAY_PAGE_SIZE));
+      essayCurrentPage = Math.min(Math.max(Number(page) || 1, 1), totalPages);
+      const start = (essayCurrentPage - 1) * ESSAY_PAGE_SIZE;
+      const pageItems = list.slice(start, start + ESSAY_PAGE_SIZE);
       const drafts = JSON.parse(localStorage.getItem('broker_user_drafts') || '{}');
 
-      container.innerHTML = list.slice(0, 15).map(q => {
+      const cards = pageItems.map(q => {
         const dec = q.deconstruction || {};
         const draftVal = drafts[`user_essay_${q.id}`] || '';
+        const structure = dec.structure ? Object.values(dec.structure).map(v => `<div style="margin:.25rem 0;">${escapeHtml(v)}</div>`).join('') : '';
+        const mustKeywords = Array.isArray(dec.mustKeywords) ? dec.mustKeywords.map(k => escapeHtml(k)).join('、') : '';
         return `
-          <div class="healing-card" style="margin-bottom: 1.2rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem;">
-              <span class="badge">${q.year}年 / ${q.subject} 申論題第 ${q.number} 題</span>
-              <button class="filter-btn" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;" onclick="showReminderPickerModal('${q.title}', 'ESSAY', '${q.id}')">🔔 提醒 me</button>
+          <div class="healing-card" style="margin-bottom:1.2rem;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.4rem;">
+              <span class="badge">${escapeHtml(q.year)}年 / ${escapeHtml(q.subject)} 申論題第 ${escapeHtml(q.number)} 題</span>
+              <button class="filter-btn" style="font-size:.75rem;padding:.2rem .5rem;" onclick="showReminderPickerModal('${escapeHtml((q.title || '').slice(0,20))}','ESSAY','${escapeHtml(q.id)}')">🔔 提醒</button>
             </div>
-            <h4 style="margin: 0.6rem 0; font-size: 1.05rem; color: var(--text-main);">${q.title}</h4>
-            <p style="font-size: 0.92rem; color: var(--text-main); font-weight: 600;">${q.question}</p>
-
+            <h4 style="margin:.6rem 0;font-size:1.05rem;color:var(--text-main);">${escapeHtml(q.title || '')}</h4>
+            <p style="font-size:.92rem;color:var(--text-main);font-weight:600;white-space:pre-wrap;">${escapeHtml(q.question || '')}</p>
             <div class="essay-deconstruct-box">
-              <div class="deconstruct-tag">⚖️ 適用法條：${formatLegalLinks(dec.applicableLaws || '依相關法規辦理')}</div>
-              <textarea class="essay-textarea" placeholder="輸入申論擬答（已啟用 Debounce 自動存檔）..." oninput="debounceSaveDraft('user_essay_${q.id}', this.value)">${draftVal}</textarea>
-              <div style="background: var(--bg-card); padding: 0.85rem; border-radius: 10px; font-size: 0.88rem; line-height: 1.6; white-space: pre-wrap; border: 1px solid var(--border-color);">
-                <strong style="color: var(--accent-purple);">【高分範本解答】</strong>\n${formatLegalLinks(dec.sampleAnswer || '')}
+              ${dec.applicableLaws ? `<div class="deconstruct-tag">⚖️ 適用法條：${formatLegalLinks(escapeHtml(dec.applicableLaws))}</div>` : ''}
+              ${dec.intent ? `<div style="margin:.6rem 0;"><strong>🎯 考題意旨：</strong>${escapeHtml(dec.intent)}</div>` : ''}
+              ${structure ? `<div style="margin:.6rem 0;"><strong>🧩 答題架構：</strong>${structure}</div>` : ''}
+              ${mustKeywords ? `<div style="margin:.6rem 0;"><strong>🔑 必背關鍵詞：</strong>${mustKeywords}</div>` : ''}
+              ${dec.everydayExample ? `<div style="margin:.6rem 0;"><strong>🏠 日常實例：</strong>${escapeHtml(dec.everydayExample)}</div>` : ''}
+              <textarea class="essay-textarea" placeholder="輸入申論擬答（自動存檔）..." oninput="debounceSaveDraft('user_essay_${escapeHtml(q.id)}', this.value)">${escapeHtml(draftVal)}</textarea>
+              <div style="background:var(--bg-card);padding:.85rem;border-radius:10px;font-size:.88rem;line-height:1.6;white-space:pre-wrap;border:1px solid var(--border-color);margin-top:.7rem;">
+                <strong style="color:var(--accent-purple);">【高分範本解答】</strong>\n${formatLegalLinks(escapeHtml(dec.sampleAnswer || q.explanation || ''))}
               </div>
             </div>
-          </div>
-        `;
+          </div>`;
       }).join('');
+
+      const pager = renderPager('essay', essayCurrentPage, totalPages, list.length, start + 1, Math.min(start + ESSAY_PAGE_SIZE, list.length));
+      container.innerHTML = `<div style="display:flex;justify-content:space-between;gap:.5rem;align-items:center;flex-wrap:wrap;margin-bottom:.8rem;"><strong>目前 ${list.length} 題</strong><span style="font-size:.82rem;color:var(--text-sub);">題庫實際收錄 ${getQuestionStats().essay} 題申論</span></div>${cards}${pager}`;
     }
 
     let currentMistakeIndex = 0;
@@ -1925,8 +1990,9 @@
       renderExamHistoryTable();
       startRandomMockExam();
 
+      // 清除舊版 Service Worker，避免 GitHub Pages 繼續顯示舊快取版本。
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
+        navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(reg => reg.unregister())).catch(() => {});
       }
     });
   </script>
