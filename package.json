@@ -1,0 +1,28 @@
+{
+  "name": "my-reminder-app",
+  "version": "1.0.0",
+  "description": "不動產經紀人 國考勝率戰略系統 (Android Mobile App)",
+  "main": "index.html",
+  "scripts": {
+    "build": "python scripts/build.py",
+    "cap:sync": "npx cap sync",
+    "cap:open": "npx cap open android"
+  },
+  "keywords": [
+    "real-estate",
+    "broker-exam",
+    "capacitor",
+    "android",
+    "study-app"
+  ],
+  "author": "Antigravity Team",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/local-notifications": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0"
+  }
+}
