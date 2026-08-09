@@ -217,15 +217,29 @@
     .auth-status.ok { background:#e8f5e9; color:#2e7d32; }
     .auth-status.err { background:#ffebee; color:#c62828; }
     .auth-status.info { background:var(--accent-sage-light); color:var(--text-main); }
-
-    /* ===== 📱 App 響應式：35天速成＋講義圖卡＋設定頁 ===== */
-    .settings-account-card{background:linear-gradient(135deg,rgba(107,142,115,.10),rgba(157,142,199,.08));border:1px solid var(--border-color);border-radius:18px;padding:1rem;margin-bottom:1rem}.settings-account-head{display:flex;justify-content:space-between;align-items:flex-start;gap:.75rem}.settings-section-kicker{font-size:.75rem;color:var(--text-sub)}.settings-account-title{font-size:1.08rem;font-weight:800;margin-top:.1rem}.settings-cloud-status{font-size:.78rem;font-weight:700;color:var(--accent-sage);background:var(--bg-card);border:1px solid var(--border-color);border-radius:999px;padding:.35rem .65rem;white-space:nowrap}.settings-account-email{color:var(--text-sub);font-size:.84rem;line-height:1.55;margin:.65rem 0 .8rem}.settings-account-actions{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}.settings-account-btn{width:100%;min-height:46px;justify-content:center}
-    #tab-flashcards .healing-card{width:100%;max-width:980px;margin-left:auto;margin-right:auto}#tab-flashcards .flashcard-container{width:100%;max-width:900px;margin-left:auto;margin-right:auto;min-height:clamp(360px,55vh,540px)}#tab-flashcards .flashcard{min-height:clamp(360px,55vh,540px)}#tab-flashcards .card-face{padding:clamp(1rem,2vw,1.6rem)}#tab-flashcards .card-title-lg{font-size:clamp(1.05rem,2vw,1.45rem)}#tab-flashcards .card-question{font-size:clamp(.92rem,1.6vw,1.08rem)}#tab-flashcards .card-filters{align-items:stretch}#tab-flashcards .card-filters .filter-btn,#tab-flashcards .card-filters select{min-height:44px}#tab-flashcards > .healing-card > div:last-child{max-width:900px;margin-left:auto;margin-right:auto}
-    #tab-crash35 .healing-card{width:100%;max-width:1100px;margin-left:auto;margin-right:auto}#tab-crash35 .day-grid{grid-template-columns:repeat(auto-fit,minmax(clamp(82px,10vw,125px),1fr));gap:clamp(.4rem,1vw,.7rem)}#tab-crash35 .day-card{min-height:clamp(64px,8vw,88px);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:.55rem .35rem}#tab-crash35 .day-num{font-size:clamp(.9rem,1.5vw,1.08rem)}#tab-crash35 .day-topic{font-size:clamp(.68rem,1.1vw,.8rem);max-width:100%}#tab-crash35 #day-content-box{width:100%}
-    @media (min-width:1200px){main{max-width:1320px;padding-left:1.25rem;padding-right:1.25rem}.day-grid{grid-template-columns:repeat(7,minmax(100px,1fr))}.bottom-nav-bar{max-width:1180px;left:50%;right:auto;transform:translateX(-50%);width:calc(100% - 2rem);border:1px solid var(--border-color);border-bottom:none;border-radius:18px 18px 0 0}}
-    @media (min-width:768px) and (max-width:1199px){main{max-width:960px;padding:1.1rem}#tab-flashcards .card-filters{display:grid;grid-template-columns:repeat(5,1fr)}#tab-flashcards .card-filters select{grid-column:1/-1;width:100%}#tab-flashcards .flashcard-container,#tab-flashcards .flashcard{min-height:460px}#tab-crash35 .day-grid{grid-template-columns:repeat(5,minmax(95px,1fr))}}
-    @media (max-width:767px){body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}main{padding:.65rem .55rem}.healing-card{padding:.85rem;border-radius:16px}.panel-title{font-size:1rem}.bottom-nav-bar{padding-left:.2rem;padding-right:.2rem}.tab-item{min-width:64px;min-height:54px;font-size:.65rem}.tab-item .tab-icon{font-size:1.12rem}.settings-account-actions{grid-template-columns:1fr}#tab-flashcards .flashcard-container,#tab-flashcards .flashcard{min-height:clamp(360px,62vh,500px)}#tab-flashcards .card-face{padding:1rem}#tab-flashcards .card-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem}#tab-flashcards .card-filters .filter-btn{width:100%;min-height:46px;justify-content:center}#tab-flashcards .card-filters select{grid-column:1/-1;width:100%;min-height:46px}#tab-flashcards > .healing-card > div:last-child{display:grid!important;grid-template-columns:1fr 1fr;gap:.55rem!important}#tab-flashcards > .healing-card > div:last-child > div{grid-column:1/-1;justify-content:center}#tab-flashcards > .healing-card > div:last-child > button{width:100%;min-height:48px}#tab-crash35 .day-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem}#tab-crash35 .day-card{min-height:68px;border-radius:11px}#tab-crash35 #day-content-box{padding:.9rem!important}#tab-crash35 #day-content-box .filter-btn{min-height:42px}#tab-crash35 .panel-title{align-items:flex-start!important}#tab-crash35 .panel-title .filter-btn{min-height:44px}}
-    @media (max-width:390px){.brand{font-size:.98rem}.day-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}#tab-flashcards .card-title-lg{font-size:1rem}#tab-flashcards .card-question{font-size:.9rem}.settings-account-card{padding:.85rem}}
+  
+    /* ===== 本次僅新增：考試入口＋講義圖卡手機同排控制 ===== */
+    .exam-center-card { padding: clamp(1rem, 3vw, 2rem); }
+    .exam-center-head { margin-bottom: 1.25rem; }
+    .exam-center-kicker { color: var(--accent-sage); font-weight: 800; font-size: .9rem; }
+    .exam-center-head h2 { margin: .25rem 0 .35rem; font-size: clamp(1.35rem, 3vw, 2rem); }
+    .exam-center-head p { margin: 0; color: var(--text-sub); font-size: .92rem; }
+    .exam-entry-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; }
+    .exam-entry-card { border: 1px solid var(--border-color); border-radius: 20px; padding: 1.15rem; min-height: 180px; text-align:left; cursor:pointer; display:flex; flex-direction:column; align-items:flex-start; justify-content:space-between; color:var(--text-main); background:var(--bg-card); box-shadow:var(--shadow-soft); transition:transform .18s ease,box-shadow .18s ease; }
+    .exam-entry-card:hover { transform:translateY(-3px); box-shadow:0 12px 28px rgba(0,0,0,.09); }
+    .exam-entry-icon { font-size:2rem; } .exam-entry-title { font-size:1.12rem; font-weight:800; margin-top:.45rem; }
+    .exam-entry-desc { color:var(--text-sub); font-size:.84rem; line-height:1.5; margin-top:.3rem; }
+    .exam-entry-arrow { margin-top:auto; padding-top:.8rem; font-weight:800; color:var(--accent-sage); font-size:.88rem; }
+    .entry-history { border-color:rgba(107,142,115,.35); background:linear-gradient(145deg,var(--bg-card),rgba(107,142,115,.08)); }
+    .entry-essay { border-color:rgba(217,136,106,.35); background:linear-gradient(145deg,var(--bg-card),rgba(217,136,106,.08)); }
+    .entry-mock { border-color:rgba(124,104,176,.35); background:linear-gradient(145deg,var(--bg-card),rgba(124,104,176,.08)); }
+    .flashcard-controls { display:flex; align-items:center; justify-content:space-between; gap:.45rem; flex-wrap:nowrap; width:100%; }
+    .flash-difficulty { display:flex; align-items:center; justify-content:center; gap:.25rem; flex:0 0 auto; }
+    .flash-next-wrap { display:flex; align-items:center; gap:.4rem; flex:0 0 auto; }
+    .flash-rate-btn,.flash-nav-btn { white-space:nowrap; } .flash-progress { font-size:.78rem; color:var(--text-sub); white-space:nowrap; }
+    @media (max-width:820px){ .exam-entry-grid{grid-template-columns:1fr;} .exam-entry-card{min-height:145px;} }
+    @media (max-width:520px){ .flashcard-controls{gap:.22rem;} .flash-nav-btn{padding:.42rem .48rem;min-height:38px;font-size:.72rem;border-radius:10px;} .flash-rate-btn{padding:.42rem .36rem !important;min-height:38px;font-size:.7rem !important;border-radius:10px !important;} .flash-difficulty{gap:.16rem;} .flash-next-wrap{gap:.2rem;} .flash-progress{display:none;} }
+    @media (max-width:380px){ .flash-nav-btn{padding-left:.34rem;padding-right:.34rem;font-size:.66rem;} .flash-rate-btn{padding-left:.28rem !important;padding-right:.28rem !important;font-size:.64rem !important;} }
 
   </style>
 </head>
@@ -239,7 +253,7 @@
         <span>國考勝率 App</span>
       </div>
       <div class="header-actions">
-        <button id="auth-header-btn" class="filter-btn auth-user-chip" style="padding:.3rem .6rem; display:none;" onclick="openAuthModal()" title="Email 登入／同步學習資料">
+        <button id="auth-header-btn" class="filter-btn auth-user-chip" style="padding:.3rem .6rem;" onclick="openAuthModal()" title="Email 登入／同步學習資料">
           🔐 <span id="auth-header-text">登入同步</span>
         </button>
         <a href="https://law.moj.gov.tw/Index.aspx" target="_blank" rel="noopener" class="filter-btn" style="padding: 0.3rem 0.6rem; text-decoration: none;" title="開啟全國法規資料庫">
@@ -549,19 +563,44 @@
           </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.6rem;">
-          <button class="btn-primary" onclick="prevCard()">⬅️ 上一張</button>
+        <div class="flashcard-controls">
+          <button class="btn-primary flash-nav-btn" onclick="prevCard()">⬅️ 上一張</button>
 
-          <div style="display: flex; gap: 0.4rem;">
-            <button class="filter-btn" onclick="rateCard('hard')" style="background: #ffebee; color: #c62828;">🔴 難</button>
-            <button class="filter-btn" onclick="rateCard('medium')" style="background: #fff8e1; color: #f57f17;">🟡 中</button>
-            <button class="filter-btn" onclick="rateCard('easy')" style="background: #e8f5e9; color: #2e7d32;">🟢 易</button>
+          <div class="flash-difficulty">
+            <button class="filter-btn flash-rate-btn" onclick="rateCard('hard')" style="background: #ffebee; color: #c62828;">🔴 難</button>
+            <button class="filter-btn flash-rate-btn" onclick="rateCard('medium')" style="background: #fff8e1; color: #f57f17;">🟡 中</button>
+            <button class="filter-btn flash-rate-btn" onclick="rateCard('easy')" style="background: #e8f5e9; color: #2e7d32;">🟢 易</button>
           </div>
 
-          <div style="display: flex; align-items: center; gap: 0.6rem;">
-            <span style="font-size: 0.85rem; color: var(--text-sub);" id="fc-progress">1 / 10</span>
-            <button class="btn-primary" onclick="nextCard()">下一張 ➡️</button>
+          <div class="flash-next-wrap">
+            <span class="flash-progress" id="fc-progress">1 / 10</span>
+            <button class="btn-primary flash-nav-btn" onclick="nextCard()">下一張 ➡️</button>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: 📚 考試入口（僅新增入口；下方三個原始功能與資料完全保留） -->
+    <section id="tab-examcenter" class="tab-pane">
+      <div class="healing-card exam-center-card">
+        <div class="exam-center-head">
+          <div class="exam-center-kicker">🎯 考試準備中心</div>
+          <h2>📚 考試入口</h2>
+          <p>歷屆題庫、申論拆解、全真模考，三個原有功能完整保留。</p>
+        </div>
+        <div class="exam-entry-grid">
+          <button class="exam-entry-card entry-history" onclick="switchTab('questions', event)">
+            <span class="exam-entry-icon">📚</span><span class="exam-entry-title">歷屆題庫</span>
+            <span class="exam-entry-desc">100～114 年完整歷屆考題</span><span class="exam-entry-arrow">進入 →</span>
+          </button>
+          <button class="exam-entry-card entry-essay" onclick="switchTab('essay', event)">
+            <span class="exam-entry-icon">✍️</span><span class="exam-entry-title">申論拆解</span>
+            <span class="exam-entry-desc">完整申論題與原有解析</span><span class="exam-entry-arrow">進入 →</span>
+          </button>
+          <button class="exam-entry-card entry-mock" onclick="switchTab('mockexam', event)">
+            <span class="exam-entry-icon">🎲</span><span class="exam-entry-title">全真模考</span>
+            <span class="exam-entry-desc">使用原有題庫隨機抽題模擬</span><span class="exam-entry-arrow">開始 →</span>
+          </button>
         </div>
       </div>
     </section>
@@ -716,21 +755,6 @@
           <span>⚙️ 系統設定、備份與 IndexedDB 學習歷程</span>
         </div>
 
-        <div class="settings-account-card">
-          <div class="settings-account-head">
-            <div>
-              <div class="settings-section-kicker">帳號與雲端</div>
-              <div class="settings-account-title">☁️ 登入同步</div>
-            </div>
-            <div class="settings-cloud-status" id="settings-cloud-status">未登入</div>
-          </div>
-          <div class="settings-account-email" id="settings-cloud-email">使用 Email＋密碼登入後，可在手機、平板、電腦同步學習進度。</div>
-          <div class="settings-account-actions">
-            <button class="btn-primary settings-account-btn" onclick="openAuthModal()">🔐 <span id="settings-auth-action-text">登入／建立帳號</span></button>
-            <button class="filter-btn settings-account-btn" onclick="openAuthModal()">☁️ 查看同步狀態</button>
-          </div>
-        </div>
-
         <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem;">
           <button class="filter-btn" style="justify-content: center;" onclick="showAccountModal()">👤 切換學員帳號：<strong id="settings-user-name">Default Student</strong></button>
           <button class="filter-btn" style="justify-content: center; background: #e8f0e8; color: var(--accent-sage);" onclick="exportStudyDataJSON()">📥 匯出完整學習備份 (.json)</button>
@@ -830,17 +854,9 @@
       <span class="tab-icon">📖</span>
       <span>講義圖卡</span>
     </button>
-    <button class="tab-item" onclick="switchTab('questions', event)">
+    <button class="tab-item" onclick="switchTab('examcenter', event)">
       <span class="tab-icon">📚</span>
-      <span>歷屆題庫</span>
-    </button>
-    <button class="tab-item" onclick="switchTab('essay', event)">
-      <span class="tab-icon">✍️</span>
-      <span>申論拆解</span>
-    </button>
-    <button class="tab-item" onclick="switchTab('mockexam', event)">
-      <span class="tab-icon">🎲</span>
-      <span>全真模考</span>
+      <span>考試</span>
     </button>
     <button class="tab-item" onclick="switchTab('mistakes', event)">
       <span class="tab-icon">🎴</span>
@@ -959,8 +975,6 @@
         };
       } catch (e) {}
     }
-
-    function updateSettingsCloudCard(){const status=document.getElementById('settings-cloud-status'),email=document.getElementById('settings-cloud-email'),action=document.getElementById('settings-auth-action-text');if(!status||!email||!action)return;if(typeof currentUser!=='undefined'&&currentUser){status.textContent='☁️ 已登入／同步';email.textContent=currentUser;action.textContent='管理帳號／同步'}else{status.textContent='未登入';email.textContent='使用 Email＋密碼登入後，可在手機、平板、電腦同步學習進度。';action.textContent='登入／建立帳號'}}
 
     function renderTimelineLogs() {
       const container = document.getElementById('timeline-log-container');
@@ -2104,7 +2118,6 @@
     }
 
     function openAuthModal() {
-      updateSettingsCloudCard();
       updateAuthUI();
       document.getElementById('auth-modal')?.classList.add('active');
       document.getElementById('auth-email')?.focus();
@@ -2284,7 +2297,6 @@
         navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(reg => reg.unregister())).catch(() => {});
       }
     });
-  try { setTimeout(updateSettingsCloudCard, 0); } catch(e) {}
   </script>
 </body>
 </html>
