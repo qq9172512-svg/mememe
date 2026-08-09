@@ -1158,6 +1158,7 @@
           if (data.customTargets) customTargets = data.customTargets;
           if (data.bestScores) bestScores = data.bestScores;
           if (data.taskProgress) taskProgress = data.taskProgress;
+          if (data.taskClaimed) taskClaimed = data.taskClaimed;
           if (data.mistakeBank) mistakeBank = data.mistakeBank;
           if (data.examHistory) examHistory = data.examHistory;
           if (data.appendLogs) appendLogs = data.appendLogs;
@@ -1168,6 +1169,7 @@
           localStorage.setItem('broker_custom_targets', JSON.stringify(customTargets));
           localStorage.setItem('broker_best_scores', JSON.stringify(bestScores));
           localStorage.setItem('broker_today_tasks', JSON.stringify(taskProgress));
+          localStorage.setItem('broker_today_task_claimed', JSON.stringify(taskClaimed));
           localStorage.setItem('broker_mistake_bank', JSON.stringify(mistakeBank));
           localStorage.setItem('broker_exam_history', JSON.stringify(examHistory));
 
@@ -1902,54 +1904,120 @@
       } catch (e) {}
     }
 
-    // ===== 🎯 今日衝刺任務單日限完成一次 =====
-    let taskProgress = JSON.parse(localStorage.getItem('broker_today_tasks') || JSON.stringify({ t1: false, t2: false, t3: false, t4: false }));
+    // ===== 🎯 今日衝刺任務：每日只能領取一次，取消勾選後重新勾選也不會重複領獎 =====
+    const DAILY_TASK_DEFAULTS = { t1: false, t2: false, t3: false, t4: false };
+    const DAILY_TASK_REWARDS = { t1: 1, t2: 0, t3: 3, t4: 1 };
+    const DAILY_TASK_STORAGE = 'broker_today_tasks';
+    const DAILY_TASK_CLAIMED_STORAGE = 'broker_today_task_claimed';
+
+    let taskProgress = JSON.parse(localStorage.getItem(DAILY_TASK_STORAGE) || JSON.stringify(DAILY_TASK_DEFAULTS));
+    let taskClaimed = JSON.parse(localStorage.getItem(DAILY_TASK_CLAIMED_STORAGE) || JSON.stringify(DAILY_TASK_DEFAULTS));
     let lastTaskDate = localStorage.getItem('broker_task_date') || '';
+
+    function normalizeDailyTaskState() {
+      taskProgress = { ...DAILY_TASK_DEFAULTS, ...(taskProgress || {}) };
+      taskClaimed = { ...DAILY_TASK_DEFAULTS, ...(taskClaimed || {}) };
+    }
+
+    function resetDailyTaskState(todayStr) {
+      taskProgress = { ...DAILY_TASK_DEFAULTS };
+      taskClaimed = { ...DAILY_TASK_DEFAULTS };
+      lastTaskDate = todayStr;
+      localStorage.setItem(DAILY_TASK_STORAGE, JSON.stringify(taskProgress));
+      localStorage.setItem(DAILY_TASK_CLAIMED_STORAGE, JSON.stringify(taskClaimed));
+      localStorage.setItem('broker_task_date', todayStr);
+    }
 
     function initTasksUI() {
       const todayStr = new Date().toISOString().slice(0, 10);
+      normalizeDailyTaskState();
+
       if (lastTaskDate !== todayStr) {
-        taskProgress = { t1: false, t2: false, t3: false, t4: false };
-        localStorage.setItem('broker_today_tasks', JSON.stringify(taskProgress));
-        localStorage.setItem('broker_task_date', todayStr);
-        lastTaskDate = todayStr;
+        resetDailyTaskState(todayStr);
       }
 
       let count = 0;
-      for (let k in taskProgress) {
-        const chk = document.getElementById(`task-chk-${k.replace('t', '')}`);
-        if (chk) chk.checked = taskProgress[k];
-        if (taskProgress[k]) count++;
+      for (const key of Object.keys(DAILY_TASK_DEFAULTS)) {
+        const num = key.replace('t', '');
+        const chk = document.getElementById(`task-chk-${num}`);
+        if (!chk) continue;
+
+        chk.checked = !!taskProgress[key];
+        // 已領取的任務仍可取消勾選，但再次勾選絕不會重新領取。
+        chk.title = taskClaimed[key]
+          ? '今日獎勵已領取；取消後重新勾選不會再次獲得樹苗。'
+          : '今日尚未領取獎勵。';
+      
+        if (taskProgress[key]) count++;
       }
-      document.getElementById('today-task-progress').innerText = `${count} / 4`;
+
+      const progressEl = document.getElementById('today-task-progress');
+      if (progressEl) progressEl.innerText = `${count} / 4`;
+    }
+
+    function saveDailyTaskState() {
+      localStorage.setItem(DAILY_TASK_STORAGE, JSON.stringify(taskProgress));
+      localStorage.setItem(DAILY_TASK_CLAIMED_STORAGE, JSON.stringify(taskClaimed));
+      localStorage.setItem('broker_task_date', lastTaskDate);
     }
 
     function toggleTaskCheck(chkId) {
       const todayStr = new Date().toISOString().slice(0, 10);
-      if (lastTaskDate !== todayStr) {
-        lastTaskDate = todayStr;
-        localStorage.setItem('broker_task_date', todayStr);
-      }
+      normalizeDailyTaskState();
+
+      if (lastTaskDate !== todayStr) resetDailyTaskState(todayStr);
 
       const chk = document.getElementById(chkId);
       if (!chk) return;
       const key = 't' + chkId.replace('task-chk-', '');
 
-      if (taskProgress[key] && chk.checked) {
-        alert("⚠️ 今日該任務已經領取獎勵囉！明天再繼續加油！");
+      // 防呆核心：只要今天曾經領過這個任務的獎勵，就永遠不能再次領。
+      if (taskClaimed[key]) {
+        taskProgress[key] = !!chk.checked;
+        saveDailyTaskState();
+
+        if (chk.checked) {
+          alert('⚠️ 今日這項任務的獎勵已經領取過了！\n即使取消勾選再重新勾選，也不會再次獲得🌱樹苗。\n明天 00:00 後才能重新領取。');
+        }
+        initTasksUI();
         return;
       }
 
-      taskProgress[key] = chk.checked;
-      localStorage.setItem('broker_today_tasks', JSON.stringify(taskProgress));
-
-      if (chk.checked) {
-        playSound('correct');
-        appendStudyLog('TASK_DONE', `完成每日學習任務 [${key}]`);
-        if (key === 't1') earnSaplings(1, "完成速成");
-        else if (key === 't3') earnSaplings(3, "完成模考");
-        else if (key === 't4') doDailyCheckIn();
+      // 取消勾選：只改顯示狀態，不產生任何獎勵。
+      if (!chk.checked) {
+        taskProgress[key] = false;
+        saveDailyTaskState();
+        initTasksUI();
+        return;
       }
+
+      // 第一次勾選：先鎖定「已領取」再發獎勵，避免快速連點造成重複領取。
+      taskProgress[key] = true;
+      taskClaimed[key] = true;
+      saveDailyTaskState();
+
+      playSound('correct');
+      appendStudyLog('TASK_DONE', `完成每日學習任務 [${key}]`);
+
+      const reward = DAILY_TASK_REWARDS[key] || 0;
+      if (reward > 0) earnSaplings(reward, `完成每日任務 ${key}`);
+
+      // 第 4 項本身就是「每日打卡並紀錄進度」，直接執行打卡核心，
+      // 但不讓 doDailyCheckIn 再次發放 +1，避免重複領獎。
+      if (key === 't4') {
+        const lastCheckIn = localStorage.getItem('broker_last_checkin_date');
+        if (lastCheckIn !== todayStr) {
+          localStorage.setItem('broker_last_checkin_date', todayStr);
+          checkInDays++;
+          localStorage.setItem('broker_checkin_days', checkInDays.toString());
+          appendStudyLog('CHECK_IN', `完成第 ${checkInDays} 天每日打卡 (${todayStr})`);
+          updateCheckInBtnUI();
+        } else {
+          // 如果今天早已在別處完成打卡，這項任務仍只領一次任務獎勵。
+          updateCheckInBtnUI();
+        }
+      }
+
       initTasksUI();
     }
 
