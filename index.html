@@ -198,57 +198,6 @@
     table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.88rem; }
     th, td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border-color); text-align: left; }
     th { background: var(--bg-card-sub); font-weight: 700; color: var(--text-main); }
-  
-    /* ===== App v2：響應式／手機／平板／桌機 ===== */
-    html { -webkit-text-size-adjust: 100%; }
-    body { overscroll-behavior-y: none; }
-    main { max-width: 1180px; padding-left: clamp(0.75rem, 2vw, 1.5rem); padding-right: clamp(0.75rem, 2vw, 1.5rem); }
-    .healing-card { overflow: hidden; }
-    .exam-center-hero { background: linear-gradient(135deg, var(--accent-sage-light), var(--bg-card)); border:1px solid var(--border-color); border-radius:24px; padding:clamp(1.25rem,4vw,2.25rem); margin-bottom:1rem; box-shadow:var(--shadow-soft); }
-    .exam-center-hero h1 { font-size:clamp(1.55rem,4vw,2.25rem); margin:.25rem 0 .45rem; }
-    .exam-center-hero p { color:var(--text-sub); }
-    .eyebrow { font-size:.78rem; font-weight:800; color:var(--accent-sage); letter-spacing:.08em; }
-    .exam-mode-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
-    .exam-mode-card { position:relative; text-align:left; border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-main); border-radius:22px; padding:1.35rem; min-height:190px; box-shadow:var(--shadow-soft); cursor:pointer; transition:var(--transition); display:flex; flex-direction:column; align-items:flex-start; justify-content:center; }
-    .exam-mode-card:hover { transform:translateY(-3px); border-color:var(--accent-sage); }
-    .exam-mode-card.mock-card { border-color:rgba(217,136,106,.35); }
-    .exam-mode-icon { font-size:2.1rem; margin-bottom:.65rem; }
-    .exam-mode-card strong { font-size:1.15rem; }
-    .exam-mode-card small { color:var(--text-sub); margin-top:.25rem; line-height:1.5; }
-    .exam-mode-arrow { position:absolute; right:1rem; bottom:1rem; font-size:1.5rem; color:var(--text-sub); }
-    .exam-center-tips { margin-top:1rem; background:var(--bg-card); border:1px solid var(--border-color); border-radius:18px; padding:1rem 1.2rem; }
-    .exam-center-tips p { color:var(--text-sub); margin-top:.25rem; }
-    .app-nav-v2 { gap:.15rem; }
-    .app-nav-v2 .tab-item { max-width:150px; }
-    .auth-card { max-width:440px; }
-    .auth-header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; margin-bottom:.5rem; }
-    .auth-header h2 { margin-top:.2rem; }
-    .auth-desc { color:var(--text-sub); font-size:.9rem; margin-bottom:1rem; }
-    .auth-card label { display:block; font-size:.82rem; font-weight:700; margin:.65rem 0 .3rem; }
-    .auth-card input { width:100%; padding:.78rem .9rem; border:1px solid var(--border-color); border-radius:13px; background:var(--bg-primary); color:var(--text-main); font:inherit; outline:none; }
-    .auth-card input:focus { border-color:var(--accent-sage); box-shadow:0 0 0 3px var(--accent-sage-light); }
-    .auth-submit { width:100%; margin-top:1rem; }
-    .auth-switch { width:100%; justify-content:center; margin-top:.5rem; }
-    .auth-message { min-height:1.4rem; margin-top:.65rem; font-size:.84rem; line-height:1.5; }
-    .settings-v2-section { border:1px solid var(--border-color); border-radius:18px; padding:1rem; margin-bottom:.8rem; background:var(--bg-card); }
-    .settings-v2-title { font-weight:800; margin-bottom:.65rem; display:flex; align-items:center; justify-content:space-between; }
-    .legacy-exam-pane { display:none !important; } .legacy-exam-pane.active { display:block !important; }
-    .legal-link { color:var(--accent-sage); font-weight:800; text-decoration:underline; }
-    .related-crash-box { margin-top:1rem; padding:1rem; border:1px solid rgba(107,142,115,.3); background:var(--accent-sage-light); border-radius:16px; }
-    .related-crash-title { font-weight:800; color:var(--accent-sage); margin-bottom:.55rem; }
-    .related-crash-list { display:grid; gap:.45rem; }
-    .related-crash-list button { border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-main); border-radius:12px; padding:.65rem .75rem; display:flex; align-items:center; gap:.65rem; text-align:left; cursor:pointer; }
-    .related-crash-list button strong { color:var(--accent-terracotta); white-space:nowrap; }
-    .related-crash-list button span { flex:1; }
-    .settings-v2-row { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.85rem .15rem; border-top:1px solid var(--border-color); cursor:pointer; }
-    .settings-v2-row:first-of-type { border-top:0; }
-    .settings-v2-row small { display:block; color:var(--text-sub); margin-top:.1rem; }
-    .settings-v2-arrow { color:var(--text-sub); font-size:1.2rem; }
-    @media (max-width: 800px) { .exam-mode-grid { grid-template-columns:1fr; } .exam-mode-card { min-height:125px; } }
-    @media (min-width: 801px) { body { padding-bottom:2rem; } .bottom-nav-bar { position:sticky; top:0; bottom:auto; order:2; max-width:1180px; margin:0 auto; border:1px solid var(--border-color); border-radius:18px; width:calc(100% - 2rem); } .app-nav-v2 .tab-item { min-width:90px; } }
-    @media (max-width: 520px) { main { padding-top:.7rem; } .healing-card { padding:1rem; border-radius:18px; } .panel-title { font-size:1rem; } .app-nav-v2 .tab-item { min-width:56px; } .app-nav-v2 .tab-item span:last-child { font-size:.65rem; } .app-nav-v2 .tab-item .tab-icon { font-size:1.1rem; } .question-item { padding:1rem; } .exam-center-hero { border-radius:20px; } }
-    @media (min-width: 1200px) { main { padding-left:0; padding-right:0; } }
-
   </style>
 </head>
 <body>
@@ -585,30 +534,6 @@
       </div>
     </section>
 
-    <!-- TAB 4: 📚 考題中心：歷屆題庫／申論拆解／全真模考 -->
-    <section id="tab-examcenter" class="tab-pane">
-      <div class="exam-center-hero">
-        <div class="eyebrow">📚 考試中心</div>
-        <h1>歷屆考題 × 全真模考</h1>
-        <p>先選擇你要的模式，再載入內容；不會一進頁面就自動抽題。</p>
-      </div>
-      <div class="exam-mode-grid">
-        <button class="exam-mode-card" onclick="openExamMode('questions')">
-          <span class="exam-mode-icon">📚</span><strong>歷屆題庫</strong><small>100～114 年完整題庫</small><span class="exam-mode-arrow">›</span>
-        </button>
-        <button class="exam-mode-card" onclick="openExamMode('essay')">
-          <span class="exam-mode-icon">✍️</span><strong>申論拆解</strong><small>完整題目、拆解、擬答與法條</small><span class="exam-mode-arrow">›</span>
-        </button>
-        <button class="exam-mode-card mock-card" onclick="openExamMode('mockexam')">
-          <span class="exam-mode-icon">🎲</span><strong>全真模考</strong><small>按下後才抽題並開始測驗</small><span class="exam-mode-arrow">›</span>
-        </button>
-      </div>
-      <div class="exam-center-tips">
-        <div>💡 <strong>複習路線</strong></div>
-        <p>歷屆題 → 找錯題／考點 → 35 天速成 → 再做模考。</p>
-      </div>
-    </section>
-
     <!-- TAB 4: 📚 歷屆題庫 (114~110年全考古題全檢索與練習) -->
     <section id="tab-questions" class="tab-pane">
       <div class="healing-card">
@@ -658,7 +583,26 @@
       </div>
     </section>
 
-    <!-- TAB 5: ✍️ 申論拆解（由考題中心開啟） -->
+    <!-- TAB: 📚 考題中心（僅作入口；原本三個完整功能區保留不動） -->
+    <section id="tab-examhub" class="tab-pane">
+      <div class="healing-card" style="max-width: 900px; margin: 0 auto;">
+        <div class="panel-title" style="text-align:center; margin-bottom:1rem;">📚 考題中心</div>
+        <p style="text-align:center; color:var(--text-sub); margin-bottom:1.4rem;">請選擇要使用的考題功能；按下後才載入對應內容。</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem;">
+          <button class="btn-primary" style="min-height:150px; font-size:1.05rem;" onclick="switchTab('questions', event)">
+            📚 歷屆考題<br><small style="font-weight:500; opacity:.85;">100～114 年完整題庫</small>
+          </button>
+          <button class="btn-primary" style="min-height:150px; font-size:1.05rem; background:var(--accent-purple);" onclick="switchTab('essay', event)">
+            ✍️ 申論拆解<br><small style="font-weight:500; opacity:.85;">完整題目與申論分析</small>
+          </button>
+          <button class="btn-primary" style="min-height:150px; font-size:1.05rem; background:var(--accent-terracotta);" onclick="switchTab('mockexam', event)">
+            🎲 全真模考<br><small style="font-weight:500; opacity:.85;">從 QUESTIONS_DATA 抽題</small>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: ✍️ 申論拆解 -->
     <section id="tab-essay" class="tab-pane">
       <div class="healing-card">
         <div class="panel-title">
@@ -810,28 +754,33 @@
     </section>
   </main>
 
-  <!-- App 導覽列：手機／平板／桌機自適應 -->
-  <nav class="bottom-nav-bar app-nav-v2">
-    <button class="tab-item active" data-appnav="dashboard" onclick="switchTab('dashboard', event)"><span class="tab-icon">🏠</span><span>首頁</span></button>
-    <button class="tab-item" data-appnav="crash35" onclick="switchTab('crash35', event)"><span class="tab-icon">🌱</span><span>35天速成</span></button>
-    <button class="tab-item" data-appnav="flashcards" onclick="switchTab('flashcards', event)"><span class="tab-icon">📖</span><span>講義圖卡</span></button>
-    <button class="tab-item" data-appnav="examcenter" onclick="switchTab('examcenter', event)"><span class="tab-icon">📚</span><span>考題</span></button>
-    <button class="tab-item" data-appnav="mistakes" onclick="switchTab('mistakes', event)"><span class="tab-icon">🎴</span><span>錯題</span></button>
-    <button class="tab-item" data-appnav="settings" onclick="switchTab('settings', event)"><span class="tab-icon">⚙️</span><span>設定</span></button>
+  <!-- 底部 App 導覽列 (Bottom Tab Bar) -->
+  <nav class="bottom-nav-bar">
+    <button class="tab-item active" onclick="switchTab('dashboard', event)">
+      <span class="tab-icon">🌸</span>
+      <span>儀表板</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('crash35', event)">
+      <span class="tab-icon">🌱</span>
+      <span>35天速成</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('flashcards', event)">
+      <span class="tab-icon">📖</span>
+      <span>講義圖卡</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('examhub', event)">
+      <span class="tab-icon">📚</span>
+      <span>考題</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('mistakes', event)">
+      <span class="tab-icon">🎴</span>
+      <span>錯題本</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('settings', event)">
+      <span class="tab-icon">⚙️</span>
+      <span>設定歷程</span>
+    </button>
   </nav>
-
-  <!-- Supabase Email＋密碼登入／註冊 -->
-  <div class="modal-overlay" id="supabase-auth-modal">
-    <div class="modal-card auth-card">
-      <div class="auth-header"><div><div class="eyebrow">☁️ 雲端同步</div><h2 id="auth-title">登入帳號</h2></div><button class="filter-btn" onclick="closeSupabaseAuth()">✕</button></div>
-      <p class="auth-desc">登入後，你的學習進度可在不同設備使用同一帳號同步。</p>
-      <label>Email</label><input id="auth-email" type="email" autocomplete="email" placeholder="your@email.com">
-      <label>密碼</label><input id="auth-password" type="password" autocomplete="current-password" placeholder="至少 6 個字元">
-      <button class="btn-primary auth-submit" onclick="submitSupabaseAuth()" id="auth-submit">登入</button>
-      <button class="filter-btn auth-switch" onclick="toggleAuthMode()" id="auth-switch">還沒有帳號？建立帳號</button>
-      <div id="auth-message" class="auth-message"></div>
-    </div>
-  </div>
 
   <!-- Modal: 本地通知時間選擇器 -->
   <div class="modal-overlay" id="reminder-picker-modal">
@@ -863,7 +812,6 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="data/crash35_data.js"></script>
   <script src="data/flashcards.js"></script>
   <script src="data/questions.js"></script>
@@ -872,13 +820,8 @@
     // ===== ⚖️ 全球法規網 (https://law.moj.gov.tw/Index.aspx) 超連結輔助涵式 =====
     function formatLegalLinks(str) {
       if (!str) return '';
-      const pcodeMap = {
-        '土地法':'D0060001','土地稅法':'N0060001','民法':'B0000001','不動產經紀業管理條例':'D0060066','契稅條例':'G0340028','房屋稅條例':'G0340051','平均地權條例':'D0060078','區域計畫法':'D0070001','都市計畫法':'D0070001','不動產估價技術規則':'D0060076','公平交易法':'A0030001','消費者保護法':'D0050001','個人資料保護法':'I0050021'
-      };
-      return str.replace(/(土地法|土地稅法|民法|不動產經紀業管理條例|契稅條例|房屋稅條例|平均地權條例|區域計畫法|都市計畫法|不動產估價技術規則|公平交易法|消費者保護法|個人資料保護法)\s*(?:§|第)?\s*([0-9]+(?:-[0-9]+)?)\s*(條)?/g, (match, law, no) => {
-        const pcode=pcodeMap[law];
-        const href=pcode ? `https://law.moj.gov.tw/LawClass/LawSingle.aspx?pcode=${pcode}&flno=${no}` : 'https://law.moj.gov.tw/Index.aspx';
-        return `<a href="${href}" target="_blank" rel="noopener" class="legal-link" title="${match}：開啟全國法規資料庫">${match} ↗</a>`;
+      return str.replace(/(土地法|土地稅法|民法|不動產經紀業管理條例|契稅條例|房屋稅條例|平均地權條例|區域計畫法|都市計畫法|不動產估價技術規則)\s*(?:§|第)?\s*([0-9]+(?:-[0-9]+)?)\s*(條)?/g, (match) => {
+        return `<a href="https://law.moj.gov.tw/Index.aspx" target="_blank" rel="noopener" style="color:var(--accent-sage); font-weight:700; text-decoration:underline;" title="點擊至全國法規資料庫檢視：${match}">${match} ↗</a>`;
       });
     }
 
@@ -1158,7 +1101,6 @@
           if (data.customTargets) customTargets = data.customTargets;
           if (data.bestScores) bestScores = data.bestScores;
           if (data.taskProgress) taskProgress = data.taskProgress;
-          if (data.taskClaimed) taskClaimed = data.taskClaimed;
           if (data.mistakeBank) mistakeBank = data.mistakeBank;
           if (data.examHistory) examHistory = data.examHistory;
           if (data.appendLogs) appendLogs = data.appendLogs;
@@ -1169,7 +1111,6 @@
           localStorage.setItem('broker_custom_targets', JSON.stringify(customTargets));
           localStorage.setItem('broker_best_scores', JSON.stringify(bestScores));
           localStorage.setItem('broker_today_tasks', JSON.stringify(taskProgress));
-          localStorage.setItem('broker_today_task_claimed', JSON.stringify(taskClaimed));
           localStorage.setItem('broker_mistake_bank', JSON.stringify(mistakeBank));
           localStorage.setItem('broker_exam_history', JSON.stringify(examHistory));
 
@@ -1220,7 +1161,9 @@
         });
       }
 
-      if (tabId === 'questions') renderQuestionsList();
+      if (tabId === 'examhub') {
+        // 僅顯示入口，不碰原有題庫資料。
+      } else if (tabId === 'questions') renderQuestionsList();
       else if (tabId === 'essay') renderEssayDeconstruction();
       else if (tabId === 'mockexam') {
         if (currentMockExamQuestions.length === 0) startRandomMockExam();
@@ -1904,120 +1847,54 @@
       } catch (e) {}
     }
 
-    // ===== 🎯 今日衝刺任務：每日只能領取一次，取消勾選後重新勾選也不會重複領獎 =====
-    const DAILY_TASK_DEFAULTS = { t1: false, t2: false, t3: false, t4: false };
-    const DAILY_TASK_REWARDS = { t1: 1, t2: 0, t3: 3, t4: 1 };
-    const DAILY_TASK_STORAGE = 'broker_today_tasks';
-    const DAILY_TASK_CLAIMED_STORAGE = 'broker_today_task_claimed';
-
-    let taskProgress = JSON.parse(localStorage.getItem(DAILY_TASK_STORAGE) || JSON.stringify(DAILY_TASK_DEFAULTS));
-    let taskClaimed = JSON.parse(localStorage.getItem(DAILY_TASK_CLAIMED_STORAGE) || JSON.stringify(DAILY_TASK_DEFAULTS));
+    // ===== 🎯 今日衝刺任務單日限完成一次 =====
+    let taskProgress = JSON.parse(localStorage.getItem('broker_today_tasks') || JSON.stringify({ t1: false, t2: false, t3: false, t4: false }));
     let lastTaskDate = localStorage.getItem('broker_task_date') || '';
-
-    function normalizeDailyTaskState() {
-      taskProgress = { ...DAILY_TASK_DEFAULTS, ...(taskProgress || {}) };
-      taskClaimed = { ...DAILY_TASK_DEFAULTS, ...(taskClaimed || {}) };
-    }
-
-    function resetDailyTaskState(todayStr) {
-      taskProgress = { ...DAILY_TASK_DEFAULTS };
-      taskClaimed = { ...DAILY_TASK_DEFAULTS };
-      lastTaskDate = todayStr;
-      localStorage.setItem(DAILY_TASK_STORAGE, JSON.stringify(taskProgress));
-      localStorage.setItem(DAILY_TASK_CLAIMED_STORAGE, JSON.stringify(taskClaimed));
-      localStorage.setItem('broker_task_date', todayStr);
-    }
 
     function initTasksUI() {
       const todayStr = new Date().toISOString().slice(0, 10);
-      normalizeDailyTaskState();
-
       if (lastTaskDate !== todayStr) {
-        resetDailyTaskState(todayStr);
+        taskProgress = { t1: false, t2: false, t3: false, t4: false };
+        localStorage.setItem('broker_today_tasks', JSON.stringify(taskProgress));
+        localStorage.setItem('broker_task_date', todayStr);
+        lastTaskDate = todayStr;
       }
 
       let count = 0;
-      for (const key of Object.keys(DAILY_TASK_DEFAULTS)) {
-        const num = key.replace('t', '');
-        const chk = document.getElementById(`task-chk-${num}`);
-        if (!chk) continue;
-
-        chk.checked = !!taskProgress[key];
-        // 已領取的任務仍可取消勾選，但再次勾選絕不會重新領取。
-        chk.title = taskClaimed[key]
-          ? '今日獎勵已領取；取消後重新勾選不會再次獲得樹苗。'
-          : '今日尚未領取獎勵。';
-      
-        if (taskProgress[key]) count++;
+      for (let k in taskProgress) {
+        const chk = document.getElementById(`task-chk-${k.replace('t', '')}`);
+        if (chk) chk.checked = taskProgress[k];
+        if (taskProgress[k]) count++;
       }
-
-      const progressEl = document.getElementById('today-task-progress');
-      if (progressEl) progressEl.innerText = `${count} / 4`;
-    }
-
-    function saveDailyTaskState() {
-      localStorage.setItem(DAILY_TASK_STORAGE, JSON.stringify(taskProgress));
-      localStorage.setItem(DAILY_TASK_CLAIMED_STORAGE, JSON.stringify(taskClaimed));
-      localStorage.setItem('broker_task_date', lastTaskDate);
+      document.getElementById('today-task-progress').innerText = `${count} / 4`;
     }
 
     function toggleTaskCheck(chkId) {
       const todayStr = new Date().toISOString().slice(0, 10);
-      normalizeDailyTaskState();
-
-      if (lastTaskDate !== todayStr) resetDailyTaskState(todayStr);
+      if (lastTaskDate !== todayStr) {
+        lastTaskDate = todayStr;
+        localStorage.setItem('broker_task_date', todayStr);
+      }
 
       const chk = document.getElementById(chkId);
       if (!chk) return;
       const key = 't' + chkId.replace('task-chk-', '');
 
-      // 防呆核心：只要今天曾經領過這個任務的獎勵，就永遠不能再次領。
-      if (taskClaimed[key]) {
-        taskProgress[key] = !!chk.checked;
-        saveDailyTaskState();
-
-        if (chk.checked) {
-          alert('⚠️ 今日這項任務的獎勵已經領取過了！\n即使取消勾選再重新勾選，也不會再次獲得🌱樹苗。\n明天 00:00 後才能重新領取。');
-        }
-        initTasksUI();
+      if (taskProgress[key] && chk.checked) {
+        alert("⚠️ 今日該任務已經領取獎勵囉！明天再繼續加油！");
         return;
       }
 
-      // 取消勾選：只改顯示狀態，不產生任何獎勵。
-      if (!chk.checked) {
-        taskProgress[key] = false;
-        saveDailyTaskState();
-        initTasksUI();
-        return;
+      taskProgress[key] = chk.checked;
+      localStorage.setItem('broker_today_tasks', JSON.stringify(taskProgress));
+
+      if (chk.checked) {
+        playSound('correct');
+        appendStudyLog('TASK_DONE', `完成每日學習任務 [${key}]`);
+        if (key === 't1') earnSaplings(1, "完成速成");
+        else if (key === 't3') earnSaplings(3, "完成模考");
+        else if (key === 't4') doDailyCheckIn();
       }
-
-      // 第一次勾選：先鎖定「已領取」再發獎勵，避免快速連點造成重複領取。
-      taskProgress[key] = true;
-      taskClaimed[key] = true;
-      saveDailyTaskState();
-
-      playSound('correct');
-      appendStudyLog('TASK_DONE', `完成每日學習任務 [${key}]`);
-
-      const reward = DAILY_TASK_REWARDS[key] || 0;
-      if (reward > 0) earnSaplings(reward, `完成每日任務 ${key}`);
-
-      // 第 4 項本身就是「每日打卡並紀錄進度」，直接執行打卡核心，
-      // 但不讓 doDailyCheckIn 再次發放 +1，避免重複領獎。
-      if (key === 't4') {
-        const lastCheckIn = localStorage.getItem('broker_last_checkin_date');
-        if (lastCheckIn !== todayStr) {
-          localStorage.setItem('broker_last_checkin_date', todayStr);
-          checkInDays++;
-          localStorage.setItem('broker_checkin_days', checkInDays.toString());
-          appendStudyLog('CHECK_IN', `完成第 ${checkInDays} 天每日打卡 (${todayStr})`);
-          updateCheckInBtnUI();
-        } else {
-          // 如果今天早已在別處完成打卡，這項任務仍只領一次任務獎勵。
-          updateCheckInBtnUI();
-        }
-      }
-
       initTasksUI();
     }
 
@@ -2059,209 +1936,12 @@
       updateDashboardStats();
       updateReminderBadge();
       renderExamHistoryTable();
-      // 不在進入頁面時自動抽模考；使用者按「全真模考」後才開始。
+      startRandomMockExam();
 
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js').catch(() => {});
       }
     });
-  
-    /* ================================================================
-       APP V2：考題中心、Supabase 登入、設定歷程、35天關聯
-       ================================================================ */
-    const SUPABASE_URL = 'https://hvcyjevvcdmcrjrqstag.supabase.co';
-    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_uDlPq_POd37k_SlaE_v-uA_XmE6TuLk';
-    let sbClient = null;
-    let authMode = 'login';
-
-    function initSupabaseV2() {
-      if (!window.supabase) return;
-      try {
-        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-        sbClient.auth.onAuthStateChange((_event, session) => {
-          window.currentSupabaseSession = session;
-          updateSupabaseAccountUI(session?.user || null);
-          if (session?.user) syncStudyProgressToCloud().catch(()=>{});
-        });
-        sbClient.auth.getSession().then(({data}) => {
-          window.currentSupabaseSession = data.session;
-          updateSupabaseAccountUI(data.session?.user || null);
-        });
-      } catch (e) { console.warn('Supabase init failed', e); }
-    }
-
-    function updateSupabaseAccountUI(user) {
-      const el=document.getElementById('settings-user-name');
-      if (el) el.textContent = user ? (user.email || '已登入') : '尚未登入';
-      const status=document.getElementById('cloud-sync-status');
-      if(status) status.textContent = user ? '☁️ 已登入，可同步' : '○ 尚未登入';
-    }
-
-    function openSupabaseAuth(mode='login') {
-      authMode=mode;
-      const modal=document.getElementById('supabase-auth-modal'); if(!modal) return;
-      document.getElementById('auth-title').textContent=mode==='login'?'登入帳號':'建立帳號';
-      document.getElementById('auth-submit').textContent=mode==='login'?'登入':'建立帳號';
-      document.getElementById('auth-switch').textContent=mode==='login'?'還沒有帳號？建立帳號':'已經有帳號？返回登入';
-      document.getElementById('auth-message').textContent='';
-      modal.classList.add('active');
-    }
-    function closeSupabaseAuth(){ document.getElementById('supabase-auth-modal')?.classList.remove('active'); }
-    function toggleAuthMode(){ openSupabaseAuth(authMode==='login'?'signup':'login'); }
-    async function submitSupabaseAuth(){
-      const email=document.getElementById('auth-email').value.trim();
-      const password=document.getElementById('auth-password').value;
-      const msg=document.getElementById('auth-message');
-      if(!sbClient){msg.textContent='⚠️ 雲端服務尚未載入，請重新整理頁面。';return;}
-      if(!email || !password){msg.textContent='⚠️ 請輸入 Email 與密碼。';return;}
-      msg.textContent='處理中…';
-      try {
-        let result;
-        if(authMode==='login') result=await sbClient.auth.signInWithPassword({email,password});
-        else result=await sbClient.auth.signUp({email,password});
-        if(result.error) throw result.error;
-        msg.textContent=authMode==='signup'?'✅ 帳號建立成功；若需要 Email 驗證，請先完成驗證。':'✅ 登入成功。';
-        if(authMode==='login') setTimeout(closeSupabaseAuth,450);
-      } catch(e){ msg.textContent='⚠️ '+(e?.message || '操作失敗'); }
-    }
-    async function logoutSupabase(){ if(sbClient) await sbClient.auth.signOut(); updateSupabaseAccountUI(null); }
-
-    async function syncStudyProgressToCloud(){
-      if(!sbClient || !window.currentSupabaseSession?.user) return;
-      const uid=window.currentSupabaseSession.user.id;
-      const fp=JSON.parse(localStorage.getItem('broker_flashcard_progress')||'{}');
-      const appBackup={};
-      try { for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k) appBackup[k]=localStorage.getItem(k); } } catch(e) {}
-      const payload={
-        user_id:uid,
-        crash35_day:Number(localStorage.getItem('broker_crash35_day')||1),
-        crash35_completed:JSON.parse(localStorage.getItem('broker_crash35_completed')||'[]'),
-        flashcard_progress:Object.assign({},fp,{__mememe_app_backup:appBackup}),
-        last_question_id:localStorage.getItem('broker_last_question_id') || null
-      };
-      try { await sbClient.from('study_progress').upsert(payload,{onConflict:'user_id'}); } catch(e) {}
-    }
-
-    async function loadStudyProgressFromCloud(){
-      if(!sbClient || !window.currentSupabaseSession?.user) return;
-      try {
-        const {data}=await sbClient.from('study_progress').select('*').eq('user_id',window.currentSupabaseSession.user.id).maybeSingle();
-        if(!data) return;
-        if(data.crash35_day!=null) localStorage.setItem('broker_crash35_day',String(data.crash35_day));
-        if(data.crash35_completed) localStorage.setItem('broker_crash35_completed',JSON.stringify(data.crash35_completed));
-        if(data.flashcard_progress) localStorage.setItem('broker_flashcard_progress',JSON.stringify(data.flashcard_progress));
-        if(data.last_question_id) localStorage.setItem('broker_last_question_id',data.last_question_id);
-      } catch(e) {}
-    }
-
-    function openExamMode(mode){
-      if(mode==='questions'){ switchTab('questions'); return; }
-      if(mode==='essay'){ switchTab('essay'); return; }
-      if(mode==='mockexam'){ switchTab('mockexam'); return; }
-    }
-
-    // 35天講義與題目建立「複習入口」：依科目找最相關的 Day。
-    function getRelatedCrashDays(subject, questionText=''){
-      const data=Array.isArray(window.CRASH_35_DATA)?window.CRASH_35_DATA:[];
-      const terms={估價:['估價'],土地:['土地','稅','地'],民法:['民法','物權','債'],經紀:['經紀','交易','消費'],國文:['國文','作文']};
-      const keys=terms[subject]||[subject];
-      const text=(questionText||'').toLowerCase();
-      return data.map(d=>{
-        let score=(d.subject===subject?5:0);
-        const all=`${d.title} ${d.desc} ${d.article} ${d.traps}`.toLowerCase();
-        keys.forEach(k=>{if(all.includes(k.toLowerCase())) score+=2;});
-        const qwords=text.split(/[^\u4e00-\u9fffA-Za-z0-9]+/).filter(x=>x.length>=2).slice(0,12);
-        qwords.forEach(w=>{if(all.includes(w)) score+=1;});
-        return {d,score};
-      }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.d);
-    }
-
-    function renderRelatedCrashDays(subject, questionText){
-      const days=getRelatedCrashDays(subject,questionText);
-      if(!days.length) return '';
-      return `<div class="related-crash-box"><div class="related-crash-title">🌱 35天速成｜建議複習</div><div class="related-crash-list">${days.map(d=>`<button onclick="switchTab('crash35'); setTimeout(()=>selectCrashDay(${d.day}),80)"><strong>Day ${d.day}</strong><span>${escapeHtmlV2(d.title.replace(/^Day\s*\d+[:：]\s*/,'').slice(0,28))}</span>›</button>`).join('')}</div></div>`;
-    }
-    function escapeHtmlV2(v){return String(v||'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-
-    // 包裝原本申論／題庫 render：在每題尾端加入 35 天複習入口。
-    const _renderEssayOriginal = window.renderEssayDeconstruction;
-    const _renderQuestionsOriginal = window.renderQuestionsList;
-    function enhanceQuestionRelatedLinks(){
-      document.querySelectorAll('#questions-list-container .question-item').forEach(card=>{
-        if(card.querySelector('.related-crash-box')) return;
-        const text=card.innerText||'';
-        const subject=(card.querySelector('.badge')?.innerText||'').replace(/[^估價土地民法經紀國文]/g,'');
-        const box=renderRelatedCrashDays(subject,text); if(box) card.insertAdjacentHTML('beforeend',box);
-      });
-      document.querySelectorAll('#essay-deconstruct-container .essay-deconstruct-box').forEach(card=>{
-        if(card.querySelector('.related-crash-box')) return;
-        const text=card.innerText||'';
-        let subject='';
-        for(const x of ['估價','土地','民法','經紀','國文']) if(text.includes(x)){subject=x;break;}
-        const box=renderRelatedCrashDays(subject,text); if(box) card.insertAdjacentHTML('beforeend',box);
-      });
-    }
-    window.renderQuestionsList=function(){ if(typeof _renderQuestionsOriginal==='function') _renderQuestionsOriginal(); setTimeout(enhanceQuestionRelatedLinks,30); };
-    window.renderEssayDeconstruction=function(){ if(typeof _renderEssayOriginal==='function') _renderEssayOriginal(); setTimeout(enhanceQuestionRelatedLinks,30); };
-
-    // 覆寫導覽：考題中心是唯一入口；模考只有按下後才抽題。
-    window.switchTab=function(tabId,evt){
-      document.querySelectorAll('.tab-pane').forEach(el=>el.classList.remove('active'));
-      document.querySelectorAll('.tab-item').forEach(el=>el.classList.remove('active'));
-      const target=document.getElementById(`tab-${tabId}`); if(target) target.classList.add('active');
-      const navId=tabId==='questions'||tabId==='essay'||tabId==='mockexam'?'examcenter':tabId;
-      document.querySelectorAll('.tab-item').forEach(b=>{if(b.dataset.appnav===navId)b.classList.add('active');});
-      if(tabId==='questions') { if(typeof window.renderQuestionsList==='function') window.renderQuestionsList(); }
-      if(tabId==='essay') { if(typeof window.renderEssayDeconstruction==='function') window.renderEssayDeconstruction(); }
-      if(tabId==='mockexam') { if(typeof currentMockExamQuestions!=='undefined' && currentMockExamQuestions.length===0) startRandomMockExam(); }
-      if(tabId==='settings'){ renderExamHistoryTable(); renderTimelineLogs(); updateSupabaseAccountUI(window.currentSupabaseSession?.user||null); }
-    };
-
-    function renderSettingsV2(){
-      const pane=document.getElementById('tab-settings'); if(!pane||pane.dataset.v2==='1') return; pane.dataset.v2='1';
-      const card=pane.querySelector('.healing-card'); if(!card) return;
-      card.innerHTML=`
-        <div class="panel-title"><span>⚙️ 設定與學習歷程</span></div>
-        <div class="settings-v2-section"><div class="settings-v2-title"><span>👤 帳號與雲端同步</span><span id="cloud-sync-status" style="font-size:.8rem;color:var(--accent-sage)">○ 尚未登入</span></div>
-          <div class="settings-v2-row" onclick="openSupabaseAuth('login')"><div><strong id="settings-user-name">尚未登入</strong><small>登入後可在不同設備使用同一帳號</small></div><span class="settings-v2-arrow">›</span></div>
-          <div class="settings-v2-row" onclick="syncStudyProgressToCloud().then(()=>alert('☁️ 同步完成'))"><div><strong>☁️ 立即同步</strong><small>同步 35 天速成與講義進度</small></div><span class="settings-v2-arrow">↻</span></div>
-          <div class="settings-v2-row" onclick="logoutSupabase()"><div><strong>🚪 登出</strong><small>只會登出目前設備，不會刪除雲端資料</small></div><span class="settings-v2-arrow">›</span></div>
-        </div>
-        <div class="settings-v2-section"><div class="settings-v2-title">📊 學習歷程</div>
-          <div class="settings-v2-row" onclick="renderExamHistoryTable();document.getElementById('exam-history-tbody')?.scrollIntoView({behavior:'smooth'})"><div><strong>模考紀錄</strong><small id="exam-history-count">0 筆測驗</small></div><span class="settings-v2-arrow">›</span></div>
-          <div class="settings-v2-row" onclick="document.getElementById('timeline-log-container')?.scrollIntoView({behavior:'smooth'})"><div><strong>學習日誌</strong><small id="append-log-count">0 條紀錄</small></div><span class="settings-v2-arrow">›</span></div>
-        </div>
-        <div class="settings-v2-section"><div class="settings-v2-title">📦 資料管理</div>
-          <div class="settings-v2-row" onclick="exportStudyDataJSON()"><div><strong>📥 匯出完整學習備份</strong><small>備份到本機</small></div><span class="settings-v2-arrow">›</span></div>
-          <label class="settings-v2-row"><div><strong>📤 匯入備份</strong><small>從 JSON 還原本機資料</small></div><span class="settings-v2-arrow">›</span><input type="file" accept=".json" style="display:none" onchange="importStudyDataJSON(event)"></label>
-          <div class="settings-v2-row" onclick="exportHistoryCSV()"><div><strong>📊 匯出學習歷程 CSV</strong><small>方便保存與分析</small></div><span class="settings-v2-arrow">›</span></div>
-        </div>
-        <div class="settings-v2-section"><div class="settings-v2-title">🔔 提醒</div><div class="settings-v2-row" onclick="showScheduledRemindersModal()"><div><strong>複習提醒</strong><small>管理已排定的提醒</small></div><span class="settings-v2-arrow">›</span></div></div>
-        <div class="settings-v2-section"><div class="settings-v2-title">📜 完整學習日誌</div><div class="timeline-container" id="timeline-log-container"><div style="font-size:.85rem;color:var(--text-sub)">尚未建立學習歷史日誌...</div></div></div>
-        <div class="settings-v2-section"><div class="settings-v2-title">📊 歷次模考成績</div><div style="overflow-x:auto"><table><thead><tr><th>時間</th><th>科目</th><th>選擇題</th><th>總分</th><th>狀態</th></tr></thead><tbody id="exam-history-tbody"><tr><td colspan="5">尚未進行模擬測驗</td></tr></tbody></table></div></div>`;
-      updateSupabaseAccountUI(window.currentSupabaseSession?.user||null); renderExamHistoryTable(); renderTimelineLogs();
-    }
-
-    // 初始化 V2。
-    document.addEventListener('DOMContentLoaded',()=>{
-      initSupabaseV2();
-      renderSettingsV2();
-      // 初始顯示考題中心，而非自動抽模考。
-      const oldQ=document.getElementById('tab-questions');
-      if(oldQ) oldQ.style.display='none';
-      const oldE=document.getElementById('tab-essay');
-      if(oldE) oldE.style.display='none';
-      const oldM=document.getElementById('tab-mockexam');
-      if(oldM) oldM.style.display='none';
-      setTimeout(()=>{
-        document.querySelectorAll('.tab-pane').forEach(x=>x.classList.remove('active'));
-        document.getElementById('tab-dashboard')?.classList.add('active');
-        document.querySelectorAll('.app-nav-v2 .tab-item').forEach(x=>x.classList.remove('active'));
-        document.querySelector('[data-appnav="dashboard"]')?.classList.add('active');
-        if(window.currentSupabaseSession?.user) loadStudyProgressFromCloud().then(()=>{try{renderCrash35Grid();selectCrashDay(Number(localStorage.getItem('broker_crash35_day')||1));}catch(e){}});
-      },120);
-    });
-
   </script>
 </body>
 </html>
